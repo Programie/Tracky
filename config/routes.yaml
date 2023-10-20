@@ -1,0 +1,5 @@
+controllers:
+  resource:
+    path: ../src/main/php/tracky/controller/
+    namespace: tracky\controller
+  type: attribute

@@ -1,0 +1,26 @@
+imports:
+  - resource: "defaults.yaml"
+  - resource: "config.yaml"
+    ignore_errors: not_found
+
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  tracky\:
+    resource: '../src/main/php/tracky'
+    exclude:
+      - '../src/main/php/tracky/DependencyInjection/'
+      - '../src/main/php/tracky/Entity/'
+      - '../src/main/php/tracky/Kernel.php'
+
+  tracky\Config:
+    arguments:
+      $container: "@service_container"
+  tracky\TwigGlobals:
+    arguments:
+      $container: "@service_container"

@@ -1,0 +1,13 @@
+.idea
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/config.yaml
+/config/secrets/prod/prod.decrypt.private.php
+/docker-compose.local.yml
+/node_modules/
+/public/assets/
+/public/bundles/
+/var/
+/vendor/
+/webpack.assets.json
