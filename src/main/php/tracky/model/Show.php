@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "shows")]
 class Show
 {
+    use TMDBTrait;
+
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue]

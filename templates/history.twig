@@ -8,8 +8,14 @@
     <div class="container mt-3">
         <div class="row">
             {% for entry in entries %}
+                {% if entry.type == "episode" %}
+                    {% set imageUrl = entry.episode.show.posterImageUrl %}
+                {% elseif entry.type == "movie" %}
+                    {% set imageUrl = entry.movie.posterImageUrl %}
+                {% endif %}
                 <div class="col">
-                    <div class="card">
+                    <div class="card history-entry">
+                        <img class="card-img-top" src="{{ imageUrl }}"/>
                         <div class="card-body">
                             <h5 class="card-title">
                                 {% if entry.type == "episode" %}

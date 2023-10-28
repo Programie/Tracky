@@ -8,8 +8,10 @@ CREATE TABLE `users`
 
 CREATE TABLE `shows`
 (
-    `id`    int(11)      NOT NULL AUTO_INCREMENT,
-    `title` varchar(300) NOT NULL,
+    `id`             int(11)      NOT NULL AUTO_INCREMENT,
+    `title`          varchar(300) NOT NULL,
+    `tmdbId`         int(11)      DEFAULT NULL,
+    `posterImageUrl` varchar(500) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
@@ -41,9 +43,11 @@ CREATE TABLE `episodeviews`
 
 CREATE TABLE `movies`
 (
-    `id`    int(11)      NOT NULL AUTO_INCREMENT,
-    `title` varchar(300) NOT NULL,
-    `year`  int(11) DEFAULT NULL,
+    `id`             int(11)      NOT NULL AUTO_INCREMENT,
+    `title`          varchar(300) NOT NULL,
+    `year`           int(11)      DEFAULT NULL,
+    `tmdbId`         int(11)      DEFAULT NULL,
+    `posterImageUrl` varchar(500) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
