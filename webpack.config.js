@@ -7,6 +7,7 @@ const scriptRoot = "./src/main/resources/assets/script";
 module.exports = {
     entry: {
         "main": `${scriptRoot}/main.ts`,
+        "history": `${scriptRoot}/history.ts`,
         "error-page": `${scriptRoot}/error-page.ts`
     },
     output: {

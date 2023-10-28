@@ -1,0 +1,11 @@
+{% set assetEntryPoint = "error-page" %}
+
+{% extends "page.twig" %}
+
+{% block title %}{{ "error-page.#{status_code}.title"|trans }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> {{ "error-page.#{status_code}.message"|trans }}</div>
+    </div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% set assetEntryPoint = "history" %}
+
+{% extends "page.twig" %}
+
+{% block title %}History{% endblock %}
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row">
+            {% for entry in entries %}
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {% if entry.type == "episode" %}
+                                    <b>{{ entry.episode.season }}x{{ entry.episode.episode }}</b> {{ entry.episode.title }}<br/>
+                                    <small>{{ entry.episode.show.title }}</small><br/>
+                                {% elseif entry.type == "movie" %}
+                                    {{ entry.movie.title }}<br/>
+                                {% endif %}
+                                <small>{{ entry.datetime.format("r") }}</small>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

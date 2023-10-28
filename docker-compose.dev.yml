@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  app:
+    volumes:
+      - .:/app
+      - var:/app/var
+    environment:
+      APP_ENV: dev
+
+  mysql:
+    volumes:
+      - ./database-sample.sql:/docker-entrypoint-initdb.d/20-sample.sql:ro
+
+volumes:
+  var:

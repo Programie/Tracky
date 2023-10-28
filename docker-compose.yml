@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - 8080:80
+    links:
+      - mysql
+    environment:
+      TZ: Europe/Berlin
+      APP_URL: "http://localhost:8080"
+      DATABASE_DRIVER: pdo_mysql
+      DATABASE_HOST: mysql
+      DATABASE_NAME: tracky
+      DATABASE_USERNAME: tracky
+      DATABASE_PASSWORD: tracky
+      DATABASE_SERVER_VERSION: "mariadb-10.10.2"
+
+  mysql:
+    image: mariadb
+    volumes:
+      - ./database.sql:/docker-entrypoint-initdb.d/10-db.sql:ro
+    environment:
+      TZ: Europe/Berlin
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: tracky
+      MYSQL_USER: tracky
+      MYSQL_PASSWORD: tracky
