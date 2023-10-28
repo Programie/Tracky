@@ -15,7 +15,7 @@ services:
       DATABASE_NAME: tracky
       DATABASE_USERNAME: tracky
       DATABASE_PASSWORD: tracky
-      DATABASE_SERVER_VERSION: "mariadb-10.10.2"
+      DATABASE_SERVER_VERSION: "11.1.2-MariaDB"
 
   mysql:
     image: mariadb
