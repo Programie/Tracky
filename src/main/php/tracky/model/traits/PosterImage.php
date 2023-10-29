@@ -1,26 +1,12 @@
 <?php
-namespace tracky\model;
+namespace tracky\model\traits;
 
 use Doctrine\ORM\Mapping as ORM;
 
-trait TMDBTrait
+trait PosterImage
 {
-    #[ORM\Column(name: "tmdbId", type: "integer")]
-    private ?int $tmdbId;
-
     #[ORM\Column(name: "posterImageUrl", type: "string")]
-    private ?string $posterImageUrl;
-
-    public function getTmdbId(): ?int
-    {
-        return $this->tmdbId;
-    }
-
-    public function setTmdbId(?int $tmdbId): self
-    {
-        $this->tmdbId = $tmdbId;
-        return $this;
-    }
+    private ?string $posterImageUrl = null;
 
     public function getPosterImageUrl(): ?string
     {

@@ -2,25 +2,23 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
+use tracky\dataprovider\TMDB;
+use tracky\model\traits\PosterImage;
+use tracky\model\traits\TMDB as TMDBTrait;
 
 #[ORM\Entity(repositoryClass: "tracky\orm\ShowRepository")]
 #[ORM\Table(name: "shows")]
-class Show
+class Show extends BaseEntity
 {
     use TMDBTrait;
-
-    #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    #[ORM\GeneratedValue]
-    private int $id;
+    use PosterImage;
 
     #[ORM\Column(type: "string")]
     private string $title;
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
+    #[ORM\OneToMany(mappedBy: "show", targetEntity: "Season", cascade: ["persist"])]
+    #[ORM\OrderBy(["number" => "ASC"])]
+    private mixed $seasons = [];
 
     public function getTitle(): string
     {
@@ -31,5 +29,70 @@ class Show
     {
         $this->title = $title;
         return $this;
+    }
+
+    /**
+     * @return Season[]
+     */
+    public function getSeasons(): mixed
+    {
+        return $this->seasons;
+    }
+
+    /**
+     * @param Season[] $seasons
+     * @return $this
+     */
+    public function setSeasons(mixed $seasons): Show
+    {
+        $this->seasons = $seasons;
+        return $this;
+    }
+
+    public function addSeason(Season $season): Show
+    {
+        $this->seasons[] = $season;
+        return $this;
+    }
+
+    public function getSeason(int $season): ?Season
+    {
+        foreach ($this->getSeasons() as $seasonEntry) {
+            if ($seasonEntry->getNumber() === $season) {
+                return $seasonEntry;
+            }
+        }
+
+        return null;
+    }
+
+    public function fetchTMDBData(TMDB $tmdb): bool
+    {
+        $tmdbId = $this->getTmdbId();
+        if ($tmdbId === null) {
+            return false;
+        }
+
+        $showData = $tmdb->getShowData($tmdbId, $this->getLanguage());
+        $this->setTitle($showData["title"]);
+        $this->setPosterImageUrl($showData["posterImageUrl"]);
+
+        foreach ($showData["seasons"] as $seasonData) {
+            $seasonNumber = $seasonData["season_number"];
+
+            $season = $this->getSeason($seasonNumber);
+            if ($season === null) {
+                $season = new Season;
+                $season->setShow($this);
+                $season->setNumber($seasonNumber);
+                $this->addSeason($season);
+            }
+
+            $season->setPosterImageUrl($seasonData["posterImageUrl"]);
+
+            $season->fetchTMDBData($tmdb);
+        }
+
+        return true;
     }
 }

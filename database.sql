@@ -12,20 +12,32 @@ CREATE TABLE `shows`
     `title`          varchar(300) NOT NULL,
     `tmdbId`         int(11)      DEFAULT NULL,
     `posterImageUrl` varchar(500) DEFAULT NULL,
+    `language`       varchar(10)  DEFAULT NULL,
     PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `seasons`
+(
+    `id`             int(11) NOT NULL AUTO_INCREMENT,
+    `show`           int(11) NOT NULL,
+    `number`         int(11) NOT NULL,
+    `posterImageUrl` varchar(500) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`show`) REFERENCES `shows` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE `episodes`
 (
-    `id`         int(11)      NOT NULL AUTO_INCREMENT,
-    `show`       int(11)      NOT NULL,
-    `season`     int(11)      NOT NULL,
-    `episode`    int(11)      NOT NULL,
-    `title`      varchar(300) NOT NULL,
-    `firstAired` date DEFAULT NULL,
+    `id`             int(11)      NOT NULL AUTO_INCREMENT,
+    `season`         int(11)      NOT NULL,
+    `number`         int(11)      NOT NULL,
+    `title`          varchar(300) NOT NULL,
+    `firstAired`     date         DEFAULT NULL,
+    `posterImageUrl` varchar(500) DEFAULT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`show`) REFERENCES `shows` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (`season`) REFERENCES `seasons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -48,6 +60,7 @@ CREATE TABLE `movies`
     `year`           int(11)      DEFAULT NULL,
     `tmdbId`         int(11)      DEFAULT NULL,
     `posterImageUrl` varchar(500) DEFAULT NULL,
+    `language`       varchar(10)  DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

@@ -35,15 +35,10 @@ class FetchTMDBCommand extends Command
          * @var $show Show
          */
         foreach ($this->showRepository->findAll() as $show) {
-            $tmdbId = $show->getTmdbId();
-            if ($tmdbId === null) {
-                continue;
-            }
-
             $output->writeln(sprintf("Fetching data for show: %s", $show->getTitle()));
 
-            $showData = $this->tmdb->getShowData($tmdbId);
-            $show->setPosterImageUrl($showData["posterImageUrl"]);
+            $show->fetchTMDBData($this->tmdb);
+
             $this->entityManager->persist($show);
         }
 
@@ -51,15 +46,10 @@ class FetchTMDBCommand extends Command
          * @var $movie Movie
          */
         foreach ($this->movieRepository->findAll() as $movie) {
-            $tmdbId = $movie->getTmdbId();
-            if ($tmdbId === null) {
-                continue;
-            }
-
             $output->writeln(sprintf("Fetching data for movie: %s", $movie->getTitle()));
 
-            $movieData = $this->tmdb->getMovieData($tmdbId);
-            $movie->setPosterImageUrl($movieData["posterImageUrl"]);
+            $movie->fetchTMDBData($this->tmdb);
+
             $this->entityManager->persist($movie);
         }
 

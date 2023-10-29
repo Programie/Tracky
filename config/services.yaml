@@ -21,6 +21,8 @@ services:
   tracky\dataprovider\TMDB:
     arguments:
       $apiToken: "%tmdb.api-token%"
+      $defaultMovieLanguage: "%tmdb.movies.language"
+      $defaultShowLanguage: "%tmdb.shows.language"
   tracky\Config:
     arguments:
       $container: "@service_container"

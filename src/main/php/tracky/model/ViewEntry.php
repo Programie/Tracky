@@ -4,24 +4,14 @@ namespace tracky\model;
 use Doctrine\ORM\Mapping as ORM;
 use tracky\datetime\DateTime;
 
-abstract class ViewEntry
+abstract class ViewEntry extends BaseEntity
 {
-    #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    #[ORM\GeneratedValue]
-    protected int $id;
-
     #[ORM\OneToOne(targetEntity: "User")]
     #[ORM\JoinColumn(name: "user", referencedColumnName: "id")]
     protected User $user;
 
     #[ORM\Column(name: "dateTime", type: "datetime")]
     protected DateTime $dateTime;
-
-    public function getId(): int
-    {
-        return $this->id;
-    }
 
     public function getUser(): User
     {
