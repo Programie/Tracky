@@ -5,31 +5,29 @@
 {% block title %}History{% endblock %}
 
 {% block content %}
-    <div class="container mt-3">
-        <div class="row">
-            {% for entry in entries %}
-                {% if entry.type == "episode" %}
-                    {% set imageUrl = entry.episode.show.posterImageUrl %}
-                {% elseif entry.type == "movie" %}
-                    {% set imageUrl = entry.movie.posterImageUrl %}
-                {% endif %}
-                <div class="col">
-                    <div class="card history-entry">
-                        <img class="card-img-top" src="{{ imageUrl }}"/>
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                {% if entry.type == "episode" %}
-                                    <b>{{ entry.episode.season }}x{{ entry.episode.episode }}</b> {{ entry.episode.title }}<br/>
-                                    <small>{{ entry.episode.show.title }}</small><br/>
-                                {% elseif entry.type == "movie" %}
-                                    {{ entry.movie.title }}<br/>
-                                {% endif %}
-                                <small>{{ entry.datetime.format("r") }}</small>
-                            </h5>
-                        </div>
+    <div class="row">
+        {% for entry in entries %}
+            {% if entry.type == "episode" %}
+                {% set imageUrl = entry.episode.show.posterImageUrl %}
+            {% elseif entry.type == "movie" %}
+                {% set imageUrl = entry.movie.posterImageUrl %}
+            {% endif %}
+            <div class="col">
+                <div class="card history-entry">
+                    <img class="card-img-top" src="{{ imageUrl }}"/>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% if entry.type == "episode" %}
+                                <b>{{ entry.episode.season }}x{{ entry.episode.episode }}</b> {{ entry.episode.title }}<br/>
+                                <small>{{ entry.episode.show.title }}</small><br/>
+                            {% elseif entry.type == "movie" %}
+                                {{ entry.movie.title }}<br/>
+                            {% endif %}
+                            <small>{{ entry.datetime.format("r") }}</small>
+                        </h5>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

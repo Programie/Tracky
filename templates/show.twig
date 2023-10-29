@@ -5,24 +5,22 @@
 {% block title %}{{ show.title }}{% endblock %}
 
 {% block content %}
-    <div class="container mt-3">
-        <h1>{{ show.title }}</h1>
+    <h1>{{ show.title }}</h1>
 
-        <h2>Seasons</h2>
-        <div class="row row-cols-1 row-cols-md-5 g-4">
-            {% for season in show.seasons %}
-                <div class="col">
-                    <a class="card" href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}">
-                        <img class="card-img-top" src="{{ season.posterImageUrl }}"/>
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                Season {{ season.number }}<br/>
-                                <small>{{ season.episodes|length }} episodes</small>
-                            </h5>
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
+    <h2>Seasons</h2>
+    <div class="row row-cols-1 row-cols-md-5 g-4">
+        {% for season in show.seasons %}
+            <div class="col">
+                <a class="card" href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}">
+                    <img class="card-img-top" src="{{ season.posterImageUrl }}"/>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Season {{ season.number }}<br/>
+                            <small>{{ season.episodes|length }} episodes</small>
+                        </h5>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

@@ -5,45 +5,43 @@
 {% block title %}{{ show.title }} - Season {{ season.number }}{% endblock %}
 
 {% block content %}
-    <div class="container mt-3">
-        <h1>
-            <a href="{{ path("showOverviewPage", {"id": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a>
-            <span class="fs-4 text-body-secondary">Season {{ season.number }}</span>
-        </h1>
+    <h1>
+        <a href="{{ path("showOverviewPage", {"id": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a>
+        <span class="fs-4 text-body-secondary">Season {{ season.number }}</span>
+    </h1>
 
-        <div class="episode-pagination d-flex justify-content-between mt-3 mb-3">
+    <div class="episode-pagination d-flex justify-content-between mt-3 mb-3">
             <span>
                 {% if pagination.previousSeason is not null %}
                     <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.previousSeason}) }}"><i class="fa-solid fa-arrow-left"></i> Season {{ pagination.previousSeason }}</a>
                 {% endif %}
             </span>
-            <span class="justify-content-end">
+        <span class="justify-content-end">
                 {% if pagination.nextSeason is not null %}
                     <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.nextSeason}) }}">Season {{ pagination.nextSeason }} <i class="fa-solid fa-arrow-right"></i></a>
                 {% endif %}
             </span>
-        </div>
+    </div>
 
-        <h2>Episodes</h2>
-        <div class="row row-cols-1 g-4">
-            {% for episode in season.episodes %}
-                <div class="col">
-                    <div class="card">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img class="img-fluid rounded-start" src="{{ episode.posterImageUrl }}"/>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ episode.title }}</h5>
-                                    <h6 class="card-subtitle text-body-secondary">Episode {{ season.number }}x{{ episode.number }}</h6>
-                                    <p class="card-text mt-3"><small class="text-body-secondary">First aired: {{ episode.firstAired.format("Y-m-d") }}</small></p>
-                                </div>
+    <h2>Episodes</h2>
+    <div class="row row-cols-1 g-4">
+        {% for episode in season.episodes %}
+            <div class="col">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img class="img-fluid rounded-start" src="{{ episode.posterImageUrl }}"/>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ episode.title }}</h5>
+                                <h6 class="card-subtitle text-body-secondary">Episode {{ season.number }}x{{ episode.number }}</h6>
+                                <p class="card-text mt-3"><small class="text-body-secondary">First aired: {{ episode.firstAired.format("Y-m-d") }}</small></p>
                             </div>
                         </div>
                     </div>
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
