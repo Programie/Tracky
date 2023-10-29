@@ -18,6 +18,14 @@ class ShowController extends AbstractController
     {
     }
 
+    #[Route("/shows", name: "showsPage")]
+    public function getShowsPage(): Response
+    {
+        return $this->render("shows.twig", [
+            "shows" => $this->showRepository->findAll()
+        ]);
+    }
+
     #[Route("/shows/{id}", name: "showOverviewPage")]
     public function getShowOverviewPage(Request $request, Show $show): Response
     {
