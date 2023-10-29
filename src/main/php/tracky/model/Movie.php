@@ -3,7 +3,7 @@ namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: "MovieRepository")]
+#[ORM\Entity(repositoryClass: "tracky\orm\MovieRepository")]
 #[ORM\Table(name: "movies")]
 class Movie
 {

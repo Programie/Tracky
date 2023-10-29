@@ -3,7 +3,7 @@ namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: "EpisodeViewRepository")]
+#[ORM\Entity(repositoryClass: "tracky\orm\EpisodeViewRepository")]
 #[ORM\Table(name: "episodeviews")]
 class EpisodeView extends ViewEntry
 {
