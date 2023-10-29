@@ -1,0 +1,23 @@
+{% set assetEntryPoint = "main" %}
+
+{% extends "page.twig" %}
+
+{% block title %}All movies{% endblock %}
+
+{% block content %}
+    <h1>All movies</h1>
+
+    <div class="row row-cols-1 row-cols-md-5 g-4">
+        {% for movie in movies %}
+            <div class="col">
+                <div class="card">
+                    <img class="card-img-top" src="{{ movie.posterImageUrl }}"/>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ movie.title }}</h5>
+                        <h6 class="text-body-secondary">{{ movie.year }}</h6>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
