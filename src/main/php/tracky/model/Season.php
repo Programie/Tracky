@@ -20,6 +20,7 @@ class Season extends BaseEntity
     private int $number;
 
     #[ORM\OneToMany(mappedBy: "season", targetEntity: "Episode", cascade: ["persist"])]
+    #[ORM\OrderBy(["number" => "ASC"])]
     private mixed $episodes = [];
 
     public function getShow(): Show
