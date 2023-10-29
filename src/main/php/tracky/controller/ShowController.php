@@ -2,11 +2,9 @@
 namespace tracky\controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use tracky\model\Season;
 use tracky\model\Show;
 use tracky\orm\ShowRepository;
 
@@ -27,7 +25,7 @@ class ShowController extends AbstractController
     }
 
     #[Route("/shows/{id}", name: "showOverviewPage")]
-    public function getShowOverviewPage(Request $request, Show $show): Response
+    public function getShowOverviewPage(Show $show): Response
     {
         return $this->render("show.twig", [
             "show" => $show
@@ -35,7 +33,7 @@ class ShowController extends AbstractController
     }
 
     #[Route("/shows/{id}/seasons/{number}", name: "seasonPage")]
-    public function getSeasonPage(Request $request, Show $show, int $number): Response
+    public function getSeasonPage(Show $show, int $number): Response
     {
         $season = $show->getSeason($number);
         if ($season === null) {
