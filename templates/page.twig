@@ -22,6 +22,10 @@
                         <li class="nav-item"><a class="nav-link" href="{{ path("showsPage") }}">Shows</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ path("moviesPage") }}">Movies</a></li>
                     </ul>
+
+                    <form action="{{ path("searchPage") }}" method="get" role="search">
+                        <input class="form-control" type="search" name="query" placeholder="Search for shows, episodes and movies"/>
+                    </form>
                 </div>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"><span class="navbar-toggler-icon"></span></button>

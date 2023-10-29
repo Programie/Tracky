@@ -1,0 +1,26 @@
+{% set assetEntryPoint = "main" %}
+
+{% extends "page.twig" %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+    <form method="get" role="search">
+        <input class="form-control" type="search" name="query" value="{{ query }}" placeholder="Search for shows, episodes and movies"/>
+    </form>
+
+    {% if results %}
+        <div class="row row-cols-1 row-cols-md-5 g-4 mt-1">
+            {% for entry in results %}
+                <div class="col">
+                    <div class="card">
+                        <img class="card-img-top" src="{{ entry.posterImageUrl }}"/>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ entry.title }}</h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
