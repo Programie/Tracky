@@ -27,7 +27,6 @@
     "symfony/console": "^6.2",
     "symfony/dependency-injection": "^6.2",
     "symfony/dotenv": "^6.2",
-    "symfony/flex": "^2.2",
     "symfony/framework-bundle": "^6.2",
     "symfony/runtime": "^6.2",
     "symfony/translation": "^6.2",
@@ -39,7 +38,6 @@
   },
   "config": {
     "allow-plugins": {
-      "symfony/flex": true,
       "symfony/runtime": true
     }
   }
