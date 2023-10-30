@@ -8,7 +8,7 @@
     <div class="row">
         {% for entry in entries %}
             {% if entry.type == "episode" %}
-                {% set imageUrl = entry.episode.show.posterImageUrl %}
+                {% set imageUrl = entry.episode.posterImageUrl %}
             {% elseif entry.type == "movie" %}
                 {% set imageUrl = entry.movie.posterImageUrl %}
             {% endif %}
@@ -18,8 +18,8 @@
                     <div class="card-body">
                         <h5 class="card-title">
                             {% if entry.type == "episode" %}
-                                <b>{{ entry.episode.season }}x{{ entry.episode.episode }}</b> {{ entry.episode.title }}<br/>
-                                <small>{{ entry.episode.show.title }}</small><br/>
+                                <b>{{ entry.episode.season.number }}x{{ entry.episode.number }}</b> {{ entry.episode.title }}<br/>
+                                <small>{{ entry.episode.season.show.title }}</small><br/>
                             {% elseif entry.type == "movie" %}
                                 {{ entry.movie.title }}<br/>
                             {% endif %}

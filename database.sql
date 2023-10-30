@@ -2,7 +2,9 @@ CREATE TABLE `users`
 (
     `id`       int(11)      NOT NULL AUTO_INCREMENT,
     `username` varchar(100) NOT NULL,
-    PRIMARY KEY (`id`)
+    `password` varchar(200) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX (`username`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 

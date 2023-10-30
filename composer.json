@@ -34,11 +34,15 @@
     "symfony/yaml": "^6.2",
     "twig/extra-bundle": "^2.12|^3.0",
     "twig/html-extra": "^3.5",
-    "twig/twig": "^3.5"
+    "twig/twig": "^3.5",
+    "symfony/security-bundle": "^6.3"
   },
   "config": {
     "allow-plugins": {
       "symfony/runtime": true
     }
+  },
+  "require-dev": {
+    "symfony/profiler-pack": "^1.0"
   }
 }

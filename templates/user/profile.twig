@@ -1,0 +1,10 @@
+{% set assetEntryPoint = "main" %}
+
+{% extends "page.twig" %}
+
+{% block title %}View profile - {{ user.username }}{% endblock %}
+
+{% block content %}
+    <h1>Profile</h1>
+    <a href="{{ path("userHistoryPage", {"username": user.username}) }}">History</a>
+{% endblock %}

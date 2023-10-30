@@ -23,9 +23,24 @@
                         <li class="nav-item"><a class="nav-link" href="{{ path("moviesPage") }}">Movies</a></li>
                     </ul>
 
-                    <form action="{{ path("searchPage") }}" method="get" role="search">
-                        <input class="form-control" type="search" name="query" placeholder="Search for shows, episodes and movies"/>
-                    </form>
+                    <div class="navbar-nav ms-auto mb-md-0">
+                        <form action="{{ path("searchPage") }}" method="get" role="search">
+                            <input class="form-control" type="search" name="query" placeholder="Search for shows, episodes and movies"/>
+                        </form>
+
+                        {% if app.user %}
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ app.user.username }}</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ path("profilePage", {"username": app.user.username}) }}">Profile</a></li>
+                                    <li class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{{ path("logout") }}">Logout</a></li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            <a class="nav-link" href="{{ path("loginPage") }}">Login</a>
+                        {% endif %}
+                    </div>
                 </div>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"><span class="navbar-toggler-icon"></span></button>

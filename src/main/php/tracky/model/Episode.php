@@ -2,6 +2,7 @@
 namespace tracky\model;
 
 use DateTime;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use tracky\model\traits\PosterImage;
 use tracky\orm\EpisodeRepository;
@@ -24,6 +25,10 @@ class Episode extends BaseEntity
 
     #[ORM\Column(name: "firstAired", type: "date")]
     private DateTime $firstAired;
+
+    #[ORM\OneToMany(mappedBy: "episode", targetEntity: EpisodeView::class)]
+    #[ORM\OrderBy(["dateTime" => "ASC"])]
+    private mixed $views;
 
     public function getSeason(): Season
     {
@@ -67,5 +72,13 @@ class Episode extends BaseEntity
     {
         $this->firstAired = $firstAired;
         return $this;
+    }
+
+    public function getViewsForUser(User $user)
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq("user", $user));
+
+        return $this->views->matching($criteria);
     }
 }

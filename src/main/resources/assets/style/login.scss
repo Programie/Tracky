@@ -1,0 +1,24 @@
+#login-form {
+    max-width: 330px;
+    padding: 1rem;
+}
+
+#login-form .form-floating:focus-within {
+    z-index: 2;
+}
+
+#login-form .form-floating input {
+    margin-bottom: -1px;
+    border-radius: 0;
+}
+
+#login-form .form-floating:first-of-type input {
+    border-top-left-radius: var(--bs-border-radius);
+    border-top-right-radius: var(--bs-border-radius);
+}
+
+#login-form .form-floating:last-of-type input {
+    margin-bottom: 10px;
+    border-bottom-left-radius: var(--bs-border-radius);
+    border-bottom-right-radius: var(--bs-border-radius);
+}
