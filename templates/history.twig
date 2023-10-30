@@ -1,11 +1,11 @@
-{% set assetEntryPoint = "history" %}
+{% set assetEntryPoint = "main" %}
 
 {% extends "page.twig" %}
 
 {% block title %}History{% endblock %}
 
 {% block content %}
-    <div class="row">
+    <div class="row row-cols-1 row-cols-md-5 g-4">
         {% for entry in entries %}
             {% if entry.type == "episode" %}
                 {% set imageUrl = entry.episode.posterImageUrl %}
@@ -13,7 +13,7 @@
                 {% set imageUrl = entry.movie.posterImageUrl %}
             {% endif %}
             <div class="col">
-                <div class="card history-entry">
+                <div class="card">
                     <img class="card-img-top" src="{{ imageUrl }}"/>
                     <div class="card-body">
                         <h5 class="card-title">
