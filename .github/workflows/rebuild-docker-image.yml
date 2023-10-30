@@ -1,0 +1,16 @@
+name: Rebuild Docker image from latest release
+
+on:
+  schedule:
+    - cron: '0 10 * * SUN'
+
+permissions:
+  packages: write
+
+jobs:
+  build:
+    uses: programie/Workflows/.github/workflows/build-docker-image.yml@main
+    with:
+      dockerhub_image: programie/tracky
+      use_latest_release: true
+    secrets: inherit

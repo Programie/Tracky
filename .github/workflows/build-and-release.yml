@@ -1,0 +1,24 @@
+name: Build and Release
+
+on: push
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-docker-image:
+    uses: programie/Workflows/.github/workflows/build-docker-image.yml@main
+    with:
+      dockerhub_image: programie/tracky
+    secrets: inherit
+
+  build-release-package:
+    needs: build-docker-image
+    if: startsWith(github.ref, 'refs/tags/')
+    uses: programie/Workflows/.github/workflows/package-zip-release-from-docker.yml@main
+    with:
+      path: /app
+      zip_name: Tracky
+      additional_files: database.sql database-sample.sql
+    secrets: inherit
