@@ -10,7 +10,7 @@ abstract class ViewEntry extends BaseEntity
     #[ORM\JoinColumn(name: "user", referencedColumnName: "id")]
     protected User $user;
 
-    #[ORM\Column(name: "dateTime", type: "datetime")]
+    #[ORM\Column(name: "datetime", type: "datetime")]
     protected DateTime $dateTime;
 
     public function getUser(): User
