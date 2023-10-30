@@ -1,0 +1,44 @@
+{% set assetEntryPoint = "main" %}
+
+{% extends "page.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <h1>Latest episodes</h1>
+
+    <div class="row row-cols-1 row-cols-md-5 g-4">
+        {% for episode in latestEpisodes %}
+            <div class="col">
+                <div class="card">
+                    <img class="card-img-top" src="{{ episode.posterImageUrl }}"/>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <b>{{ episode.season.number }}x{{ episode.number }}</b> {{ episode.title }}<br/>
+                            <small>{{ episode.season.show.title }}</small><br/>
+                            <small>{{ episode.firstAired.format("r") }}</small>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h1>Latest movies</h1>
+
+    <div class="row row-cols-1 row-cols-md-5 g-4">
+        {% for movie in latestMovies %}
+            <div class="col">
+                <div class="card">
+                    <img class="card-img-top" src="{{ movie.posterImageUrl }}"/>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ movie.title }}<br/>
+                            <small>{{ movie.year }}</small>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
