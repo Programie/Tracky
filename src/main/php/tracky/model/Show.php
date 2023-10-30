@@ -5,8 +5,9 @@ use Doctrine\ORM\Mapping as ORM;
 use tracky\dataprovider\TMDB;
 use tracky\model\traits\PosterImage;
 use tracky\model\traits\TMDB as TMDBTrait;
+use tracky\orm\ShowRepository;
 
-#[ORM\Entity(repositoryClass: "tracky\orm\ShowRepository")]
+#[ORM\Entity(repositoryClass: ShowRepository::class)]
 #[ORM\Table(name: "shows")]
 class Show extends BaseEntity
 {
@@ -16,7 +17,7 @@ class Show extends BaseEntity
     #[ORM\Column(type: "string")]
     private string $title;
 
-    #[ORM\OneToMany(mappedBy: "show", targetEntity: "Season", cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: "show", targetEntity: Season::class, cascade: ["persist"])]
     #[ORM\OrderBy(["number" => "ASC"])]
     private mixed $seasons = [];
 

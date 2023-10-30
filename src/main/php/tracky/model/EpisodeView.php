@@ -2,12 +2,13 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
+use tracky\orm\EpisodeViewRepository;
 
-#[ORM\Entity(repositoryClass: "tracky\orm\EpisodeViewRepository")]
+#[ORM\Entity(repositoryClass: EpisodeViewRepository::class)]
 #[ORM\Table(name: "episodeviews")]
 class EpisodeView extends ViewEntry
 {
-    #[ORM\OneToOne(targetEntity: "Episode")]
+    #[ORM\OneToOne(targetEntity: Episode::class)]
     #[ORM\JoinColumn(name: "episode", referencedColumnName: "id")]
     private Episode $episode;
 

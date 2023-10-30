@@ -2,12 +2,13 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
+use tracky\orm\MovieViewRepository;
 
-#[ORM\Entity(repositoryClass: "tracky\orm\MovieViewRepository")]
+#[ORM\Entity(repositoryClass: MovieViewRepository::class)]
 #[ORM\Table(name: "movieviews")]
 class MovieView extends ViewEntry
 {
-    #[ORM\OneToOne(targetEntity: "Movie")]
+    #[ORM\OneToOne(targetEntity: Movie::class)]
     #[ORM\JoinColumn(name: "movie", referencedColumnName: "id")]
     private Movie $movie;
 

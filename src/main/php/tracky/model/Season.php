@@ -5,21 +5,22 @@ use Doctrine\ORM\Mapping as ORM;
 use tracky\dataprovider\TMDB;
 use tracky\datetime\Date;
 use tracky\model\traits\PosterImage;
+use tracky\orm\SeasonRepository;
 
-#[ORM\Entity(repositoryClass: "tracky\orm\SeasonRepository")]
+#[ORM\Entity(repositoryClass: SeasonRepository::class)]
 #[ORM\Table(name: "seasons")]
 class Season extends BaseEntity
 {
     use PosterImage;
 
-    #[ORM\OneToOne(targetEntity: "Show")]
+    #[ORM\OneToOne(targetEntity: Show::class)]
     #[ORM\JoinColumn(name: "`show`", referencedColumnName: "id")]
     private Show $show;
 
     #[ORM\Column(type: "integer")]
     private int $number;
 
-    #[ORM\OneToMany(mappedBy: "season", targetEntity: "Episode", cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: "season", targetEntity: Episode::class, cascade: ["persist"])]
     #[ORM\OrderBy(["number" => "ASC"])]
     private mixed $episodes = [];
 

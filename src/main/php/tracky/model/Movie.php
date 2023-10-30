@@ -5,8 +5,9 @@ use Doctrine\ORM\Mapping as ORM;
 use tracky\dataprovider\TMDB;
 use tracky\model\traits\PosterImage;
 use tracky\model\traits\TMDB as TMDBTrait;
+use tracky\orm\MovieRepository;
 
-#[ORM\Entity(repositoryClass: "tracky\orm\MovieRepository")]
+#[ORM\Entity(repositoryClass:MovieRepository::class)]
 #[ORM\Table(name: "movies")]
 class Movie extends BaseEntity
 {

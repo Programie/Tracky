@@ -2,8 +2,9 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
+use tracky\orm\UserRepository;
 
-#[ORM\Entity(repositoryClass: "tracky\orm\UserRepository")]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: "users")]
 class User extends BaseEntity
 {

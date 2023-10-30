@@ -4,14 +4,15 @@ namespace tracky\model;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use tracky\model\traits\PosterImage;
+use tracky\orm\EpisodeRepository;
 
-#[ORM\Entity(repositoryClass: "tracky\orm\EpisodeRepository")]
+#[ORM\Entity(repositoryClass: EpisodeRepository::class)]
 #[ORM\Table(name: "episodes")]
 class Episode extends BaseEntity
 {
     use PosterImage;
 
-    #[ORM\OneToOne(targetEntity: "Season")]
+    #[ORM\OneToOne(targetEntity: Season::class)]
     #[ORM\JoinColumn(name: "season", referencedColumnName: "id")]
     private Season $season;
 
