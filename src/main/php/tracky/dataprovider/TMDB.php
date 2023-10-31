@@ -84,4 +84,19 @@ class TMDB
             "posterImageUrl" => sprintf("https://image.tmdb.org/t/p/w500/%s", ltrim($data["poster_path"], "/"))
         ];
     }
+
+    public function getTmdbIdFromExternalId(string $externalSource, string $externalId, string $expectedMediaType): ?int
+    {
+        $data = $this->getJson(sprintf("find/%s", $externalId), ["external_source" => $externalSource]);
+
+        foreach ($data as $results) {
+            foreach ($results as $result) {
+                if ($result["media_type"] === $expectedMediaType) {
+                    return $result["id"];
+                }
+            }
+        }
+
+        return null;
+    }
 }
