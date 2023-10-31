@@ -6,6 +6,7 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use tracky\dataprovider\TMDB;
@@ -32,8 +33,8 @@ class ScrobbleController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route("/scrobble", name: "scrobble", methods: ["POST"])]
-    public function scrobble(Request $request): string
+    #[Route("/api/scrobble", name: "scrobble", methods: ["POST"])]
+    public function scrobble(Request $request): Response
     {
         /**
          * @var $user User
@@ -48,7 +49,7 @@ class ScrobbleController extends AbstractController
         $event = $json["event"] ?? "end";
 
         if ($event !== "end") {
-            return sprintf("Event is '%s', only accepting 'end'", $event);
+            return $this->returnPlainText(sprintf("Event is '%s', only accepting 'end'", $event));
         }
 
         if (isset($json["timestamp"])) {
@@ -57,13 +58,17 @@ class ScrobbleController extends AbstractController
             $timestamp = new DateTime;
         }
 
+        if (!isset($json["mediaType"])) {
+            throw new BadRequestException("Missing media type");
+        }
+
         switch (strtolower($json["mediaType"])) {
             case "episode":
                 $this->scrobbleEpisode($json, $timestamp, $user);
-                return "Episode view added to database";
+                return $this->returnPlainText("Episode view added to database");
             case "movie":
                 $this->scrobbleMovie($json, $timestamp, $user);
-                return "Movie view added to database";
+                return $this->returnPlainText("Movie view added to database");
             default:
                 throw new BadRequestException(sprintf("Invalid media type: %s", $json["mediaType"]));
         }
@@ -170,5 +175,10 @@ class ScrobbleController extends AbstractController
         }
 
         return null;
+    }
+
+    private function returnPlainText(string $content): Response
+    {
+        return new Response($content);
     }
 }
