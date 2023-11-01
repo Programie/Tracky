@@ -78,3 +78,14 @@ CREATE TABLE `movieviews`
     FOREIGN KEY (`movie`) REFERENCES `movies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `scrobblequeue`
+(
+    `id`       int(11)  NOT NULL AUTO_INCREMENT,
+    `user`     int(11)  NOT NULL,
+    `json`     json     NOT NULL,
+    `datetime` datetime NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
