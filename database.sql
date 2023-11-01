@@ -13,6 +13,7 @@ CREATE TABLE `shows`
     `id`             int(11)      NOT NULL AUTO_INCREMENT,
     `title`          varchar(300) NOT NULL,
     `tmdbId`         int(11)      DEFAULT NULL,
+    `tvdbId`         int(11)      DEFAULT NULL,
     `posterImageUrl` varchar(500) DEFAULT NULL,
     `language`       varchar(10)  DEFAULT NULL,
     PRIMARY KEY (`id`)
@@ -63,6 +64,7 @@ CREATE TABLE `movies`
     `plot`           text         DEFAULT NULL,
     `year`           int(11)      DEFAULT NULL,
     `tmdbId`         int(11)      DEFAULT NULL,
+    `tvdbId`         int(11)      DEFAULT NULL,
     `posterImageUrl` varchar(500) DEFAULT NULL,
     `language`       varchar(10)  DEFAULT NULL,
     PRIMARY KEY (`id`)

@@ -3,14 +3,14 @@ namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
 use tracky\model\traits\PosterImage;
-use tracky\model\traits\TMDB as TMDBTrait;
+use tracky\model\traits\DataProvider;
 use tracky\orm\ShowRepository;
 
 #[ORM\Entity(repositoryClass: ShowRepository::class)]
 #[ORM\Table(name: "shows")]
 class Show extends BaseEntity
 {
-    use TMDBTrait;
+    use DataProvider;
     use PosterImage;
 
     #[ORM\Column(type: "string")]

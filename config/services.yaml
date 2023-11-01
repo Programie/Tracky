@@ -24,6 +24,9 @@ services:
       $apiToken: "%tmdb.api-token%"
       $defaultMovieLanguage: "%tmdb.movies.language"
       $defaultShowLanguage: "%tmdb.shows.language"
+  tracky\dataprovider\TVDB:
+    arguments:
+      $authToken: "%tvdb.auth-token%"
   tracky\scrobbler\Scrobbler:
     arguments:
       $useQueue: "%scrobbler.use-queue%"
