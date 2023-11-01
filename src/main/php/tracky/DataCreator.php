@@ -2,7 +2,7 @@
 namespace tracky;
 
 use Doctrine\ORM\EntityManagerInterface;
-use tracky\dataprovider\Provider;
+use tracky\dataprovider\Helper;
 use tracky\model\Episode;
 use tracky\model\Movie;
 use tracky\model\Season;
@@ -14,7 +14,7 @@ use UnexpectedValueException;
 class DataCreator
 {
     public function __construct(
-        private readonly Provider               $dataProvider,
+        private readonly Helper                 $dataProviderHelper,
         private readonly ShowRepository         $showRepository,
         private readonly MovieRepository        $movieRepository,
         private readonly EntityManagerInterface $entityManager
@@ -24,16 +24,18 @@ class DataCreator
 
     public function getOrCreateShow(array $uniqueIds, bool $createSeasonsAndEpisodes): Show
     {
-        $providerId = $this->dataProvider->getIdFromUniqueIds($uniqueIds);
+        $dataProvider = $this->dataProviderHelper->getProviderByType(Helper::TYPE_SHOW);
+
+        $providerId = $dataProvider->getIdFromUniqueIds($uniqueIds);
         if ($providerId === null) {
             throw new UnexpectedValueException("Unable to get ID from data provider");
         }
 
-        $show = $this->showRepository->findOneBy([$this->dataProvider->getIdFieldName() => $providerId]);
+        $show = $this->showRepository->findOneBy([$dataProvider->getIdFieldName() => $providerId]);
         if ($show === null) {
             $show = new Show;
-            $this->dataProvider->setIdForShow($show, $providerId);
-            $this->dataProvider->fetchShow($show, $createSeasonsAndEpisodes);
+            $dataProvider->setIdForShow($show, $providerId);
+            $dataProvider->fetchShow($show, $createSeasonsAndEpisodes);
 
             $this->entityManager->persist($show);
         }
@@ -43,12 +45,14 @@ class DataCreator
 
     public function getOrCreateSeason(array $uniqueIds, int $seasonNumber, bool $createEpisodes): Season
     {
+        $dataProvider = $this->dataProviderHelper->getProviderByType(Helper::TYPE_SHOW);
+
         $show = $this->getOrCreateShow($uniqueIds, false);
 
         $created = false;
         $season = $show->getOrCreateSeason($seasonNumber, $created);
         if ($created) {
-            $this->dataProvider->fetchSeason($season, $createEpisodes);
+            $dataProvider->fetchSeason($season, $createEpisodes);
 
             $this->entityManager->persist($season);
         }
@@ -58,12 +62,14 @@ class DataCreator
 
     public function getOrCreateEpisode(array $uniqueIds, int $seasonNumber, int $episodeNumber): Episode
     {
+        $dataProvider = $this->dataProviderHelper->getProviderByType(Helper::TYPE_SHOW);
+
         $season = $this->getOrCreateSeason($uniqueIds, $seasonNumber, false);
 
         $created = false;
         $episode = $season->getOrCreateEpisode($episodeNumber, $created);
         if ($created) {
-            $this->dataProvider->fetchEpisode($episode);
+            $dataProvider->fetchEpisode($episode);
 
             $this->entityManager->persist($episode);
         }
@@ -73,16 +79,18 @@ class DataCreator
 
     public function getOrCreateMovie(array $uniqueIds): Movie
     {
-        $providerId = $this->dataProvider->getIdFromUniqueIds($uniqueIds);
+        $dataProvider = $this->dataProviderHelper->getProviderByType(Helper::TYPE_MOVIE);
+
+        $providerId = $dataProvider->getIdFromUniqueIds($uniqueIds);
         if ($providerId === null) {
             throw new UnexpectedValueException("Unable to get ID from data provider");
         }
 
-        $movie = $this->movieRepository->findOneBy([$this->dataProvider->getIdFieldName() => $providerId]);
+        $movie = $this->movieRepository->findOneBy([$dataProvider->getIdFieldName() => $providerId]);
         if ($movie === null) {
             $movie = new Movie;
-            $this->dataProvider->setIdForMovie($movie, $providerId);
-            $this->dataProvider->fetchMovie($movie);
+            $dataProvider->setIdForMovie($movie, $providerId);
+            $dataProvider->fetchMovie($movie);
 
             $this->entityManager->persist($movie);
         }

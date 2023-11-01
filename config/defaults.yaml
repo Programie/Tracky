@@ -1,4 +1,6 @@
 parameters:
+  data-provider.movies: tmdb
+  data-provider.shows: tvdb
   tmdb.api-token:
   tmdb.movies.language: en-US
   tmdb.shows.language: en-US

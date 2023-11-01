@@ -18,7 +18,10 @@ services:
       - '../src/main/php/tracky/Entity/'
       - '../src/main/php/tracky/Kernel.php'
 
-  tracky\dataprovider\Provider: '@tracky\dataprovider\TMDB'
+  tracky\dataprovider\Helper:
+    arguments:
+      $movieProvider: "%data-provider.movies%"
+      $showProvider: "%data-provider.shows%"
   tracky\dataprovider\TMDB:
     arguments:
       $apiToken: "%tmdb.api-token%"

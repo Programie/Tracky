@@ -5,19 +5,24 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use tracky\dataprovider\Helper;
 use tracky\dataprovider\Provider;
 use tracky\model\Movie;
 use tracky\orm\MovieRepository;
 
 class FetchMovieDataCommand extends Command
 {
+    private Provider $dataProvider;
+
     public function __construct(
-        private readonly Provider               $dataProvider,
+        Helper                                  $dataProviderHelper,
         private readonly MovieRepository        $movieRepository,
         private readonly EntityManagerInterface $entityManager
     )
     {
         parent::__construct();
+
+        $this->dataProvider = $dataProviderHelper->getProviderByType(Helper::TYPE_MOVIE);
     }
 
     public function configure(): void
