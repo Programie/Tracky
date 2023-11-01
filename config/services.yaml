@@ -18,6 +18,7 @@ services:
       - '../src/main/php/tracky/Entity/'
       - '../src/main/php/tracky/Kernel.php'
 
+  tracky\dataprovider\Provider: '@tracky\dataprovider\TMDB'
   tracky\dataprovider\TMDB:
     arguments:
       $apiToken: "%tmdb.api-token%"

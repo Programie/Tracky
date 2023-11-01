@@ -2,25 +2,19 @@
 namespace tracky\scrobbler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use tracky\dataprovider\TMDB;
+use tracky\DataCreator;
 use tracky\datetime\DateTime;
 use tracky\model\EpisodeView;
-use tracky\model\Movie;
 use tracky\model\MovieView;
 use tracky\model\ScrobbleQueue;
-use tracky\model\Show;
 use tracky\model\User;
-use tracky\orm\MovieRepository;
-use tracky\orm\ShowRepository;
 use UnexpectedValueException;
 
 class Scrobbler
 {
     public function __construct(
-        private readonly ShowRepository         $showRepository,
-        private readonly MovieRepository        $movieRepository,
+        private readonly DataCreator            $dataCreator,
         private readonly EntityManagerInterface $entityManager,
-        private readonly TMDB                   $tmdb,
         private readonly bool                   $useQueue = false,
     )
     {
@@ -84,29 +78,7 @@ class Scrobbler
             throw new UnexpectedValueException("Missing episode number");
         }
 
-        $tmdbId = $this->getTmdbId($json["uniqueIds"] ?? [], "tv");
-        if ($tmdbId === null) {
-            throw new UnexpectedValueException("Unable to get TMDB ID");
-        }
-
-        $show = $this->showRepository->findOneBy(["tmdbId" => $tmdbId]);
-        if ($show === null) {
-            $show = new Show;
-            $show->setTmdbId($tmdbId);
-            $show->fetchTMDBData($this->tmdb);
-
-            $this->entityManager->persist($show);
-        }
-
-        $season = $show->getSeason($seasonNumber);
-        if ($season === null) {
-            throw new UnexpectedValueException("Unknown season");
-        }
-
-        $episode = $season->getEpisode($episodeNumber);
-        if ($episode === null) {
-            throw new UnexpectedValueException("Unknown episode");
-        }
+        $episode = $this->dataCreator->getOrCreateEpisode($json["uniqueIds"] ?? [], $seasonNumber, $episodeNumber);
 
         $episodeView = new EpisodeView;
         $episodeView->setEpisode($episode);
@@ -119,19 +91,7 @@ class Scrobbler
 
     private function addMovieView(array $json, DateTime $dateTime, User $user): void
     {
-        $tmdbId = $this->getTmdbId($json["uniqueIds"] ?? [], "movie");
-        if ($tmdbId === null) {
-            throw new UnexpectedValueException("Unable to get TMDB ID");
-        }
-
-        $movie = $this->movieRepository->findOneBy(["tmdbId" => $tmdbId]);
-        if ($movie === null) {
-            $movie = new Movie;
-            $movie->setTmdbId($tmdbId);
-            $movie->fetchTMDBData($this->tmdb);
-
-            $this->entityManager->persist($movie);
-        }
+        $movie = $this->dataCreator->getOrCreateMovie($json["uniqueIds"] ?? []);
 
         $movieView = new MovieView;
         $movieView->setMovie($movie);
@@ -140,37 +100,5 @@ class Scrobbler
 
         $this->entityManager->persist($movieView);
         $this->entityManager->flush();
-    }
-
-    private function getTmdbId(array $uniqueIds, string $expectedMediaType): ?int
-    {
-        $tmdbId = $uniqueIds["tmdb"] ?? null;
-        if ($tmdbId !== null) {
-            $tmdbId = (int)$tmdbId;
-            if ($tmdbId === 0) {
-                return null;
-            }
-
-            return $tmdbId;
-        }
-
-        $externalSources = [
-            "imdb" => "imdb_id",
-            "tvdb" => "tvdb_id"
-        ];
-
-        foreach ($externalSources as $provider => $externalSource) {
-            $uniqueId = $uniqueIds[$provider] ?? null;
-            if ($uniqueId === null) {
-                continue;
-            }
-
-            $tmdbId = $this->tmdb->getTmdbIdFromExternalId($externalSource, $uniqueId, $expectedMediaType);
-            if ($tmdbId !== null) {
-                return $tmdbId;
-            }
-        }
-
-        return null;
     }
 }

@@ -2,7 +2,6 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
-use tracky\dataprovider\TMDB;
 use tracky\model\traits\PosterImage;
 use tracky\model\traits\TMDB as TMDBTrait;
 use tracky\orm\ShowRepository;
@@ -67,33 +66,19 @@ class Show extends BaseEntity
         return null;
     }
 
-    public function fetchTMDBData(TMDB $tmdb): bool
+    public function getOrCreateSeason(int $seasonNumber, &$created = false): Season
     {
-        $tmdbId = $this->getTmdbId();
-        if ($tmdbId === null) {
-            return false;
+        $season = $this->getSeason($seasonNumber);
+        if ($season === null) {
+            $season = new Season;
+            $season->setShow($this);
+            $season->setNumber($seasonNumber);
+
+            $this->addSeason($season);
+
+            $created = true;
         }
 
-        $showData = $tmdb->getShowData($tmdbId, $this->getLanguage());
-        $this->setTitle($showData["title"]);
-        $this->setPosterImageUrl($showData["posterImageUrl"]);
-
-        foreach ($showData["seasons"] as $seasonData) {
-            $seasonNumber = $seasonData["season_number"];
-
-            $season = $this->getSeason($seasonNumber);
-            if ($season === null) {
-                $season = new Season;
-                $season->setShow($this);
-                $season->setNumber($seasonNumber);
-                $this->addSeason($season);
-            }
-
-            $season->setPosterImageUrl($seasonData["posterImageUrl"]);
-
-            $season->fetchTMDBData($tmdb);
-        }
-
-        return true;
+        return $season;
     }
 }

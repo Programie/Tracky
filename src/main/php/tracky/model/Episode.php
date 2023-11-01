@@ -1,9 +1,10 @@
 <?php
 namespace tracky\model;
 
-use DateTime;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use tracky\datetime\Date;
+use tracky\model\traits\Plot;
 use tracky\model\traits\PosterImage;
 use tracky\orm\EpisodeRepository;
 
@@ -11,6 +12,7 @@ use tracky\orm\EpisodeRepository;
 #[ORM\Table(name: "episodes")]
 class Episode extends BaseEntity
 {
+    use Plot;
     use PosterImage;
 
     #[ORM\OneToOne(targetEntity: Season::class)]
@@ -24,7 +26,7 @@ class Episode extends BaseEntity
     private string $title;
 
     #[ORM\Column(name: "firstAired", type: "date")]
-    private DateTime $firstAired;
+    private Date $firstAired;
 
     #[ORM\OneToMany(mappedBy: "episode", targetEntity: EpisodeView::class)]
     #[ORM\OrderBy(["dateTime" => "ASC"])]
@@ -63,12 +65,12 @@ class Episode extends BaseEntity
         return $this;
     }
 
-    public function getFirstAired(): DateTime
+    public function getFirstAired(): Date
     {
         return $this->firstAired;
     }
 
-    public function setFirstAired(DateTime $firstAired): Episode
+    public function setFirstAired(Date $firstAired): Episode
     {
         $this->firstAired = $firstAired;
         return $this;

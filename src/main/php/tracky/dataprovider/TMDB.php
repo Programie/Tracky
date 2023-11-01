@@ -3,8 +3,13 @@ namespace tracky\dataprovider;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
+use tracky\datetime\Date;
+use tracky\model\Episode;
+use tracky\model\Movie;
+use tracky\model\Season;
+use tracky\model\Show;
 
-class TMDB
+class TMDB implements Provider
 {
     private Client $client;
 
@@ -31,72 +36,175 @@ class TMDB
         return json_decode($request->getBody()->getContents(), true);
     }
 
-    public function getShowData(int $id, ?string $language): array
+    private function getLocalizedJson(string $path, ?string $language, string $defaultLanguage): array
     {
-        $data = $this->getJson(sprintf("tv/%d", $id), ["language" => $language ?? $this->defaultShowLanguage]);
+        return $this->getJson($path, ["language" => $language ?? $defaultLanguage]);
+    }
 
-        $seasons = [];
+    private function getShowJson(Show $show, ?string $path = null): array
+    {
+        $pathArray = [
+            "tv",
+            $show->getTmdbId()
+        ];
 
-        foreach ($data["seasons"] ?? [] as $season) {
-            $posterImageUrl = $season["poster_path"] ?? null;
-            if ($posterImageUrl !== null) {
-                $posterImageUrl = sprintf("https://image.tmdb.org/t/p/w500/%s", ltrim($posterImageUrl, "/"));
-            }
-
-            $season["posterImageUrl"] = $posterImageUrl;
-
-            $seasons[] = $season;
+        if ($path !== null) {
+            $pathArray[] = $path;
         }
 
-        return [
-            "title" => $data["name"],
-            "posterImageUrl" => sprintf("https://image.tmdb.org/t/p/w500/%s", ltrim($data["poster_path"], "/")),
-            "seasons" => $seasons
-        ];
+        return $this->getLocalizedJson(implode("/", $pathArray), $show->getLanguage(), $this->defaultShowLanguage);
     }
 
-    public function getShowEpisodes(int $showId, int $season, ?string $language): array
-    {
-        $data = $this->getJson(sprintf("tv/%d/season/%d", $showId, $season), ["language" => $language ?? $this->defaultShowLanguage]);
-
-        $episodes = [];
-
-        foreach ($data["episodes"] ?? [] as $episode) {
-            $posterImageUrl = $episode["still_path"] ?? null;
-            if ($posterImageUrl !== null) {
-                $posterImageUrl = sprintf("https://image.tmdb.org/t/p/w500/%s", ltrim($posterImageUrl, "/"));
-            }
-
-            $episode["posterImageUrl"] = $posterImageUrl;
-
-            $episodes[] = $episode;
-        }
-
-        return $episodes;
-    }
-
-    public function getMovieData(int $id, ?string $language): array
-    {
-        $data = $this->getJson(sprintf("movie/%d", $id), ["language" => $language ?? $this->defaultMovieLanguage]);
-
-        return [
-            "title" => $data["title"],
-            "posterImageUrl" => sprintf("https://image.tmdb.org/t/p/w500/%s", ltrim($data["poster_path"], "/"))
-        ];
-    }
-
-    public function getTmdbIdFromExternalId(string $externalSource, string $externalId, string $expectedMediaType): ?int
+    private function getTmdbIdFromExternalId(string $externalSource, string $externalId): ?int
     {
         $data = $this->getJson(sprintf("find/%s", $externalId), ["external_source" => $externalSource]);
 
         foreach ($data as $results) {
             foreach ($results as $result) {
-                if ($result["media_type"] === $expectedMediaType) {
-                    return $result["id"];
-                }
+                return $result["id"];
             }
         }
 
         return null;
+    }
+
+    private function getImageUrl(?string $path): ?string
+    {
+        if ($path === null) {
+            return null;
+        }
+
+        return sprintf("https://image.tmdb.org/t/p/w500/%s", ltrim($path, "/"));
+    }
+
+    public function getIdFieldName(): string
+    {
+        return "tmdbId";
+    }
+
+    public function setIdForShow(Show $show, mixed $id): void
+    {
+        $show->setTmdbId($id);
+    }
+
+    public function setIdForMovie(Movie $movie, mixed $id): void
+    {
+        $movie->setTmdbId($id);
+    }
+
+    public function getIdFromUniqueIds(array $uniqueIds): ?int
+    {
+        $tmdbId = $uniqueIds["tmdb"] ?? null;
+        if ($tmdbId !== null) {
+            $tmdbId = (int)$tmdbId;
+            if ($tmdbId === 0) {
+                return null;
+            }
+
+            return $tmdbId;
+        }
+
+        $externalSources = [
+            "imdb" => "imdb_id",
+            "tvdb" => "tvdb_id"
+        ];
+
+        foreach ($externalSources as $provider => $externalSource) {
+            $uniqueId = $uniqueIds[$provider] ?? null;
+            if ($uniqueId === null) {
+                continue;
+            }
+
+            $tmdbId = $this->getTmdbIdFromExternalId($externalSource, $uniqueId);
+            if ($tmdbId !== null) {
+                return $tmdbId;
+            }
+        }
+
+        return null;
+    }
+
+    public function fetchShow(Show $show, bool $createSeasonsAndEpisodes): bool
+    {
+        if ($show->getTmdbId() === null) {
+            return false;
+        }
+
+        $showData = $this->getShowJson($show);
+
+        $show->setTitle($showData["name"]);
+        $show->setPosterImageUrl($this->getImageUrl($showData["poster_path"] ?? null));
+
+        if ($createSeasonsAndEpisodes) {
+            foreach ($showData["seasons"] ?? [] as $seasonData) {
+                $season = $show->getOrCreateSeason($seasonData["season_number"]);
+
+                $this->fetchSeason($season, true);
+            }
+        }
+
+        return true;
+    }
+
+    public function fetchSeason(Season $season, bool $createEpisodes): bool
+    {
+        $show = $season->getShow();
+
+        if ($show->getTmdbId() === null) {
+            return false;
+        }
+
+        $seasonData = $this->getShowJson($show, sprintf("season/%d", $season->getNumber()));
+
+        $season->setPosterImageUrl($this->getImageUrl($seasonData["poster_path"] ?? null));
+
+        if ($createEpisodes) {
+            foreach ($seasonData["episodes"] ?? [] as $episodeData) {
+                $episode = $season->getOrCreateEpisode($episodeData["episode_number"]);
+
+                $episode->setTitle($episodeData["name"]);
+                $episode->setPlot($episodeData["overview"] ?? null);
+                $episode->setPosterImageUrl($this->getImageUrl($episodeData["still_path"] ?? null));
+                $episode->setFirstAired(new Date($episodeData["air_date"]));
+            }
+        }
+
+        return true;
+    }
+
+    public function fetchEpisode(Episode $episode): bool
+    {
+        $season = $episode->getSeason();
+        $show = $season->getShow();
+
+        $tmdbId = $show->getTmdbId();
+        if ($tmdbId === null) {
+            return false;
+        }
+
+        $episodeData = $this->getShowJson($show, sprintf("season/%d/episode/%d", $season->getNumber(), $episode->getNumber()));
+
+        $episode->setTitle($episodeData["name"]);
+        $episode->setPlot($episodeData["overview"] ?? null);
+        $episode->setPosterImageUrl($this->getImageUrl($episodeData["still_path"] ?? null));
+        $episode->setFirstAired(new Date($episodeData["air_date"]));
+
+        return true;
+    }
+
+    public function fetchMovie(Movie $movie): bool
+    {
+        $tmdbId = $movie->getTmdbId();
+        if ($tmdbId === null) {
+            return false;
+        }
+
+        $movieData = $this->getLocalizedJson(sprintf("movie/%d", $tmdbId), $movie->getLanguage(), $this->defaultMovieLanguage);
+
+        $movie->setTitle($movieData["title"]);
+        $movie->setPlot($movieData["overview"] ?? null);
+        $movie->setPosterImageUrl($this->getImageUrl($movieData["poster_path"] ?? null));
+
+        return true;
     }
 }

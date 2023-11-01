@@ -2,8 +2,6 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
-use tracky\dataprovider\TMDB;
-use tracky\datetime\Date;
 use tracky\model\traits\PosterImage;
 use tracky\orm\SeasonRepository;
 
@@ -81,29 +79,19 @@ class Season extends BaseEntity
         return null;
     }
 
-    public function fetchTMDBData(TMDB $tmdb): bool
+    public function getOrCreateEpisode(int $episodeNumber, bool &$created = false): Episode
     {
-        $tmdbId = $this->getShow()->getTmdbId();
-        if ($tmdbId === null) {
-            return false;
+        $episode = $this->getEpisode($episodeNumber);
+        if ($episode === null) {
+            $episode = new Episode;
+            $episode->setSeason($this);
+            $episode->setNumber($episodeNumber);
+
+            $this->addEpisode($episode);
+
+            $created = true;
         }
 
-        foreach ($tmdb->getShowEpisodes($tmdbId, $this->getNumber(), $this->getShow()->getLanguage()) as $episodeData) {
-            $episodeNumber = $episodeData["episode_number"];
-
-            $episode = $this->getEpisode($episodeNumber);
-            if ($episode === null) {
-                $episode = new Episode;
-                $episode->setSeason($this);
-                $episode->setNumber($episodeNumber);
-                $this->addEpisode($episode);
-            }
-
-            $episode->setTitle($episodeData["name"]);
-            $episode->setFirstAired(new Date($episodeData["air_date"]));
-            $episode->setPosterImageUrl($episodeData["posterImageUrl"]);
-        }
-
-        return true;
+        return $episode;
     }
 }

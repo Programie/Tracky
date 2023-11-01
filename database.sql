@@ -36,6 +36,7 @@ CREATE TABLE `episodes`
     `season`         int(11)      NOT NULL,
     `number`         int(11)      NOT NULL,
     `title`          varchar(300) NOT NULL,
+    `plot`           text         DEFAULT NULL,
     `firstAired`     date         DEFAULT NULL,
     `posterImageUrl` varchar(500) DEFAULT NULL,
     PRIMARY KEY (`id`),
@@ -59,6 +60,7 @@ CREATE TABLE `movies`
 (
     `id`             int(11)      NOT NULL AUTO_INCREMENT,
     `title`          varchar(300) NOT NULL,
+    `plot`           text         DEFAULT NULL,
     `year`           int(11)      DEFAULT NULL,
     `tmdbId`         int(11)      DEFAULT NULL,
     `posterImageUrl` varchar(500) DEFAULT NULL,

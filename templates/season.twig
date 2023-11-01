@@ -43,6 +43,7 @@
                                         {% if viewsForUser|length %}<small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime.format("Y-m-d") }} ({{ viewsForUser|length }})</small>{% endif %}
                                     {% endif %}
                                 </div>
+                                <div class="card-text mt-3">{{ episode.plot }}</div>
                             </div>
                         </div>
                     </div>
