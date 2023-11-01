@@ -9,7 +9,7 @@ trait TMDB
     private ?int $tmdbId;
 
     #[ORM\Column(name: "language", type: "string")]
-    private ?string $language;
+    private ?string $language = null;
 
     public function getTmdbId(): ?int
     {
