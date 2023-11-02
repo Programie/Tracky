@@ -1,0 +1,27 @@
+<div class="row row-cols-1 g-4">
+    {% for episode in episodes %}
+        <div class="col">
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img class="img-fluid rounded-start" src="{{ episode.posterImageUrl }}"/>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ episode.title }}</h5>
+                            <h6 class="card-subtitle text-body-secondary">Episode {{ episode.season.number }}x{{ episode.number }}</h6>
+                            <div class="card-text mt-3">
+                                <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired.format("Y-m-d") }}</small>
+                                {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+                                    {% set viewsForUser = episode.getViewsForUser(app.user) %}
+                                    {% if viewsForUser|length %}<small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime.format("Y-m-d") }} ({{ viewsForUser|length }})</small>{% endif %}
+                                {% endif %}
+                            </div>
+                            <div class="card-text mt-3">{{ episode.plot }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
