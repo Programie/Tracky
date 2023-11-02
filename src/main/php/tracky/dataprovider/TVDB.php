@@ -2,6 +2,8 @@
 namespace tracky\dataprovider;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\UriResolver;
+use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\RequestOptions;
 use tracky\datetime\Date;
 use tracky\model\Episode;
@@ -48,11 +50,20 @@ class TVDB implements Provider
         return null;
     }
 
+    private function getImageUrl(?string $url): ?string
+    {
+        if ($url === null) {
+            return null;
+        }
+
+        return UriResolver::resolve(Utils::uriFor("https://artworks.thetvdb.com"), Utils::uriFor($url))->__toString();
+    }
+
     private function setEpisodeData(Episode $episode, array $data): void
     {
         $episode->setTitle($data["name"]);
         $episode->setPlot($data["overview"] ?? null);
-        $episode->setPosterImageUrl($data["image"] ?? null);
+        $episode->setPosterImageUrl($this->getImageUrl($data["image"] ?? null));
         $episode->setFirstAired(new Date($data["aired"]));
     }
 
@@ -113,7 +124,7 @@ class TVDB implements Provider
         }
 
         $show->setTitle($data["name"]);
-        $show->setPosterImageUrl($data["image"]);
+        $show->setPosterImageUrl($this->getImageUrl($data["image"]));
 
         if ($createSeasonsAndEpisodes) {
             foreach ($data["episodes"] ?? [] as $episodeData) {
@@ -196,7 +207,7 @@ class TVDB implements Provider
         $movie->setTitle($data["name"]);
         $movie->setPlot(null);// TODO
         $movie->setYear($data["year"]);
-        $movie->setPosterImageUrl($data["image"]);
+        $movie->setPosterImageUrl($this->getImageUrl($data["image"]));
 
         return true;
     }
