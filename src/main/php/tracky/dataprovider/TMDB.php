@@ -77,6 +77,16 @@ class TMDB implements Provider
         return sprintf("https://image.tmdb.org/t/p/w500/%s", ltrim($path, "/"));
     }
 
+    private function setEpisodeData(Episode $episode, array $data): void
+    {
+        $episode->setTitle($data["name"]);
+        $episode->setPlot($data["overview"] ?? null);
+        $episode->setPosterImageUrl($this->getImageUrl($data["still_path"] ?? null));
+
+        $airDate = $data["air_date"] ?? null;
+        $episode->setFirstAired($airDate === null ? null : new Date($airDate));
+    }
+
     public function getIdFieldName(): string
     {
         return "tmdbId";
@@ -162,10 +172,7 @@ class TMDB implements Provider
             foreach ($seasonData["episodes"] ?? [] as $episodeData) {
                 $episode = $season->getOrCreateEpisode($episodeData["episode_number"]);
 
-                $episode->setTitle($episodeData["name"]);
-                $episode->setPlot($episodeData["overview"] ?? null);
-                $episode->setPosterImageUrl($this->getImageUrl($episodeData["still_path"] ?? null));
-                $episode->setFirstAired(new Date($episodeData["air_date"]));
+                $this->setEpisodeData($episode, $episodeData);
             }
         }
 
@@ -184,10 +191,7 @@ class TMDB implements Provider
 
         $episodeData = $this->getShowJson($show, sprintf("season/%d/episode/%d", $season->getNumber(), $episode->getNumber()));
 
-        $episode->setTitle($episodeData["name"]);
-        $episode->setPlot($episodeData["overview"] ?? null);
-        $episode->setPosterImageUrl($this->getImageUrl($episodeData["still_path"] ?? null));
-        $episode->setFirstAired(new Date($episodeData["air_date"]));
+        $this->setEpisodeData($episode, $episodeData);
 
         return true;
     }
