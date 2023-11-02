@@ -127,6 +127,19 @@ class TVDB implements Provider
         $show->setPosterImageUrl($this->getImageUrl($data["image"]));
 
         if ($createSeasonsAndEpisodes) {
+            foreach ($data["seasons"] ?? [] as $seasonData) {
+                $seasonType = $seasonData["type"]["type"] ?? null;
+                if ($seasonType !== "official") {
+                    continue;
+                }
+
+                $seasonNumber = $seasonData["number"];
+
+                $season = $show->getOrCreateSeason($seasonNumber);
+
+                $season->setPosterImageUrl($this->getImageUrl($seasonData["image"] ?? null));
+            }
+
             foreach ($data["episodes"] ?? [] as $episodeData) {
                 $seasonNumber = $episodeData["seasonNumber"];
                 $episodeNumber = $episodeData["number"];
