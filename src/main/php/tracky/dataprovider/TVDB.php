@@ -64,7 +64,9 @@ class TVDB implements Provider
         $episode->setTitle($data["name"]);
         $episode->setPlot($data["overview"] ?? null);
         $episode->setPosterImageUrl($this->getImageUrl($data["image"] ?? null));
-        $episode->setFirstAired(new Date($data["aired"]));
+
+        $aired = $data["aired"] ?? null;
+        $episode->setFirstAired($aired === null ? null : new Date($aired));
     }
 
     public function getIdFieldName(): string

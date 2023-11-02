@@ -26,7 +26,7 @@ class Episode extends BaseEntity
     private string $title;
 
     #[ORM\Column(name: "firstAired", type: "date")]
-    private Date $firstAired;
+    private ?Date $firstAired;
 
     #[ORM\OneToMany(mappedBy: "episode", targetEntity: EpisodeView::class)]
     #[ORM\OrderBy(["dateTime" => "ASC"])]
@@ -65,12 +65,12 @@ class Episode extends BaseEntity
         return $this;
     }
 
-    public function getFirstAired(): Date
+    public function getFirstAired(): ?Date
     {
         return $this->firstAired;
     }
 
-    public function setFirstAired(Date $firstAired): Episode
+    public function setFirstAired(?Date $firstAired): Episode
     {
         $this->firstAired = $firstAired;
         return $this;
