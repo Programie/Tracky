@@ -45,6 +45,14 @@ class TVDB implements Provider
         return null;
     }
 
+    private function setEpisodeData(Episode $episode, array $data): void
+    {
+        $episode->setTitle($data["name"]);
+        $episode->setPlot($data["overview"] ?? null);
+        $episode->setPosterImageUrl($data["image"] ?? null);
+        $episode->setFirstAired(new Date($data["aired"]));
+    }
+
     public function getIdFieldName(): string
     {
         return "tvdbId";
@@ -112,10 +120,7 @@ class TVDB implements Provider
                 $season = $show->getOrCreateSeason($seasonNumber);
                 $episode = $season->getOrCreateEpisode($episodeNumber);
 
-                $episode->setTitle($episodeData["name"]);
-                $episode->setPlot($episodeData["overview"] ?? null);
-                $episode->setPosterImageUrl($episodeData["image"] ?? null);
-                $episode->setFirstAired(new Date($episodeData["aired"]));
+                $this->setEpisodeData($episode, $episodeData);
             }
         }
 
@@ -124,12 +129,54 @@ class TVDB implements Provider
 
     public function fetchSeason(Season $season, bool $createEpisodes): bool
     {
-        return false;
+        $show = $season->getShow();
+        $tvdbId = $show->getTvdbId();
+        if ($tvdbId === null) {
+            return false;
+        }
+
+        $data = $this->getJson(sprintf("series/%d/episodes/default", $tvdbId), [
+            "page" => 0,
+            "season" => $season->getNumber()
+        ]);
+
+        $data = $data["data"] ?? null;
+        if ($data === null) {
+            return false;
+        }
+
+        foreach ($data["episodes"] ?? [] as $episodeData) {
+            $episode = $season->getOrCreateEpisode($episodeData["number"]);
+
+            $this->setEpisodeData($episode, $episodeData);
+        }
+
+        return true;
     }
 
     public function fetchEpisode(Episode $episode): bool
     {
-        return false;
+        $season = $episode->getSeason();
+        $show = $season->getShow();
+        $tvdbId = $show->getTvdbId();
+        if ($tvdbId === null) {
+            return false;
+        }
+
+        $data = $this->getJson(sprintf("series/%d/episodes/default", $tvdbId), [
+            "page" => 0,
+            "season" => $season->getNumber(),
+            "episodeNumber" => $episode->getNumber()
+        ]);
+
+        $data = $data["data"]["episodes"][0] ?? null;
+        if ($data === null) {
+            return false;
+        }
+
+        $this->setEpisodeData($episode, $data);
+
+        return true;
     }
 
     public function fetchMovie(Movie $movie): bool
