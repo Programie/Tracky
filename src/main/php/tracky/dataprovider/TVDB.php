@@ -23,18 +23,21 @@ class TVDB implements Provider
         ]);
     }
 
-    private function getJson(string $path, array $query = []): array
+    private function getJson(string $path, array $query = []): ?array
     {
         $request = $this->client->get($path, [
             RequestOptions::QUERY => $query
         ]);
 
-        return json_decode($request->getBody()->getContents(), true);
+        return json_decode($request->getBody()->getContents(), true)["data"] ?? null;
     }
 
     private function getTvdbIdFromRemoteId(string $remoteId): ?int
     {
-        $data = $this->getJson(sprintf("search/remoteid/%s", $remoteId))["data"] ?? [];
+        $data = $this->getJson(sprintf("search/remoteid/%s", $remoteId));
+        if ($data === null) {
+            return null;
+        }
 
         foreach ($data as $results) {
             foreach ($results as $result) {
@@ -104,7 +107,7 @@ class TVDB implements Provider
             return false;
         }
 
-        $data = $this->getJson(sprintf("series/%d/extended", $tvdbId), ["meta" => "episodes", "short" => "true"])["data"] ?? null;
+        $data = $this->getJson(sprintf("series/%d/extended", $tvdbId), ["meta" => "episodes", "short" => "true"]);
         if ($data === null) {
             return false;
         }
@@ -140,7 +143,6 @@ class TVDB implements Provider
             "season" => $season->getNumber()
         ]);
 
-        $data = $data["data"] ?? null;
         if ($data === null) {
             return false;
         }
@@ -169,7 +171,7 @@ class TVDB implements Provider
             "episodeNumber" => $episode->getNumber()
         ]);
 
-        $data = $data["data"]["episodes"][0] ?? null;
+        $data = $data["episodes"][0] ?? null;
         if ($data === null) {
             return false;
         }
@@ -186,7 +188,7 @@ class TVDB implements Provider
             return false;
         }
 
-        $data = $this->getJson(sprintf("movies/%d", $tvdbId))["data"] ?? null;
+        $data = $this->getJson(sprintf("movies/%d", $tvdbId));
         if ($data === null) {
             return false;
         }
