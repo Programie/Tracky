@@ -15,6 +15,7 @@
                                 {% if is_granted("IS_AUTHENTICATED_FULLY") %}
                                     {% set viewsForUser = episode.getViewsForUser(app.user) %}
                                     {% if viewsForUser|length %}<small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime.format("Y-m-d") }} ({{ viewsForUser|length }})</small>{% endif %}
+                                    <button class="btn btn-secondary btn-sm mt-3 add-episode-view" data-show-id="{{ episode.season.show.id }}" data-season="{{ episode.season.number }}" data-episode="{{ episode.number }}">Add view</button>
                                 {% endif %}
                             </div>
                             <div class="card-text mt-3">{{ episode.plot }}</div>

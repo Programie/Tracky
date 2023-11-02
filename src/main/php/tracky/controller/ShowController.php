@@ -1,10 +1,14 @@
 <?php
 namespace tracky\controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use tracky\datetime\DateTime;
+use tracky\model\EpisodeView;
 use tracky\model\Show;
 use tracky\orm\ShowRepository;
 
@@ -70,5 +74,38 @@ class ShowController extends AbstractController
                 "nextSeason" => $nextSeason
             ]
         ]);
+    }
+
+    #[Route("/shows/{showId}/seasons/{seasonNumber}/episodes/{episodeNumber}/views", name: "addEpisodeView", methods: ["POST"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function addView(int $showId, int $seasonNumber, int $episodeNumber, EntityManagerInterface $entityManager): Response
+    {
+        /**
+         * @var $show Show
+         */
+        $show = $this->showRepository->find($showId);
+        if ($show === null) {
+            throw new NotFoundHttpException("Show not found");
+        }
+
+        $season = $show->getSeason($seasonNumber);
+        if ($season === null) {
+            throw new NotFoundHttpException("Season not found");
+        }
+
+        $episode = $season->getEpisode($episodeNumber);
+        if ($episode === null) {
+            throw new NotFoundHttpException("Episode not found");
+        }
+
+        $episodeView = new EpisodeView;
+        $episodeView->setEpisode($episode);
+        $episodeView->setUser($this->getUser());
+        $episodeView->setDateTime(new DateTime);
+
+        $entityManager->persist($episodeView);
+        $entityManager->flush();
+
+        return new Response("View added to database");
     }
 }
