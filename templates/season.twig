@@ -4,12 +4,7 @@
 
 {% block title %}{{ show.title }} - Season {{ season.number }}{% endblock %}
 
-{% block content %}
-    <h1>
-        <a href="{{ path("showOverviewPage", {"id": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a>
-        <span class="fs-4 text-body-secondary">Season {{ season.number }}</span>
-    </h1>
-
+{% macro paginationElement(pagination, show) %}
     <div class="episode-pagination d-flex justify-content-between mt-3 mb-3">
             <span>
                 {% if pagination.previousSeason is not null %}
@@ -22,6 +17,15 @@
                 {% endif %}
             </span>
     </div>
+{% endmacro %}
+
+{% block content %}
+    <h1>
+        <a href="{{ path("showOverviewPage", {"id": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a>
+        <span class="fs-4 text-body-secondary">Season {{ season.number }}</span>
+    </h1>
+
+    {{ _self.paginationElement(pagination, show) }}
 
     <h2>Episodes</h2>
     <div class="row row-cols-1 g-4">
@@ -51,4 +55,6 @@
             </div>
         {% endfor %}
     </div>
+
+    {{ _self.paginationElement(pagination, show) }}
 {% endblock %}
