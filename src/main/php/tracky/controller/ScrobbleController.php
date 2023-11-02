@@ -6,26 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\datetime\DateTime;
-use tracky\model\User;
 use tracky\scrobbler\Scrobbler;
 use UnexpectedValueException;
 
 class ScrobbleController extends AbstractController
 {
     #[Route("/api/scrobble", name: "scrobble", methods: ["POST"])]
+    #[IsGranted("IS_AUTHENTICATED")]
     public function scrobble(Request $request, Scrobbler $scrobbler): Response
     {
-        /**
-         * @var $user User
-         */
-        $user = $this->getUser();
-        if ($user === null) {
-            throw new UnauthorizedHttpException("Tracky Scrobbler");
-        }
-
         $json = $request->toArray();
 
         $event = $json["event"] ?? "end";
@@ -45,7 +37,7 @@ class ScrobbleController extends AbstractController
         }
 
         try {
-            return $this->returnPlainText($scrobbler->cacheOrAddView($json, $timestamp, $user));
+            return $this->returnPlainText($scrobbler->cacheOrAddView($json, $timestamp, $this->getUser()));
         } catch (UnexpectedValueException $exception) {
             throw new BadRequestException($exception->getMessage());
         }
