@@ -71,7 +71,7 @@ class TVDB implements Provider
         $movie->setTvdbId($id);
     }
 
-    public function getIdFromUniqueIds(array $uniqueIds): mixed
+    public function getIdFromUniqueIds(array $uniqueIds): ?int
     {
         $tvdbId = $uniqueIds["tvdb"] ?? null;
         if ($tvdbId !== null) {
