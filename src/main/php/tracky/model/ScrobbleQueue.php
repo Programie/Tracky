@@ -9,7 +9,7 @@ use tracky\orm\ScrobbleQueueRepository;
 #[ORM\Table(name: "scrobblequeue")]
 class ScrobbleQueue extends BaseEntity
 {
-    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "user", referencedColumnName: "id")]
     private User $user;
 

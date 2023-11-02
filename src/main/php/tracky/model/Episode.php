@@ -15,7 +15,7 @@ class Episode extends BaseEntity
     use Plot;
     use PosterImage;
 
-    #[ORM\OneToOne(targetEntity: Season::class)]
+    #[ORM\ManyToOne(targetEntity: Season::class)]
     #[ORM\JoinColumn(name: "season", referencedColumnName: "id")]
     private Season $season;
 

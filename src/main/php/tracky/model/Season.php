@@ -11,7 +11,7 @@ class Season extends BaseEntity
 {
     use PosterImage;
 
-    #[ORM\OneToOne(targetEntity: Show::class)]
+    #[ORM\ManyToOne(targetEntity: Show::class)]
     #[ORM\JoinColumn(name: "`show`", referencedColumnName: "id")]
     private Show $show;
 

@@ -8,7 +8,7 @@ use tracky\orm\EpisodeViewRepository;
 #[ORM\Table(name: "episodeviews")]
 class EpisodeView extends ViewEntry
 {
-    #[ORM\OneToOne(targetEntity: Episode::class)]
+    #[ORM\ManyToOne(targetEntity: Episode::class)]
     #[ORM\JoinColumn(name: "episode", referencedColumnName: "id")]
     private Episode $episode;
 

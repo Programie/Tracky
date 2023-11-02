@@ -8,7 +8,7 @@ use tracky\orm\MovieViewRepository;
 #[ORM\Table(name: "movieviews")]
 class MovieView extends ViewEntry
 {
-    #[ORM\OneToOne(targetEntity: Movie::class)]
+    #[ORM\ManyToOne(targetEntity: Movie::class)]
     #[ORM\JoinColumn(name: "movie", referencedColumnName: "id")]
     private Movie $movie;
 

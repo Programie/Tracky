@@ -6,7 +6,7 @@ use tracky\datetime\DateTime;
 
 abstract class ViewEntry extends BaseEntity
 {
-    #[ORM\OneToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "user", referencedColumnName: "id")]
     protected User $user;
 
