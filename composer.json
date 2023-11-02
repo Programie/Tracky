@@ -21,6 +21,7 @@
     "doctrine/doctrine-migrations-bundle": "^3.2",
     "doctrine/orm": "^2.14",
     "guzzlehttp/guzzle": "^7.5",
+    "guzzlehttp/psr7": "^2.6",
     "symfony/asset": "^6.2",
     "symfony/cache": "^6.2",
     "symfony/config": "^6.2",
