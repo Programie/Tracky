@@ -23,10 +23,19 @@ class HistoryController extends AbstractController
     {
         $page = $request->query->getInt("page", 1);
 
-        $episodes = $this->episodeViewRepository->getPaged($user, $page, 100);
-        $movies = $this->movieViewRepository->getPaged($user, $page, 100);
+        $episode = $request->query->getInt("episode");
+        $movie = $request->query->getInt("movie");
 
-        $entries = array_merge($episodes, $movies);
+        if ($episode) {
+            $entries = $this->episodeViewRepository->getPaged(["user" => $user, "episode" => $episode], $page, 100);
+        } elseif ($movie) {
+            $entries = $this->movieViewRepository->getPaged(["user" => $user, "movie" => $episode], $page, 100);
+        } else {
+            $episodes = $this->episodeViewRepository->getPaged(["user" => $user], $page, 100);
+            $movies = $this->movieViewRepository->getPaged(["user" => $user], $page, 100);
+
+            $entries = array_merge($episodes, $movies);
+        }
 
         usort($entries, function (ViewEntry $entry1, ViewEntry $entry2) {
             if ($entry1->getDateTime() < $entry2->getDateTime()) {

@@ -4,7 +4,6 @@ namespace tracky\orm;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use tracky\model\EpisodeView;
-use tracky\model\User;
 
 class EpisodeViewRepository extends ServiceEntityRepository
 {
@@ -13,10 +12,10 @@ class EpisodeViewRepository extends ServiceEntityRepository
         parent::__construct($registry, EpisodeView::class);
     }
 
-    public function getPaged(User $user, int $page, int $perPage)
+    public function getPaged(array $criteria, int $page, int $perPage)
     {
         $offset = ($page - 1) * $perPage;
 
-        return $this->findBy(["user" => $user], ["dateTime" => "desc"], $perPage, $offset);
+        return $this->findBy($criteria, ["dateTime" => "desc"], $perPage, $offset);
     }
 }
