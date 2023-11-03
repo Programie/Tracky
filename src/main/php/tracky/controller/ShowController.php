@@ -44,34 +44,12 @@ class ShowController extends AbstractController
             throw new NotFoundHttpException("Season not found!");
         }
 
-        $seasons = $show->getSeasons();
-
-        $seasonNumbers = [];
-
-        foreach ($seasons as $thisSeason) {
-            $seasonNumbers[] = $thisSeason->getNumber();
-        }
-
-        $previousSeasonIndex = array_search($number - 1, $seasonNumbers, true);
-        if ($previousSeasonIndex !== false) {
-            $previousSeason = $seasonNumbers[$previousSeasonIndex];
-        } else {
-            $previousSeason = null;
-        }
-
-        $nextSeasonIndex = array_search($number + 1, $seasonNumbers, true);
-        if ($nextSeasonIndex !== false) {
-            $nextSeason = $seasonNumbers[$nextSeasonIndex];
-        } else {
-            $nextSeason = null;
-        }
-
         return $this->render("season.twig", [
             "show" => $show,
             "season" => $season,
             "pagination" => [
-                "previousSeason" => $previousSeason,
-                "nextSeason" => $nextSeason
+                "previousSeason" => $season->getPreviousSeason(),
+                "nextSeason" => $season->getNextSeason()
             ]
         ]);
     }

@@ -94,4 +94,21 @@ class Season extends BaseEntity
 
         return $episode;
     }
+
+    public function getRelativeSeason(int $addNumber): ?Season
+    {
+        $show = $this->getShow();
+
+        return $show->getSeason($this->getNumber() + $addNumber);
+    }
+
+    public function getPreviousSeason(): ?Season
+    {
+        return $this->getRelativeSeason(-1);
+    }
+
+    public function getNextSeason(): ?Season
+    {
+        return $this->getRelativeSeason(1);
+    }
 }
