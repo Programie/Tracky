@@ -1,0 +1,45 @@
+{% set assetEntryPoint = "main" %}
+
+{% extends "page.twig" %}
+
+{% block title %}{{ show.title }} - {{ season.number }}x{{ episode.number }} "{{ episode.title }}"{% endblock %}
+
+{% block content %}
+    <h1>
+        <a href="{{ path("showOverviewPage", {"id": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a><br/>
+        <a href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}" class="text-reset text-decoration-none fs-4 text-body-secondary">Season {{ season.number }}</a>
+        <span class="fs-4 text-body-secondary">Episode {{ episode.number }}</span>
+    </h1>
+
+    <div class="episode-pagination d-flex justify-content-between mt-3 mb-3">
+        <span>
+            {% if pagination.previousEpisode is not null %}
+                <a class="page-link" href="{{ path("episodePage", {"show": show.id, "seasonNumber": pagination.previousEpisode.season.number, "episodeNumber": pagination.previousEpisode.number}) }}"><i class="fa-solid fa-arrow-left"></i> {{ pagination.previousEpisode.season.number }}x{{ pagination.previousEpisode.number }}</a>
+            {% endif %}
+        </span>
+        <span class="justify-content-end">
+            {% if pagination.nextEpisode is not null %}
+                <a class="page-link" href="{{ path("episodePage", {"show": show.id, "seasonNumber": pagination.nextEpisode.season.number, "episodeNumber": pagination.nextEpisode.number}) }}">{{ pagination.nextEpisode.season.number }}x{{ pagination.nextEpisode.number }} <i class="fa-solid fa-arrow-right"></i></a>
+            {% endif %}
+        </span>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3 col-12">
+            <img class="img-fluid" src="{{ episode.posterImageUrl }}"/>
+        </div>
+
+        <div class="col-lg-9 col-12">
+            <h2>{{ episode.title }}</h2>
+
+            <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>
+            {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+                {% set viewsForUser = episode.getViewsForUser(app.user) %}
+                {% if viewsForUser|length %}<small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }} ({{ viewsForUser|length }} plays)</small>{% endif %}
+                <button class="btn btn-secondary btn-sm mt-3 add-episode-view" data-show-id="{{ episode.season.show.id }}" data-season="{{ episode.season.number }}" data-episode="{{ episode.number }}">Add view</button>
+            {% endif %}
+
+            <div class="card-text mt-3">{{ episode.plot }}</div>
+        </div>
+    </div>
+{% endblock %}

@@ -83,4 +83,29 @@ class Episode extends BaseEntity
 
         return $this->views->matching($criteria);
     }
+
+    public function getPreviousEpisode(): ?Episode
+    {
+        $season = $this->getSeason();
+
+        $episode = $season->getEpisode($this->getNumber() - 1);
+        if ($episode !== null) {
+            return $episode;
+        }
+
+        return $season->getPreviousSeason()?->getEpisodes()->last();
+    }
+
+    public function getNextEpisode(): ?Episode
+    {
+        $season = $this->getSeason();
+
+        $episode = $season->getEpisode($this->getNumber() + 1);
+        if ($episode !== null) {
+            return $episode;
+        }
+
+        return $season->getNextSeason()?->getEpisodes()->first();
+
+    }
 }
