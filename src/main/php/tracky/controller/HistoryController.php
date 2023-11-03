@@ -28,10 +28,10 @@ class HistoryController extends AbstractController
 
         $entries = array_merge($episodes, $movies);
 
-        usort($episodes, function (ViewEntry $entry1, ViewEntry $entry2) {
-            if ($entry1->getDateTime() > $entry2->getDateTime()) {
+        usort($entries, function (ViewEntry $entry1, ViewEntry $entry2) {
+            if ($entry1->getDateTime() < $entry2->getDateTime()) {
                 return 1;
-            } elseif ($entry1->getDateTime() < $entry2->getDateTime()) {
+            } elseif ($entry1->getDateTime() > $entry2->getDateTime()) {
                 return -1;
             } else {
                 return 0;
