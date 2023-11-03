@@ -6,16 +6,16 @@
 
 {% macro paginationElement(pagination, show) %}
     <div class="episode-pagination d-flex justify-content-between mt-3 mb-3">
-            <span>
-                {% if pagination.previousSeason is not null %}
-                    <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.previousSeason.number}) }}"><i class="fa-solid fa-arrow-left"></i> Season {{ pagination.previousSeason.number }}</a>
-                {% endif %}
-            </span>
+        <span>
+            {% if pagination.previousSeason is not null %}
+                <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.previousSeason.number}) }}"><i class="fa-solid fa-arrow-left"></i> Season {{ pagination.previousSeason.number }}</a>
+            {% endif %}
+        </span>
         <span class="justify-content-end">
-                {% if pagination.nextSeason is not null %}
-                    <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.nextSeason.number}) }}">Season {{ pagination.nextSeason.number }} <i class="fa-solid fa-arrow-right"></i></a>
-                {% endif %}
-            </span>
+            {% if pagination.nextSeason is not null %}
+                <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.nextSeason.number}) }}">Season {{ pagination.nextSeason.number }} <i class="fa-solid fa-arrow-right"></i></a>
+            {% endif %}
+        </span>
     </div>
 {% endmacro %}
 
