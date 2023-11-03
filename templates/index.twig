@@ -16,7 +16,7 @@
                         <h5 class="card-title">
                             <b>{{ episode.season.number }}x{{ episode.number }}</b> {{ episode.title }}<br/>
                             <small>{{ episode.season.show.title }}</small><br/>
-                            <small>{{ episode.firstAired.format("r") }}</small>
+                            <small>{{ episode.firstAired|format_date }}</small>
                         </h5>
                     </div>
                 </div>

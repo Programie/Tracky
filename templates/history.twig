@@ -23,7 +23,7 @@
                             {% elseif entry.type == "movie" %}
                                 {{ entry.movie.title }}<br/>
                             {% endif %}
-                            <small>{{ entry.datetime.format("r") }}</small>
+                            <small>{{ entry.datetime|format_datetime }}</small>
                         </h5>
                     </div>
                 </div>

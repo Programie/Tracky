@@ -11,10 +11,10 @@
                             <h5 class="card-title">{{ episode.title }}</h5>
                             <h6 class="card-subtitle text-body-secondary">Episode {{ episode.season.number }}x{{ episode.number }}</h6>
                             <div class="card-text mt-3">
-                                <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired.format("Y-m-d") }}</small>
+                                <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>
                                 {% if is_granted("IS_AUTHENTICATED_FULLY") %}
                                     {% set viewsForUser = episode.getViewsForUser(app.user) %}
-                                    {% if viewsForUser|length %}<small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime.format("Y-m-d") }} ({{ viewsForUser|length }})</small>{% endif %}
+                                    {% if viewsForUser|length %}<small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }} ({{ viewsForUser|length }})</small>{% endif %}
                                     <button class="btn btn-secondary btn-sm mt-3 add-episode-view" data-show-id="{{ episode.season.show.id }}" data-season="{{ episode.season.number }}" data-episode="{{ episode.number }}">Add view</button>
                                 {% endif %}
                             </div>
