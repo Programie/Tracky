@@ -5,6 +5,7 @@
 {% block title %}History{% endblock %}
 
 {% block content %}
+    {% if entries %}
     <div class="row row-cols-1 row-cols-md-5 g-4">
         {% for entry in entries %}
             {% if entry.type == "episode" %}
@@ -30,4 +31,7 @@
             </div>
         {% endfor %}
     </div>
+    {% else %}
+        <div class="alert alert-warning">No history available.</div>
+    {% endif %}
 {% endblock %}

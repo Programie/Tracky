@@ -7,16 +7,20 @@
 {% block content %}
     <h1>All shows</h1>
 
-    <div class="row row-cols-1 row-cols-md-5 g-4">
-        {% for show in shows %}
-            <div class="col">
-                <a class="card" href="{{ path("showOverviewPage", {"id": show.id}) }}">
-                    <img class="card-img-top" src="{{ show.posterImageUrl }}"/>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ show.title }}</h5>
-                    </div>
-                </a>
-            </div>
-        {% endfor %}
-    </div>
+    {% if shows %}
+        <div class="row row-cols-1 row-cols-md-5 g-4">
+            {% for show in shows %}
+                <div class="col">
+                    <a class="card" href="{{ path("showOverviewPage", {"id": show.id}) }}">
+                        <img class="card-img-top" src="{{ show.posterImageUrl }}"/>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ show.title }}</h5>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">No shows available.</div>
+    {% endif %}
 {% endblock %}
