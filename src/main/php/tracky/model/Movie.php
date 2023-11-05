@@ -1,6 +1,7 @@
 <?php
 namespace tracky\model;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use tracky\model\traits\Plot;
 use tracky\model\traits\PosterImage;
@@ -20,6 +21,10 @@ class Movie extends BaseEntity
 
     #[ORM\Column(type: "integer")]
     private ?int $year;
+
+    #[ORM\OneToMany(mappedBy: "movie", targetEntity: MovieView::class)]
+    #[ORM\OrderBy(["dateTime" => "ASC"])]
+    private mixed $views;
 
     public function getTitle(): string
     {
@@ -41,5 +46,13 @@ class Movie extends BaseEntity
     {
         $this->year = $year;
         return $this;
+    }
+
+    public function getViewsForUser(User $user)
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq("user", $user));
+
+        return $this->views->matching($criteria);
     }
 }

@@ -1,4 +1,5 @@
 import "./common";
+import "./history";
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".add-episode-view").forEach((element: HTMLElement) => {

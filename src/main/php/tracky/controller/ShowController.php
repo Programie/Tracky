@@ -10,12 +10,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\datetime\DateTime;
 use tracky\model\EpisodeView;
 use tracky\model\Show;
+use tracky\orm\EpisodeViewRepository;
 use tracky\orm\ShowRepository;
 
 class ShowController extends AbstractController
 {
     public function __construct(
-        private readonly ShowRepository $showRepository
+        private readonly ShowRepository        $showRepository,
+        private readonly EpisodeViewRepository $episodeViewRepository
     )
     {
     }
@@ -109,5 +111,55 @@ class ShowController extends AbstractController
         $entityManager->flush();
 
         return new Response("View added to database");
+    }
+
+    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views/all", name: "removeEpisodeViews", methods: ["DELETE"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function removeViewsByEpisode(Show $show, int $seasonNumber, int $episodeNumber, EntityManagerInterface $entityManager): Response
+    {
+        $season = $show->getSeason($seasonNumber);
+        if ($season === null) {
+            throw new NotFoundHttpException("Season not found");
+        }
+
+        $episode = $season->getEpisode($episodeNumber);
+        if ($episode === null) {
+            throw new NotFoundHttpException("Episode not found");
+        }
+
+        $views = $episode->getViewsForUser($this->getUser());
+
+        foreach ($views as $view) {
+            $entityManager->remove($view);
+        }
+
+        $entityManager->flush();
+
+        return new Response("Views removed from database");
+    }
+
+    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views/{entryId}", name: "removeEpisodeViewById", methods: ["DELETE"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function removeViewById(Show $show, int $seasonNumber, int $episodeNumber, int $entryId, EntityManagerInterface $entityManager): Response
+    {
+        $season = $show->getSeason($seasonNumber);
+        if ($season === null) {
+            throw new NotFoundHttpException("Season not found");
+        }
+
+        $episode = $season->getEpisode($episodeNumber);
+        if ($episode === null) {
+            throw new NotFoundHttpException("Episode not found");
+        }
+
+        $view = $this->episodeViewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser()]);
+        if ($view === null) {
+            throw new NotFoundHttpException("View not found");
+        }
+
+        $entityManager->remove($view);
+        $entityManager->flush();
+
+        return new Response("View removed from database");
     }
 }

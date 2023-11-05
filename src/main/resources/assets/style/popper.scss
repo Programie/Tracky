@@ -1,0 +1,37 @@
+.popper {
+    display: none;
+}
+
+[data-popper-arrow], [data-popper-arrow]::before {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: inherit;
+    border: inherit;
+}
+
+[data-popper-arrow] {
+    visibility: hidden;
+}
+
+[data-popper-arrow]::before {
+    visibility: visible;
+    content: "";
+    transform: rotate(45deg);
+}
+
+.popper[data-popper-placement^="top"] > [data-popper-arrow] {
+    bottom: -4px;
+}
+
+.popper[data-popper-placement^="bottom"] > [data-popper-arrow] {
+    top: -4px;
+}
+
+.popper[data-popper-placement^="left"] > [data-popper-arrow] {
+    right: -4px;
+}
+
+.popper[data-popper-placement^="right"] > [data-popper-arrow] {
+    left: -4px;
+}
