@@ -1,0 +1,23 @@
+{% set assetEntryPoint = "main" %}
+
+{% extends "page.twig" %}
+
+{% block title %}History{% endblock %}
+
+{% block content %}
+    {% if entries %}
+        <div class="row row-cols-1 row-cols-md-5 g-4">
+            {% for entry in entries %}
+                <div class="col">
+                    {% include "history/entry.twig" with {"entry": entry} only %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">No history available.</div>
+    {% endif %}
+{% endblock %}
+
+{% block additional_content %}
+    {% include "history/additional-content.twig" %}
+{% endblock %}

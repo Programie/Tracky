@@ -1,0 +1,31 @@
+{% if entry.type == "episode" %}
+    {% set episode = entry.episode %}
+    {% set season = episode.season %}
+    {% set show = season.show %}
+    {% set imageUrl = episode.posterImageUrl %}
+    {% set views = episode.viewsForUser(app.user) %}
+    <div class="d-none" data-entry-type="{{ entry.type }}" data-entry-id="{{ entry.id }}" data-views="{{ views|length }}" data-show="{{ show.id }}" data-season="{{ season.number }}" data-episode="{{ episode.number }}"></div>
+{% elseif entry.type == "movie" %}
+    {% set movie = entry.movie %}
+    {% set imageUrl = movie.posterImageUrl %}
+    {% set views = movie.viewsForUser(app.user) %}
+    <div class="d-none" data-entry-type="{{ entry.type }}" data-entry-id="{{ entry.id }}" data-views="{{ views|length }}" data-movie="{{ movie.id }}"></div>
+{% endif %}
+
+<div class="card">
+    <img class="card-img-top" src="{{ imageUrl }}"/>
+    <div class="card-body">
+        <h5 class="card-title">
+            {% if entry.type == "episode" %}
+                <b>{{ season.number }}x{{ episode.number }}</b> {{ episode.title }}<br/>
+                <small>{{ show.title }}</small><br/>
+            {% elseif entry.type == "movie" %}
+                {{ movie.title }}<br/>
+            {% endif %}
+            <small>{{ entry.datetime|format_datetime }}</small>
+        </h5>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-sm history-edit-button" type="button" title="{{ views|length }} views"><i class="fa-solid fa-check"></i></button>
+    </div>
+</div>

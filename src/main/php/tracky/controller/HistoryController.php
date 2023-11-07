@@ -47,7 +47,7 @@ class HistoryController extends AbstractController
             }
         });
 
-        return $this->render("history.twig", [
+        return $this->render("history/page.twig", [
             "entries" => $entries
         ]);
     }
