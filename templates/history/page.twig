@@ -4,7 +4,25 @@
 
 {% block title %}History{% endblock %}
 
+{% macro paginationElement(pagination, user) %}
+    <ul class="pagination justify-content-center mt-3 mb-3">
+        <li class="{{ html_classes("page-item", {"disabled": pagination.previousPage is null}) }}"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": pagination.previousPage}) }}"><i class="fa-solid fa-arrow-left"></i></a></li>
+        {% for page in pagination.previousPages %}
+            <li class="page-item"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": page}) }}">{{ page }}</a></li>
+        {% endfor %}
+        <li class="page-item active"><a class="page-link">{{ pagination.currentPage }}</a></li>
+        {% for page in pagination.nextPages %}
+            <li class="page-item"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": page}) }}">{{ page }}</a></li>
+        {% endfor %}
+        <li class="{{ html_classes("page-item", {"disabled": pagination.nextPage is null}) }}"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": pagination.nextPage}) }}"><i class="fa-solid fa-arrow-right"></i></a></li>
+    </ul>
+{% endmacro %}
+
 {% block content %}
+    <h1>History</h1>
+
+    {{ _self.paginationElement(pagination, user) }}
+
     {% if entries %}
         <div class="row row-cols-1 row-cols-md-5 g-4">
             {% for entry in entries %}
@@ -16,6 +34,8 @@
     {% else %}
         <div class="alert alert-warning">No history available.</div>
     {% endif %}
+
+    {{ _self.paginationElement(pagination, user) }}
 {% endblock %}
 
 {% block additional_content %}
