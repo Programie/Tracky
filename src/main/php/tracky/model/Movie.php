@@ -22,7 +22,7 @@ class Movie extends BaseEntity
     #[ORM\Column(type: "integer")]
     private ?int $year;
 
-    #[ORM\OneToMany(mappedBy: "movie", targetEntity: MovieView::class)]
+    #[ORM\OneToMany(mappedBy: "item", targetEntity: MovieView::class)]
     #[ORM\OrderBy(["dateTime" => "ASC"])]
     private mixed $views;
 

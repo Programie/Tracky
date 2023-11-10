@@ -45,18 +45,6 @@ CREATE TABLE `episodes`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE `episodeviews`
-(
-    `id`       int(11)  NOT NULL AUTO_INCREMENT,
-    `user`     int(11)  NOT NULL,
-    `episode`  int(11)  NOT NULL,
-    `datetime` datetime NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`episode`) REFERENCES `episodes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
-
 CREATE TABLE `movies`
 (
     `id`             int(11)      NOT NULL AUTO_INCREMENT,
@@ -71,15 +59,15 @@ CREATE TABLE `movies`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE `movieviews`
+CREATE TABLE `views`
 (
     `id`       int(11)  NOT NULL AUTO_INCREMENT,
     `user`     int(11)  NOT NULL,
-    `movie`    int(11)  NOT NULL,
+    `type`     enum ('episode', 'movie'),
+    `item`     int(11)  NOT NULL,
     `datetime` datetime NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`movie`) REFERENCES `movies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 

@@ -10,14 +10,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\datetime\DateTime;
 use tracky\model\EpisodeView;
 use tracky\model\Show;
-use tracky\orm\EpisodeViewRepository;
 use tracky\orm\ShowRepository;
+use tracky\orm\ViewRepository;
 
 class ShowController extends AbstractController
 {
     public function __construct(
-        private readonly ShowRepository        $showRepository,
-        private readonly EpisodeViewRepository $episodeViewRepository
+        private readonly ShowRepository $showRepository,
+        private readonly ViewRepository $viewRepository
     )
     {
     }
@@ -152,7 +152,7 @@ class ShowController extends AbstractController
             throw new NotFoundHttpException("Episode not found");
         }
 
-        $view = $this->episodeViewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser()]);
+        $view = $this->viewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser(), "type" => "episode"]);
         if ($view === null) {
             throw new NotFoundHttpException("View not found");
         }

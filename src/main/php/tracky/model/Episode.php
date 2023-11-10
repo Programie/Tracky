@@ -28,7 +28,7 @@ class Episode extends BaseEntity
     #[ORM\Column(name: "firstAired", type: "date")]
     private ?Date $firstAired;
 
-    #[ORM\OneToMany(mappedBy: "episode", targetEntity: EpisodeView::class)]
+    #[ORM\OneToMany(mappedBy: "item", targetEntity: EpisodeView::class)]
     #[ORM\OrderBy(["dateTime" => "ASC"])]
     private mixed $views;
 

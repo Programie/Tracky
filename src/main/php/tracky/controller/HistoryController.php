@@ -6,16 +6,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use tracky\model\User;
 use tracky\model\ViewEntry;
-use tracky\orm\EpisodeViewRepository;
-use tracky\orm\MovieViewRepository;
+use tracky\orm\ViewRepository;
 use tracky\Pagination;
 
 class HistoryController extends AbstractController
 {
-    public function __construct(
-        private readonly EpisodeViewRepository $episodeViewRepository,
-        private readonly MovieViewRepository   $movieViewRepository
-    )
+    public function __construct(private readonly ViewRepository $viewRepository)
     {
     }
 
@@ -25,24 +21,23 @@ class HistoryController extends AbstractController
         $itemsPerPage = 100;
         $page = $request->query->getInt("page", 1);
 
+        $criteria = ["user" => $user->getId()];
+
         $episode = $request->query->getInt("episode");
         $movie = $request->query->getInt("movie");
 
         if ($episode) {
-            $count = $this->episodeViewRepository->count(["user" => $user, "episode" => $episode]);
-            $entries = $this->episodeViewRepository->getPaged(["user" => $user, "episode" => $episode], $page, $itemsPerPage);
+            $type = "episode";
+            $criteria["item"] = $episode;
         } elseif ($movie) {
-            $count = $this->movieViewRepository->count(["user" => $user, "movie" => $episode]);
-            $entries = $this->movieViewRepository->getPaged(["user" => $user, "movie" => $episode], $page, $itemsPerPage);
+            $type = "movie";
+            $criteria["item"] = $movie;
         } else {
-            $episodesCount = $this->episodeViewRepository->count(["user" => $user]);
-            $moviesCount = $this->episodeViewRepository->count(["user" => $user]);
-            $count = max($episodesCount, $moviesCount);
-
-            $episodes = $this->episodeViewRepository->getPaged(["user" => $user], $page, $itemsPerPage);
-            $movies = $this->movieViewRepository->getPaged(["user" => $user], $page, $itemsPerPage);
-            $entries = array_merge($episodes, $movies);
+            $type = null;
         }
+
+        $count = $this->viewRepository->count($criteria, $type);
+        $entries = $this->viewRepository->getPaged($criteria, $page, $itemsPerPage, $type);
 
         usort($entries, function (ViewEntry $entry1, ViewEntry $entry2) {
             if ($entry1->getDateTime() < $entry2->getDateTime()) {

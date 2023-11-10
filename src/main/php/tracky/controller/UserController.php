@@ -10,8 +10,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use tracky\model\User;
-use tracky\orm\EpisodeViewRepository;
-use tracky\orm\MovieViewRepository;
+use tracky\orm\ViewRepository;
 use tracky\orm\UserRepository;
 
 class UserController extends AbstractController
@@ -64,12 +63,12 @@ class UserController extends AbstractController
     }
 
     #[Route("/users/{username}", name: "profilePage")]
-    public function getProfilePage(User $user, EpisodeViewRepository $episodeViewRepository, MovieViewRepository $movieViewRepository): Response
+    public function getProfilePage(User $user, ViewRepository $viewRepository): Response
     {
         return $this->render("user/profile.twig", [
             "user" => $user,
-            "latestWatchedEpisodes" => $episodeViewRepository->findBy(["user" => $user], ["dateTime" => "desc"], 10),
-            "latestWatchedMovies" => $movieViewRepository->findBy(["user" => $user], ["dateTime" => "desc"], 10)
+            "latestWatchedEpisodes" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: "episode"),
+            "latestWatchedMovies" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: "movie")
         ]);
     }
 }

@@ -2,24 +2,27 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
-use tracky\orm\EpisodeViewRepository;
 
-#[ORM\Entity(repositoryClass: EpisodeViewRepository::class)]
-#[ORM\Table(name: "episodeviews")]
+#[ORM\Entity]
 class EpisodeView extends ViewEntry
 {
     #[ORM\ManyToOne(targetEntity: Episode::class)]
-    #[ORM\JoinColumn(name: "episode", referencedColumnName: "id")]
-    private Episode $episode;
+    #[ORM\JoinColumn(name: "item", referencedColumnName: "id")]
+    protected mixed $item;
 
     public function getEpisode(): Episode
     {
-        return $this->episode;
+        return $this->item;
     }
 
     public function setEpisode(Episode $episode): EpisodeView
     {
-        $this->episode = $episode;
+        $this->item = $episode;
         return $this;
+    }
+
+    public function getType(): string
+    {
+        return "episode";
     }
 }

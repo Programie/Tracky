@@ -2,24 +2,27 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
-use tracky\orm\MovieViewRepository;
 
-#[ORM\Entity(repositoryClass: MovieViewRepository::class)]
-#[ORM\Table(name: "movieviews")]
+#[ORM\Entity]
 class MovieView extends ViewEntry
 {
     #[ORM\ManyToOne(targetEntity: Movie::class)]
-    #[ORM\JoinColumn(name: "movie", referencedColumnName: "id")]
-    private Movie $movie;
+    #[ORM\JoinColumn(name: "item", referencedColumnName: "id")]
+    protected mixed $item;
 
     public function getMovie(): Movie
     {
-        return $this->movie;
+        return $this->item;
     }
 
     public function setMovie(Movie $movie): MovieView
     {
-        $this->movie = $movie;
+        $this->item = $movie;
         return $this;
+    }
+
+    public function getType(): string
+    {
+        return "movie";
     }
 }
