@@ -8,22 +8,7 @@
     <h1>Latest episodes</h1>
 
     {% if latestEpisodes %}
-        <div class="row row-cols-1 row-cols-md-5 g-4">
-            {% for episode in latestEpisodes %}
-                <div class="col">
-                    <div class="card">
-                        <img class="card-img-top" src="{{ episode.posterImageUrl }}"/>
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <b>{{ episode.season.number }}x{{ episode.number }}</b> {{ episode.title }}<br/>
-                                <small>{{ episode.season.show.title }}</small><br/>
-                                <small>{{ episode.firstAired|format_date }}</small>
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+        {% include "components/episode-list-small.twig" with {"episodes": latestEpisodes, "withShowTitle": true} %}
     {% else %}
         <div class="alert alert-warning">No episodes available.</div>
     {% endif %}
@@ -31,21 +16,7 @@
     <h1 class="mt-3">Latest movies</h1>
 
     {% if latestMovies %}
-        <div class="row row-cols-1 row-cols-md-5 g-4">
-            {% for movie in latestMovies %}
-                <div class="col">
-                    <div class="card">
-                        <img class="card-img-top" src="{{ movie.posterImageUrl }}"/>
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                {{ movie.title }}<br/>
-                                <small>{{ movie.year }}</small>
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+        {% include "components/movie-list-small.twig" with {"movies": latestMovies} %}
     {% else %}
         <div class="alert alert-warning">No movies available.</div>
     {% endif %}

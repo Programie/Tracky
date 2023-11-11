@@ -1,0 +1,7 @@
+<div class="row row-cols-1 row-cols-md-5 g-4">
+    {% for season in seasons %}
+        <div class="col">
+            {% include "components/season-card-small.twig" with {"season": season} %}
+        </div>
+    {% endfor %}
+</div>

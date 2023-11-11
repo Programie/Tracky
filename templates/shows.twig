@@ -8,18 +8,7 @@
     <h1>All shows</h1>
 
     {% if shows %}
-        <div class="row row-cols-1 row-cols-md-5 g-4">
-            {% for show in shows %}
-                <div class="col">
-                    <a class="card" href="{{ path("showOverviewPage", {"id": show.id}) }}">
-                        <img class="card-img-top" src="{{ show.posterImageUrl }}"/>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ show.title }}</h5>
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
+        {% include "components/show-list-small.twig" with {"shows": shows} %}
     {% else %}
         <div class="alert alert-warning">No shows available.</div>
     {% endif %}

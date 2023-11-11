@@ -22,13 +22,7 @@
     {{ _self.paginationElement(pagination, user) }}
 
     {% if entries %}
-        <div class="row row-cols-1 row-cols-md-5 g-4">
-            {% for entry in entries %}
-                <div class="col">
-                    {% include "user/history/entry.twig" with {"entry": entry} only %}
-                </div>
-            {% endfor %}
-        </div>
+        {% include "components/history-entry-list-small.twig" with {"entries": entries} %}
     {% else %}
         <div class="alert alert-warning">No history available.</div>
     {% endif %}

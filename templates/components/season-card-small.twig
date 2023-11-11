@@ -1,0 +1,9 @@
+<a class="card" href="{{ path("seasonPage", {"id": season.show.id, "number": season.number}) }}">
+    <img class="card-img-top" src="{{ season.posterImageUrl }}"/>
+    <div class="card-body">
+        <h5 class="card-title">
+            Season {{ season.number }}<br/>
+            <small>{{ season.episodes|length }} episodes</small>
+        </h5>
+    </div>
+</a>

@@ -1,0 +1,7 @@
+<div class="row row-cols-1 g-4">
+    {% for episode in episodes %}
+        <div class="col">
+            {% include "components/episode-card-wide.twig" with {"episode": episode} %}
+        </div>
+    {% endfor %}
+</div>

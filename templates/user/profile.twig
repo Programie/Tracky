@@ -6,13 +6,7 @@
     <h2>Latest watched episodes</h2>
 
     {% if latestWatchedEpisodes %}
-        <div class="row row-cols-1 row-cols-md-5 g-4">
-            {% for entry in latestWatchedEpisodes %}
-                <div class="col">
-                    {% include "user/history/entry.twig" with {"entry": entry} only %}
-                </div>
-            {% endfor %}
-        </div>
+        {% include "components/history-entry-list-small.twig" with {"entries": latestWatchedEpisodes} %}
     {% else %}
         <div class="alert alert-warning">No episodes available.</div>
     {% endif %}
@@ -20,13 +14,7 @@
     <h2 class="mt-3">Latest watched movies</h2>
 
     {% if latestWatchedMovies %}
-        <div class="row row-cols-1 row-cols-md-5 g-4">
-            {% for entry in latestWatchedMovies %}
-                <div class="col">
-                    {% include "user/history/entry.twig" with {"entry": entry} only %}
-                </div>
-            {% endfor %}
-        </div>
+        {% include "components/history-entry-list-small.twig" with {"entries": latestWatchedMovies} %}
     {% else %}
         <div class="alert alert-warning">No movies available.</div>
     {% endif %}
