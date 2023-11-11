@@ -6,8 +6,7 @@ const scriptRoot = "./src/main/resources/assets/script";
 
 module.exports = {
     entry: {
-        "main": `${scriptRoot}/main.ts`,
-        "error-page": `${scriptRoot}/error-page.ts`
+        "main": `${scriptRoot}/main.ts`
     },
     output: {
         path: path.resolve(__dirname, "public/assets"),
