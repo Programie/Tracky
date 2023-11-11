@@ -1,9 +1,9 @@
 <div class="card">
     <img class="card-img-top" src="{{ episode.posterImageUrl }}"/>
     <div class="card-body">
-        <h5 class="card-title"><b>{{ episode.season.number }}x{{ episode.number }}</b> {{ episode.title }}</h5>
+        <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"><b>{{ episode.season.number }}x{{ episode.number }}</b> {{ episode.title }}</a></h5>
         {% if withShowTitle|default(false) %}
-            <div>{{ episode.season.show.title }}</div>
+            <div><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": episode.season.show.id}) }}">{{ episode.season.show.title }}</a></div>
         {% endif %}
         <div class="text-body-secondary">{{ episode.firstAired|format_date }}</div>
     </div>
