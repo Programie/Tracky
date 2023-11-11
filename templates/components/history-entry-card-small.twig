@@ -16,8 +16,8 @@
     <img class="card-img-top" src="{{ imageUrl }}"/>
     <div class="card-body">
         {% if entry.type == "episode" %}
-            <h5 class="card-title"><b>{{ season.number }}x{{ episode.number }}</b> {{ episode.title }}</h5>
-            <div>{{ show.title }}</div>
+            <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) }}"><b>{{ season.number }}x{{ episode.number }}</b> {{ episode.title }}</a></h5>
+            <div><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": show.id}) }}">{{ show.title }}</a></div>
         {% elseif entry.type == "movie" %}
             <h5 class="card-title">{{ movie.title }}</h5>
         {% endif %}
