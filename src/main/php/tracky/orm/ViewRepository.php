@@ -45,6 +45,17 @@ class ViewRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function findOneBy(array $criteria, ?array $orderBy = null, ?string $type = null)
+    {
+        $items = $this->findBy($criteria, $orderBy, 1, type: $type);
+
+        if (empty($items)) {
+            return null;
+        }
+
+        return $items[0];
+    }
+
     public function count(array $criteria, ?string $type = null): int
     {
         $queryBuilder = $this->createQueryBuilder("view")->select("count(view.id)");

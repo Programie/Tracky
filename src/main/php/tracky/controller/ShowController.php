@@ -152,7 +152,7 @@ class ShowController extends AbstractController
             throw new NotFoundHttpException("Episode not found");
         }
 
-        $view = $this->viewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser(), "type" => "episode"]);
+        $view = $this->viewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser()], type: "episode");
         if ($view === null) {
             throw new NotFoundHttpException("View not found");
         }
