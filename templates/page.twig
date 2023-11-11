@@ -31,8 +31,8 @@
 
                         {% if app.user %}
                             <div class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ app.user.username }}</a>
-                                <ul class="dropdown-menu">
+                                <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ app.user.username }}</button>
+                                <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" href="{{ path("profilePage", {"username": app.user.username}) }}">Profile</a></li>
                                     <li><a class="dropdown-item" href="{{ path("userHistoryPage", {"username": app.user.username}) }}">History</a></li>
                                     <li><a class="dropdown-item" href="{{ path("userShowProgressPage", {"username": app.user.username}) }}">TV show progress</a></li>
