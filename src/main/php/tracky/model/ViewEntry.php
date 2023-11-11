@@ -3,9 +3,8 @@ namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
 use tracky\datetime\DateTime;
-use tracky\orm\ViewRepository;
 
-#[ORM\Entity(repositoryClass: ViewRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: "views")]
 #[ORM\InheritanceType("SINGLE_TABLE")]
 #[ORM\DiscriminatorColumn(name: "type", type: "string", columnDefinition: "ENUM('episode', 'movie')")]

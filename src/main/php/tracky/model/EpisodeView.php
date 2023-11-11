@@ -2,8 +2,9 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
+use tracky\orm\EpisodeViewRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: EpisodeViewRepository::class)]
 class EpisodeView extends ViewEntry
 {
     #[ORM\ManyToOne(targetEntity: Episode::class)]

@@ -7,9 +7,9 @@ use tracky\model\ViewEntry;
 
 class ViewRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, string $entityClass = ViewEntry::class)
     {
-        parent::__construct($registry, ViewEntry::class);
+        parent::__construct($registry, $entityClass);
     }
 
     public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?string $type = null)

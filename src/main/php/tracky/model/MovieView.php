@@ -2,8 +2,9 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
+use tracky\orm\MovieViewRepository;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: MovieViewRepository::class)]
 class MovieView extends ViewEntry
 {
     #[ORM\ManyToOne(targetEntity: Movie::class)]
