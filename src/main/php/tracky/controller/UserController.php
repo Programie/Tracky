@@ -10,6 +10,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use tracky\model\User;
+use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\orm\UserRepository;
 
@@ -69,6 +70,15 @@ class UserController extends AbstractController
             "user" => $user,
             "latestWatchedEpisodes" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: "episode"),
             "latestWatchedMovies" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: "movie")
+        ]);
+    }
+
+    #[Route("/users/{username}/show-progress", name: "userShowProgressPage")]
+    public function getShowProgressForUser(User $user, ShowRepository $showRepository): Response
+    {
+        return $this->render("user/show-progress.twig", [
+            "user" => $user,
+            "shows" => $showRepository->findAll()
         ]);
     }
 }

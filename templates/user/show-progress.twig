@@ -1,0 +1,73 @@
+{% set assetEntryPoint = "main" %}
+
+{% extends "page.twig" %}
+
+{% block title %}TV show progress - {{ user.username }}{% endblock %}
+
+{% macro episodeProgressBarItem(user, episode, percentage) %}
+    {% set watched = episode.getViewsForUser(user)|length > 0 %}
+    <div class="progress" role="progressbar" style="width: {{ percentage }}%" title="{{ episode }}">
+        <div class="{{ html_classes("progress-bar", {"bg-success": watched, "bg-secondary": not watched}) }}"></div>
+    </div>
+{% endmacro %}
+
+{% block content %}
+    <h1>TV show progress</h1>
+
+    <div class="row g-4">
+        {% for show in shows %}
+            <div class="col-12">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img class="img-fluid rounded-start" src="{{ show.posterImageUrl }}"/>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": show.id}) }}">{{ show.title }}</a></h5>
+                                <div class="card-text mt-3">
+                                    <div class="progress-stacked">
+                                        {% set totalEpisodes = show.totalEpisodes %}
+                                        {% for season in show.seasons %}
+                                            {% if totalEpisodes %}
+                                                {% set perEpisodePercentage = 100 / totalEpisodes %}
+                                                {% for episode in season.episodes %}
+                                                    {{ _self.episodeProgressBarItem(user, episode, perEpisodePercentage) }}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="accordion mt-3">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#show_{{ show.id }}_seasons">Seasons</button>
+                                            </h2>
+                                            <div id="show_{{ show.id }}_seasons" class="accordion-collapse collapse">
+                                                <div class="accordion-body">
+                                                    {% for season in show.seasons %}
+                                                        {% set totalEpisodes = season.episodes.count %}
+                                                        {% if totalEpisodes %}
+                                                            <div><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}">Season {{ season.number }}</a></div>
+                                                            <div class="progress-stacked">
+                                                                {% set perEpisodePercentage = 100 / totalEpisodes %}
+
+                                                                {% for episode in season.episodes %}
+                                                                    {{ _self.episodeProgressBarItem(user, episode, perEpisodePercentage) }}
+                                                                {% endfor %}
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

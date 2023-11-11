@@ -106,6 +106,10 @@ class Episode extends BaseEntity
         }
 
         return $season->getNextSeason()?->getEpisodes()->first();
+    }
 
+    public function __toString(): string
+    {
+        return sprintf("%dx%d %s", $this->getSeason()->getNumber(), $this->getNumber(), $this->getTitle());
     }
 }

@@ -81,4 +81,15 @@ class Show extends BaseEntity
 
         return $season;
     }
+
+    public function getTotalEpisodes(): int
+    {
+        $totalEpisodes = 0;
+
+        foreach ($this->getSeasons() as $season) {
+            $totalEpisodes += count($season->getEpisodes());
+        }
+
+        return $totalEpisodes;
+    }
 }
