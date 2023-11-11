@@ -14,7 +14,6 @@ class ViewRepository extends ServiceEntityRepository
 
     public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?string $type = null)
     {
-        error_log(sprintf("type = %s", $type));
         $queryBuilder = $this->createQueryBuilder("view")->select("view");
 
         foreach ($criteria as $key => $value) {
