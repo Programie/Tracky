@@ -7,7 +7,7 @@
 {% macro episodeProgressBarItem(user, episode, percentage) %}
     {% set watched = episode.getViewsForUser(user)|length > 0 %}
     <div class="progress" role="progressbar" style="width: {{ percentage }}%" title="{{ episode }}">
-        <div class="{{ html_classes("progress-bar", {"bg-success": watched, "bg-secondary": not watched}) }}"></div>
+        <a class="{{ html_classes("progress-bar", {"bg-success": watched, "bg-secondary": not watched}) }}" href="{{ path("episodePage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"></a>
     </div>
 {% endmacro %}
 
