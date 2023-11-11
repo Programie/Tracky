@@ -1,21 +1,15 @@
-{% set assetEntryPoint = "main" %}
+{% extends "user/page.twig" %}
 
-{% extends "page.twig" %}
+{% block title %}{{ user.username }}{% endblock %}
 
-{% block title %}View profile - {{ user.username }}{% endblock %}
-
-{% block content %}
-    <h1>Profile</h1>
-    <a href="{{ path("userHistoryPage", {"username": user.username}) }}">History</a>
-    <a href="{{ path("userShowProgressPage", {"username": user.username}) }}">TV show progress</a>
-
-    <h2 class="mt-3">Latest watched episodes</h2>
+{% block profileContent %}
+    <h2>Latest watched episodes</h2>
 
     {% if latestWatchedEpisodes %}
         <div class="row row-cols-1 row-cols-md-5 g-4">
             {% for entry in latestWatchedEpisodes %}
                 <div class="col">
-                    {% include "history/entry.twig" with {"entry": entry} only %}
+                    {% include "user/history/entry.twig" with {"entry": entry} only %}
                 </div>
             {% endfor %}
         </div>
@@ -29,7 +23,7 @@
         <div class="row row-cols-1 row-cols-md-5 g-4">
             {% for entry in latestWatchedMovies %}
                 <div class="col">
-                    {% include "history/entry.twig" with {"entry": entry} only %}
+                    {% include "user/history/entry.twig" with {"entry": entry} only %}
                 </div>
             {% endfor %}
         </div>
@@ -39,5 +33,5 @@
 {% endblock %}
 
 {% block additional_content %}
-    {% include "history/additional-content.twig" %}
+    {% include "user/history/additional-content.twig" %}
 {% endblock %}

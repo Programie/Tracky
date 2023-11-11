@@ -1,0 +1,21 @@
+{% set assetEntryPoint = "main" %}
+
+{% extends "page.twig" %}
+
+{% block content %}
+    <h1>{{ user.username }}</h1>
+
+    <ul class="nav nav-underline mb-3">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path("profilePage", {"username": user.username}) }}">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path("userHistoryPage", {"username": user.username}) }}">History</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path("userShowProgressPage", {"username": user.username}) }}">TV show progress</a>
+        </li>
+    </ul>
+
+    {% block profileContent %}{% endblock %}
+{% endblock %}

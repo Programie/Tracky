@@ -1,6 +1,4 @@
-{% set assetEntryPoint = "main" %}
-
-{% extends "page.twig" %}
+{% extends "user/page.twig" %}
 
 {% block title %}TV show progress - {{ user.username }}{% endblock %}
 
@@ -11,8 +9,8 @@
     </div>
 {% endmacro %}
 
-{% block content %}
-    <h1>TV show progress</h1>
+{% block profileContent %}
+    <h2>TV show progress</h2>
 
     <div class="row g-4">
         {% for show in shows %}
