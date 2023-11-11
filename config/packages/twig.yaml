@@ -1,7 +1,3 @@
-twig:
-  globals:
-    globals: '@tracky\TwigGlobals'
-
 when@test:
   twig:
     strict_variables: true

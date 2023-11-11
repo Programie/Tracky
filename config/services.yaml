@@ -36,6 +36,3 @@ services:
   tracky\Config:
     arguments:
       $container: "@service_container"
-  tracky\TwigGlobals:
-    arguments:
-      $container: "@service_container"
