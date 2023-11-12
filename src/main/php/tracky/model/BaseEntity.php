@@ -14,4 +14,11 @@ abstract class BaseEntity
     {
         return $this->id;
     }
+
+    public function getClassName(): string
+    {
+        $parts = explode("\\", get_class($this));
+
+        return end($parts);
+    }
 }
