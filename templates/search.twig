@@ -11,16 +11,18 @@
         {% if results %}
             <div class="row row-cols-1 row-cols-md-5 g-4 mt-1">
                 {% for entry in results %}
-                    {% if entry.className == "Episode" %}
-                        {% set url = path("episodePage", {"show": entry.season.show.id, "seasonNumber": entry.season.number, "episodeNumber": entry.number}) %}
-                    {% elseif entry.className == "Movie" %}
-                        {% set url = path("moviePage", {"movie": entry.id}) %}
-                    {% endif %}
                     <div class="col">
                         <div class="card">
                             <img class="card-img-top" src="{{ entry.posterImageUrl }}"/>
                             <div class="card-body">
-                                <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ url }}">{{ entry.title }}</a></h5>
+                                {% if entry.className == "Episode" %}
+                                    <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": entry.season.show.id, "seasonNumber": entry.season.number, "episodeNumber": entry.number}) }}"><b>{{ entry.season.number }}x{{ entry.number }}</b> {{ entry.title }}</a></h5>
+                                    <div><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": entry.season.show.id}) }}">{{ entry.season.show.title }}</a></div>
+                                {% elseif entry.className == "Movie" %}
+                                    <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("moviePage", {"movie": entry.id}) }}">{{ entry.title }}</a></h5>
+                                {% elseif entry.className == "Show" %}
+                                    <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": entry.id}) }}">{{ entry.title }}</a></h5>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
