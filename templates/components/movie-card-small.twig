@@ -1,7 +1,7 @@
 <div class="card">
     <img class="card-img-top" src="{{ movie.posterImageUrl }}"/>
     <div class="card-body">
-        <h5 class="card-title">{{ movie.title }}</h5>
+        <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("moviePage", {"movie": movie.id}) }}">{{ movie.title }}</a></h5>
         <div class="text-body-secondary">{{ movie.year }}</div>
     </div>
 </div>
