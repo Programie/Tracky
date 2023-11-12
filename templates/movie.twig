@@ -15,7 +15,7 @@
             {% if is_granted("IS_AUTHENTICATED_FULLY") %}
                 {% set viewsForUser = movie.getViewsForUser(app.user) %}
                 {% if viewsForUser|length %}<small class="d-block text-body-secondary"><a class="text-reset text-decoration-none" href="{{ path("userHistoryPage", {"username": app.user.username, "movie": movie.id}) }}"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }} ({{ viewsForUser|length }} plays)</a></small>{% endif %}
-                <button class="btn btn-secondary btn-sm mt-3 add-movie-view" data-movie-id="{{ movie.id }}">Add view</button>
+                <button class="btn btn-secondary btn-sm mt-3 add-view" data-type="movie" data-movie-id="{{ movie.id }}">Add view</button>
             {% endif %}
 
             <div class="card-text mt-3">{{ movie.plot }}</div>
