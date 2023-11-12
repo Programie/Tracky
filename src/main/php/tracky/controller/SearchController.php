@@ -29,7 +29,7 @@ class SearchController extends AbstractController
         if ($query !== "") {
             $results = [];
 
-            $results = array_merge($results, $this->showRepository->search($query));
+            $results = array_merge($results, $this->showRepository->search($query, false));
             $results = array_merge($results, $this->episodeRepository->search($query));
             $results = array_merge($results, $this->movieRepository->search($query));
         }
