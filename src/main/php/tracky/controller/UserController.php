@@ -35,13 +35,43 @@ class UserController extends AbstractController
     public function getRegisterPage(Request $request, UserPasswordHasherInterface $passwordHasher, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
         if ($request->isMethod("POST")) {
-            $username = $request->getPayload()->getString("username");
-            $password = $request->getPayload()->getString("password");
+            $payload = $request->getPayload();
+            $username = trim($payload->getString("username"));
+            $password = $payload->getString("password");
+            $passwordRepeat = $payload->getString("password-repeat");
+
+            if ($username === "") {
+                return $this->render("user/register.twig", [
+                    "username" => $username,
+                    "error" => [
+                        "message" => "No username given"
+                    ]
+                ]);
+            }
 
             if ($userRepository->count(["username" => $username])) {
                 return $this->render("user/register.twig", [
+                    "username" => $username,
                     "error" => [
                         "message" => "The username is already taken"
+                    ]
+                ]);
+            }
+
+            if (trim($password) === "") {
+                return $this->render("user/register.twig", [
+                    "username" => $username,
+                    "error" => [
+                        "message" => "No password given"
+                    ]
+                ]);
+            }
+
+            if ($password !== $passwordRepeat) {
+                return $this->render("user/register.twig", [
+                    "username" => $username,
+                    "error" => [
+                        "message" => "Passwords are not the same"
                     ]
                 ]);
             }
@@ -55,10 +85,11 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute("profilePage", ["username" => $username]);
+            return $this->redirectToRoute("loginPage", ["username" => $username]);
         }
 
         return $this->render("user/register.twig", [
+            "username" => null,
             "error" => null
         ]);
     }

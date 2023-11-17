@@ -7,7 +7,7 @@
         <h1 class="h3 mb-3 fw-normal">Register new account</h1>
 
         <div class="form-floating">
-            <input type="text" class="form-control" id="login-username" name="username" placeholder="Username"/>
+            <input type="text" class="form-control" id="login-username" name="username" placeholder="Username" value="{{ username }}"/>
             <label for="login-username">Username</label>
         </div>
 
@@ -22,7 +22,7 @@
         </div>
 
         {% if error %}
-            <div class="alert alert-danger"><i class="fa-solid fa-exclamation-triangle"></i> {{ error.message }}</div>
+            <div class="alert alert-danger my-3"><i class="fa-solid fa-exclamation-triangle"></i> {{ error.message }}</div>
         {% endif %}
 
         <button class="btn btn-primary w-100 py-2" type="submit">Register</button>
