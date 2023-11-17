@@ -8,6 +8,9 @@ services:
     environment:
       APP_ENV: dev
 
+      # Do not use this secret in production, only for testing!
+      APP_SECRET: fd7061a91fb9b2754eb89c641203d138
+
   mysql:
     volumes:
       - ./database-sample.sql:/docker-entrypoint-initdb.d/20-sample.sql:ro
