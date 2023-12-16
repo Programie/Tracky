@@ -1,18 +1,18 @@
 {% extends "page.twig" %}
 
+{% macro navItem(path, parameters, title) %}
+    <li class="nav-item">
+        <a class="{{ html_classes("nav-link", {"active": app.request.get("_route") == path}) }}" href="{{ path(path, parameters) }}">{{ title }}</a>
+    </li>
+{% endmacro %}
+
 {% block content %}
     <h1>{{ user.username }}</h1>
 
     <ul class="nav nav-underline mb-3">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path("profilePage", {"username": user.username}) }}">Profile</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path("userHistoryPage", {"username": user.username}) }}">History</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path("userShowProgressPage", {"username": user.username}) }}">TV show progress</a>
-        </li>
+        {{ _self.navItem("profilePage", {"username": user.username}, "Profile") }}
+        {{ _self.navItem("userHistoryPage", {"username": user.username}, "History") }}
+        {{ _self.navItem("userShowProgressPage", {"username": user.username}, "TV show progress") }}
     </ul>
 
     {% block profileContent %}{% endblock %}
