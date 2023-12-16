@@ -13,3 +13,17 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
     display: inline-flex;
     width: 50%;
 }
+
+.scaled-image {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 0 50%;
+    border-radius: var(--bs-border-radius) 0 0 var(--bs-border-radius);
+}
+
+@media (max-width: 767px) {
+    .scaled-image {
+        height: 300px;
+        border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
+    }
+}
