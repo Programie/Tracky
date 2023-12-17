@@ -44,7 +44,7 @@ class UserController extends AbstractController
                 return $this->render("user/register.twig", [
                     "username" => $username,
                     "error" => [
-                        "message" => "No username given"
+                        "messageKey" => "register.error.username-missing"
                     ]
                 ]);
             }
@@ -53,7 +53,7 @@ class UserController extends AbstractController
                 return $this->render("user/register.twig", [
                     "username" => $username,
                     "error" => [
-                        "message" => "The username is already taken"
+                        "messageKey" => "register.error.username-taken"
                     ]
                 ]);
             }
@@ -62,7 +62,7 @@ class UserController extends AbstractController
                 return $this->render("user/register.twig", [
                     "username" => $username,
                     "error" => [
-                        "message" => "No password given"
+                        "messageKey" => "register.error.password-missing"
                     ]
                 ]);
             }
@@ -71,7 +71,7 @@ class UserController extends AbstractController
                 return $this->render("user/register.twig", [
                     "username" => $username,
                     "error" => [
-                        "message" => "Passwords are not the same"
+                        "messageKey" => "register.error.passwords-do-not-match"
                     ]
                 ]);
             }

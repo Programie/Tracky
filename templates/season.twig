@@ -1,17 +1,17 @@
 {% extends "page.twig" %}
 
-{% block title %}{{ show.title }} - Season {{ season.number }}{% endblock %}
+{% block title %}{{ show.title }} - {% trans with {"%number%":season.number} %}shows.season{% endtrans %}{% endblock %}
 
 {% macro paginationElement(pagination, show) %}
     <div class="episode-pagination d-flex justify-content-between mt-3 mb-3">
         <span>
             {% if pagination.previousSeason is not null %}
-                <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.previousSeason.number}) }}"><i class="fa-solid fa-arrow-left"></i> Season {{ pagination.previousSeason.number }}</a>
+                <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.previousSeason.number}) }}"><i class="fa-solid fa-arrow-left"></i> {% trans with {"%number%": pagination.previousSeason.number} %}shows.season{% endtrans %}</a>
             {% endif %}
         </span>
         <span class="justify-content-end">
             {% if pagination.nextSeason is not null %}
-                <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.nextSeason.number}) }}">Season {{ pagination.nextSeason.number }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.nextSeason.number}) }}">{% trans with {"%number%": pagination.nextSeason.number} %}shows.season{% endtrans %} <i class="fa-solid fa-arrow-right"></i></a>
             {% endif %}
         </span>
     </div>
@@ -20,17 +20,17 @@
 {% block content %}
     <h1>
         <a href="{{ path("showOverviewPage", {"id": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a><br/>
-        <span class="fs-4 text-body-secondary">Season {{ season.number }}</span>
+        <span class="fs-4 text-body-secondary">{% trans with {"%number%": season.number} %}shows.season{% endtrans %}</span>
     </h1>
 
     {{ _self.paginationElement(pagination, show) }}
 
-    <h2>Episodes</h2>
+    <h2>{{ "shows.episodes"|trans }}</h2>
 
     {% if season.episodes %}
         {% include "components/episode-list-wide.twig" with {"episodes": season.episodes} %}
     {% else %}
-        <div class="alert alert-warning">No episodes available.</div>
+        <div class="alert alert-warning">{{ "shows.no-episodes-available"|trans }}</div>
     {% endif %}
 
     {{ _self.paginationElement(pagination, show) }}

@@ -1,10 +1,10 @@
 {% extends "page.twig" %}
 
-{% block title %}Search{% endblock %}
+{% block title %}{{ "search.title"|trans }}{% endblock %}
 
 {% block content %}
     <form method="get" role="search">
-        <input class="form-control" type="search" name="query" value="{{ query }}" placeholder="Search for shows, episodes and movies"/>
+        <input class="form-control" type="search" name="query" value="{{ query }}" placeholder="{{ "search.placeholder"|trans }}"/>
     </form>
 
     {% if results is not null %}
@@ -29,7 +29,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="alert alert-warning mt-3">Nothing results for query '{{ query }}'.</div>
+            <div class="alert alert-warning mt-3">{% trans with {"%query%": query} %}search.no-results{% endtrans %}</div>
         {% endif %}
     {% endif %}
 {% endblock %}

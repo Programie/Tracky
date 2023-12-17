@@ -1,6 +1,6 @@
 {% extends "user/page.twig" %}
 
-{% block title %}History - {{ user.username }}{% endblock %}
+{% block title %}{{ "user.history"|trans }} - {{ user.username }}{% endblock %}
 
 {% macro paginationElement(pagination, user) %}
     <ul class="pagination justify-content-center mt-3 mb-3">
@@ -17,14 +17,14 @@
 {% endmacro %}
 
 {% block profileContent %}
-    <h2>History</h2>
+    <h2>{{ "user.history"|trans }}</h2>
 
     {{ _self.paginationElement(pagination, user) }}
 
     {% if entries %}
         {% include "components/history-entry-list-small.twig" with {"entries": entries} %}
     {% else %}
-        <div class="alert alert-warning">No history available.</div>
+        <div class="alert alert-warning">{{ "user.no-history-available"|trans }}</div>
     {% endif %}
 
     {{ _self.paginationElement(pagination, user) }}

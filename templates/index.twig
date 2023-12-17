@@ -3,19 +3,19 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-    <h1>Latest episodes</h1>
+    <h1>{{ "overview.latest-episodes"|trans }}</h1>
 
     {% if latestEpisodes %}
         {% include "components/episode-list-small.twig" with {"episodes": latestEpisodes, "withShowTitle": true} %}
     {% else %}
-        <div class="alert alert-warning">No episodes available.</div>
+        <div class="alert alert-warning">{{ "shows.no-episodes-available"|trans }}</div>
     {% endif %}
 
-    <h1 class="mt-3">Latest movies</h1>
+    <h1 class="mt-3">{{ "overview.latest-movies"|trans }}</h1>
 
     {% if latestMovies %}
         {% include "components/movie-list-small.twig" with {"movies": latestMovies} %}
     {% else %}
-        <div class="alert alert-warning">No movies available.</div>
+        <div class="alert alert-warning">{{ "movies.no-movies-available"|trans }}</div>
     {% endif %}
 {% endblock %}

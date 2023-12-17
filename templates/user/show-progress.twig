@@ -1,6 +1,6 @@
 {% extends "user/page.twig" %}
 
-{% block title %}TV show progress - {{ user.username }}{% endblock %}
+{% block title %}{{ "user.show-progress"|trans }} - {{ user.username }}{% endblock %}
 
 {% macro episodeProgressBarItem(user, episode, percentage) %}
     {% set watched = episode.getViewsForUser(user)|length > 0 %}
@@ -10,7 +10,7 @@
 {% endmacro %}
 
 {% block profileContent %}
-    <h2>TV show progress</h2>
+    <h2>{{ "user.show-progress"|trans }}</h2>
 
     <div class="row g-4">
         {% for show in shows %}
@@ -39,14 +39,14 @@
                                     <div class="accordion mt-3">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#show_{{ show.id }}_seasons">Seasons</button>
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#show_{{ show.id }}_seasons">{{ "shows.seasons"|trans }}</button>
                                             </h2>
                                             <div id="show_{{ show.id }}_seasons" class="accordion-collapse collapse">
                                                 <div class="accordion-body">
                                                     {% for season in show.seasons %}
                                                         {% set totalEpisodes = season.episodes.count %}
                                                         {% if totalEpisodes %}
-                                                            <div><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}">Season {{ season.number }}</a></div>
+                                                            <div><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}">{{ "shows.season"|trans({"%number%": season.number}) }}</a></div>
                                                             <div class="progress-stacked">
                                                                 {% set perEpisodePercentage = 100 / totalEpisodes %}
 

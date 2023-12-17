@@ -1,13 +1,13 @@
 {% extends "page.twig" %}
 
-{% block title %}All shows{% endblock %}
+{% block title %}{{ "shows.all-shows"|trans }}{% endblock %}
 
 {% block content %}
-    <h1>All shows</h1>
+    <h1>{{ "shows.all-shows"|trans }}</h1>
 
     {% if shows %}
         {% include "components/show-list-small.twig" with {"shows": shows} %}
     {% else %}
-        <div class="alert alert-warning">No shows available.</div>
+        <div class="alert alert-warning">{{ "shows.no-shows-available"|trans }}</div>
     {% endif %}
 {% endblock %}

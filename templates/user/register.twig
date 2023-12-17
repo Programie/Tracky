@@ -1,32 +1,32 @@
 {% extends "page.twig" %}
 
-{% block title %}Register{% endblock %}
+{% block title %}{{ "register.title"|trans }}{% endblock %}
 
 {% block content %}
     <form class="w-100 m-auto" id="login-form" action="{{ path("registerPage") }}" method="post">
-        <h1 class="h3 mb-3 fw-normal">Register new account</h1>
+        <h1 class="h3 mb-3 fw-normal">{{ "register.title"|trans }}</h1>
 
         <div class="form-floating">
             <input type="text" class="form-control" id="login-username" name="username" placeholder="Username" value="{{ username }}"/>
-            <label for="login-username">Username</label>
+            <label for="login-username">{{ "register.username"|trans }}</label>
         </div>
 
         <div class="form-floating">
             <input type="password" class="form-control" id="login-password" name="password" placeholder="Password"/>
-            <label for="login-password">Password</label>
+            <label for="login-password">{{ "register.password"|trans }}</label>
         </div>
 
         <div class="form-floating">
             <input type="password" class="form-control" id="login-password-repeat" name="password-repeat" placeholder="Password"/>
-            <label for="login-password-repeat">Password (repeat)</label>
+            <label for="login-password-repeat">{{ "register.password-repeat"|trans }}</label>
         </div>
 
         {% if error %}
-            <div class="alert alert-danger my-3"><i class="fa-solid fa-exclamation-triangle"></i> {{ error.message }}</div>
+            <div class="alert alert-danger my-3"><i class="fa-solid fa-exclamation-triangle"></i> {{ error.messageKey|trans }}</div>
         {% endif %}
 
-        <button class="btn btn-primary w-100 py-2" type="submit">Register</button>
+        <button class="btn btn-primary w-100 py-2" type="submit">{{ "register.submit"|trans }}</button>
 
-        <a href="{{ path("loginPage") }}" class="btn btn-secondary w-100 py-2 my-2">Already have an account?</a>
+        <a href="{{ path("loginPage") }}" class="btn btn-secondary w-100 py-2 my-2">{{ "register.already-have-account"|trans }}</a>
     </form>
 {% endblock %}

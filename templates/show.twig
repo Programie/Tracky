@@ -5,11 +5,11 @@
 {% block content %}
     <h1>{{ show.title }}</h1>
 
-    <h2>Seasons</h2>
+    <h2>{{ "shows.seasons"|trans }}</h2>
 
     {% if show.seasons %}
         {% include "components/season-list-small.twig" with {"seasons": show.seasons} %}
     {% else %}
-        <div class="alert alert-warning">No seasons available.</div>
+        <div class="alert alert-warning">{{ "shows.no-seasons-available"|trans }}</div>
     {% endif %}
 {% endblock %}
