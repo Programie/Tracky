@@ -43,7 +43,7 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
         return ["ROLE_USER"];
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 
