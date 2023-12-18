@@ -2,6 +2,7 @@
 namespace tracky\console;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -10,6 +11,7 @@ use tracky\dataprovider\Provider;
 use tracky\model\Show;
 use tracky\orm\ShowRepository;
 
+#[AsCommand(name: "fetch-show-data", description: "Fetch show data from the configured data provider")]
 class FetchShowDataCommand extends Command
 {
     private Provider $dataProvider;
@@ -23,12 +25,6 @@ class FetchShowDataCommand extends Command
         parent::__construct();
 
         $this->dataProvider = $dataProviderHelper->getProviderByType(Helper::TYPE_SHOW);
-    }
-
-    public function configure(): void
-    {
-        $this->setName("fetch-show-data");
-        $this->setDescription("Fetch show data from the configured data provider");
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int

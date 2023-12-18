@@ -2,6 +2,7 @@
 namespace tracky\console;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -9,6 +10,7 @@ use tracky\model\ScrobbleQueue;
 use tracky\orm\ScrobbleQueueRepository;
 use tracky\scrobbler\Scrobbler;
 
+#[AsCommand(name: "process-scrobble-queue", description: "Process data currently stored in scrobble queue")]
 class ProcessScrobbleQueue extends Command
 {
     public function __construct(
@@ -20,13 +22,7 @@ class ProcessScrobbleQueue extends Command
         parent::__construct();
     }
 
-    public function configure(): void
-    {
-        $this->setName("process-scrobble-queue");
-        $this->setDescription("Process data currently stored in scrobble queue");
-    }
-
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         /**
          * @var $queueItems ScrobbleQueue[]
