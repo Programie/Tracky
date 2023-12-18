@@ -4,7 +4,7 @@ namespace tracky\controller;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use tracky\model\EpisodeView;
 use tracky\model\MovieView;
 use tracky\model\User;
