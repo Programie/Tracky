@@ -211,4 +211,37 @@ class TMDB implements Provider
 
         return true;
     }
+
+    public function searchShow(string $query, ?int $year): array
+    {
+        return $this->search("tv", $query, $year);
+    }
+
+    public function searchMovie(string $query, ?int $year): array
+    {
+        return $this->search("movie", $query, $year);
+    }
+
+    private function search(string $type, string $query, ?int $year): array
+    {
+        $response = $this->getJson(sprintf("search/%s", $type), [
+            "query" => $query,
+            "year" => $year ?: ""
+        ]);
+
+        $items = [];
+
+        foreach ($response["results"] ?? [] as $result) {
+            $date = $result["release_date"] ?? $result["first_air_date"] ?? null;
+
+            $items[] = [
+                "id" => $result["id"],
+                "title" => $result["title"],
+                "year" => $date === null ? null : (new Date($date))->format("Y"),
+                "image" => $this->getImageUrl($result["poster_path"] ?? null)
+            ];
+        }
+
+        return $items;
+    }
 }

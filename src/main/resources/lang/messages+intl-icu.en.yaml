@@ -58,10 +58,25 @@ shows:
   no-shows-available: "No shows available."
   no-seasons-available: "No seasons available."
   no-episodes-available: "No episodes available."
+  add-new: "Add show"
 
 movies:
   all-movies: "All movies"
   no-movies-available: "No movies available."
+  add-new: "Add movie"
+
+add-items:
+  page-title: "Add movies or shows"
+  type-title: "Type"
+  type:
+    movie: "Movie"
+    show: "Show"
+  title: "Title of the movie or show"
+  year: "Year (optional)"
+  search: "Search"
+  no-results: "Nothing found."
+  in-library: "In library"
+  add-to-library: "Add to library"
 
 views:
   views: "{count} plays"

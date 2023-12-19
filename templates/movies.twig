@@ -5,6 +5,10 @@
 {% block content %}
     <h1>{{ "movies.all-movies"|trans }}</h1>
 
+    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+        <a href="{{ path("addItemsPage", {"type": "movie"}) }}" class="btn btn-primary my-3">{{ "movies.add-new"|trans }}</a>
+    {% endif %}
+
     {% if movies %}
         {% include "components/movie-list-small.twig" with {"movies": movies} %}
     {% else %}

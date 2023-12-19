@@ -1,0 +1,61 @@
+{% extends "page.twig" %}
+
+{% block title %}{{ "add-items.page-title"|trans }}{% endblock %}
+
+{% block content %}
+    <h1 class="h3 mb-3 fw-normal">{{ "add-items.page-title"|trans }}</h1>
+
+    <form class="my-3" action="{{ path("addItemsPage") }}">
+        <div class="input-group">
+            <div class="form-floating">
+                <select class="form-select" id="add-item-type" name="type">
+                    <option value="movie" {% if type == "movie" %}selected{% endif %}>{{ "add-items.type.movie"|trans }}</option>
+                    <option value="show" {% if type == "show" %}selected{% endif %}>{{ "add-items.type.show"|trans }}</option>
+                </select>
+                <label for="add-item-type">{{ "add-items.type-title"|trans }}</label>
+            </div>
+
+            <div class="form-floating">
+                <input type="text" class="form-control" id="add-item-title" name="query" placeholder="{{ "add-items.title"|trans }}" value="{{ query }}"/>
+                <label for="add-item-title">{{ "add-items.title"|trans }}</label>
+            </div>
+
+            <div class="form-floating">
+                <input type="text" class="form-control" id="add-item-year" name="year" placeholder="{{ "add-items.year"|trans }}" value="{{ year }}"/>
+                <label for="add-item-year">{{ "add-items.year"|trans }}</label>
+            </div>
+
+            <button type="submit" class="input-group-text btn btn-primary">{{ "add-items.search"|trans }}</button>
+        </div>
+    </form>
+
+    {% if results is not null %}
+        {% if results %}
+            <div class="row row-cols-1 row-cols-md-5 g-4">
+                {% for result in results %}
+                    <div class="col">
+                        <div class="card text-reset text-decoration-none">
+                            <img class="card-img-top" src="{{ result.image }}"/>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ result.title }}</h5>
+                                <div class="text-body-secondary my-2">{{ result.year }}</div>
+                                {% if result.entry %}
+                                    {% if result.entry.className == "Movie" %}
+                                        {% set url = path("moviePage", {"movie": result.entry.id}) %}
+                                    {% elseif result.entry.className == "Show" %}
+                                        {% set url = path("showOverviewPage", {"id": result.entry.id}) %}
+                                    {% endif %}
+                                    <a class="btn btn-success" href="{{ url }}"><i class="fas fa-check"></i> {{ "add-items.in-library"|trans }}</a>
+                                {% else %}
+                                    <button class="btn btn-primary add-item-to-library" data-type="{{ type }}" data-id="{{ result.id }}"><i class="fas fa-add"></i> {{ "add-items.add-to-library"|trans }}</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-warning">{{ "add-items.no-results"|trans }}</div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

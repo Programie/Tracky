@@ -23,4 +23,8 @@ interface Provider
     public function fetchEpisode(Episode $episode): bool;
 
     public function fetchMovie(Movie $movie): bool;
+
+    public function searchShow(string $query, ?int $year): array;
+
+    public function searchMovie(string $query, ?int $year): array;
 }

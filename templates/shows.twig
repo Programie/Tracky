@@ -5,6 +5,10 @@
 {% block content %}
     <h1>{{ "shows.all-shows"|trans }}</h1>
 
+    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+        <a href="{{ path("addItemsPage", {"type": "show"}) }}" class="btn btn-primary my-3">{{ "shows.add-new"|trans }}</a>
+    {% endif %}
+
     {% if shows %}
         {% include "components/show-list-small.twig" with {"shows": shows} %}
     {% else %}

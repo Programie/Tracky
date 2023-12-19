@@ -226,4 +226,36 @@ class TVDB implements Provider
 
         return true;
     }
+
+    public function searchShow(string $query, ?int $year): array
+    {
+        return $this->search("series", $query, $year);
+    }
+
+    public function searchMovie(string $query, ?int $year): array
+    {
+        return $this->search("movie", $query, $year);
+    }
+
+    private function search(string $type, string $query, ?int $year): array
+    {
+        $response = $this->getJson("search", [
+            "query" => $query,
+            "type" => $type,
+            "year" => $year
+        ]);
+
+        $items = [];
+
+        foreach ($response ?? [] as $result) {
+            $items[] = [
+                "id" => $result["tvdb_id"],
+                "title" => $result["name"],
+                "year" => $result["year"] ?? null,
+                "image" => $result["image_url"]
+            ];
+        }
+
+        return $items;
+    }
 }
