@@ -219,9 +219,14 @@ class TVDB implements Provider
             return false;
         }
 
+        $year = $data["year"] ?? null;
+        if ($year !== null) {
+            $year = (int)$year;
+        }
+
         $movie->setTitle($data["name"]);
         $movie->setPlot(null);// TODO
-        $movie->setYear($data["year"]);
+        $movie->setYear($year);
         $movie->setPosterImageUrl($this->getImageUrl($data["image"]));
 
         return true;
