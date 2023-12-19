@@ -94,7 +94,7 @@ class AddItemsController extends AbstractController
                 $show = new Show;
 
                 $dataProvider->setIdForShow($show, $id);
-                $dataProvider->fetchShow($show, true);
+                $dataProvider->fetchShow($show, false);
 
                 $entityManager->persist($show);
                 $entityManager->flush();
