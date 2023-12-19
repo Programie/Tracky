@@ -1,6 +1,7 @@
 <?php
 namespace tracky\dataprovider;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use tracky\datetime\Date;
@@ -205,8 +206,18 @@ class TMDB implements Provider
 
         $movieData = $this->getLocalizedJson(sprintf("movie/%d", $tmdbId), $movie->getLanguage(), $this->defaultMovieLanguage);
 
+        $releaseDate = $movieData["release_date"] ?? null;
+        if ($releaseDate !== null) {
+            try {
+                $releaseDate = new Date($releaseDate);
+            } catch (Exception) {
+                $releaseDate = null;
+            }
+        }
+
         $movie->setTitle($movieData["title"]);
         $movie->setPlot($movieData["overview"] ?? null);
+        $movie->setYear($releaseDate === null ? null : (int)$releaseDate->format("Y"));
         $movie->setPosterImageUrl($this->getImageUrl($movieData["poster_path"] ?? null));
 
         return true;
