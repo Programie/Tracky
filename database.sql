@@ -16,6 +16,7 @@ CREATE TABLE `shows`
     `tvdbId`         int(11)      DEFAULT NULL,
     `posterImageUrl` varchar(500) DEFAULT NULL,
     `language`       varchar(10)  DEFAULT NULL,
+    `lastUpdate`     datetime     DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

@@ -5,6 +5,7 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use tracky\datetime\Date;
+use tracky\datetime\DateTime;
 use tracky\model\Episode;
 use tracky\model\Movie;
 use tracky\model\Season;
@@ -153,6 +154,8 @@ class TMDB implements Provider
                 $this->fetchSeason($season, true);
             }
         }
+
+        $show->setLastUpdate(new DateTime);
 
         return true;
     }

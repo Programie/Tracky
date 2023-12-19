@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\UriResolver;
 use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\RequestOptions;
 use tracky\datetime\Date;
+use tracky\datetime\DateTime;
 use tracky\model\Episode;
 use tracky\model\Movie;
 use tracky\model\Season;
@@ -152,6 +153,8 @@ class TVDB implements Provider
                 $this->setEpisodeData($episode, $episodeData);
             }
         }
+
+        $show->setLastUpdate(new DateTime);
 
         return true;
     }

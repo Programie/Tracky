@@ -18,6 +18,9 @@ services:
       - '../src/main/php/tracky/Entity/'
       - '../src/main/php/tracky/Kernel.php'
 
+  tracky\console\UpdateDataCommand:
+    arguments:
+      $showFetchInterval: "%show-fetch-interval%"
   tracky\dataprovider\Helper:
     arguments:
       $movieProvider: "%data-provider.movies%"

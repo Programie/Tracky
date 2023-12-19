@@ -2,6 +2,8 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
+use tracky\datetime\Date;
+use tracky\datetime\DateTime;
 use tracky\model\traits\PosterImage;
 use tracky\model\traits\DataProvider;
 use tracky\orm\ShowRepository;
@@ -16,6 +18,9 @@ class Show extends BaseEntity
     #[ORM\Column(type: "string")]
     private string $title;
 
+    #[ORM\Column(name: "lastUpdate", type: "datetime")]
+    private ?DateTime $lastUpdate;
+
     #[ORM\OneToMany(mappedBy: "show", targetEntity: Season::class, cascade: ["persist"])]
     #[ORM\OrderBy(["number" => "ASC"])]
     private mixed $seasons = [];
@@ -29,6 +34,29 @@ class Show extends BaseEntity
     {
         $this->title = $title;
         return $this;
+    }
+
+    public function setLastUpdate(?DateTime $lastUpdate): Show
+    {
+        $this->lastUpdate = $lastUpdate;
+        return $this;
+    }
+
+    public function getLastUpdate(): ?DateTime
+    {
+        return $this->lastUpdate;
+    }
+
+    public function needsUpdate(int $maxAge): bool
+    {
+        if ($this->getLastUpdate() === null) {
+            return true;
+        }
+
+        $now = new Date;
+        $diff = $now->getTimestamp() - $this->getLastUpdate()->getTimestamp();
+
+        return $diff >= $maxAge;
     }
 
     /**

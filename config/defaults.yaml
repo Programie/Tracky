@@ -8,3 +8,4 @@ parameters:
   tvdb.movies.language: en-US
   tvdb.shows.language: en-US
   scrobbler.use-queue: false
+  show-fetch-interval: 86400
