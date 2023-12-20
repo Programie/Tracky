@@ -12,11 +12,18 @@ use tracky\orm\ShowRepository;
 #[ORM\Table(name: "shows")]
 class Show extends BaseEntity
 {
+    const STATUS_UPCOMING = "upcoming";
+    const STATUS_CONTINUING = "continuing";
+    const STATUS_ENDED = "ended";
+
     use DataProvider;
     use PosterImage;
 
     #[ORM\Column(type: "string")]
     private string $title;
+
+    #[ORM\Column(type: "string", columnDefinition: "ENUM('upcoming', 'continuing', 'ended')")]
+    private ?string $status;
 
     #[ORM\Column(name: "lastUpdate", type: "datetime")]
     private ?DateTime $lastUpdate;
@@ -36,6 +43,17 @@ class Show extends BaseEntity
         return $this;
     }
 
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): Show
+    {
+        $this->status = $status;
+        return $this;
+    }
+
     public function setLastUpdate(?DateTime $lastUpdate): Show
     {
         $this->lastUpdate = $lastUpdate;
@@ -49,10 +67,17 @@ class Show extends BaseEntity
 
     public function needsUpdate(int $maxAge): bool
     {
+        // Update show if never updated before
         if ($this->getLastUpdate() === null) {
             return true;
         }
 
+        // Do not update show if ended
+        if ($this->getStatus() === self::STATUS_ENDED) {
+            return false;
+        }
+
+        // Update show if max age passed
         $now = new Date;
         $diff = $now->getTimestamp() - $this->getLastUpdate()->getTimestamp();
 

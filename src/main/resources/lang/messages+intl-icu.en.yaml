@@ -59,6 +59,10 @@ shows:
   no-seasons-available: "No seasons available."
   no-episodes-available: "No episodes available."
   add-new: "Add show"
+  status:
+    upcoming: "Upcoming"
+    continuing: "Continuing"
+    ended: "Ended"
 
 movies:
   all-movies: "All movies"

@@ -128,6 +128,7 @@ class TVDB implements Provider
 
         $show->setTitle($data["name"]);
         $show->setPosterImageUrl($this->getImageUrl($data["image"]));
+        $show->setStatus($this->mapShowStatus($data["status"]["name"] ?? ""));
 
         if ($createSeasonsAndEpisodes) {
             foreach ($data["seasons"] ?? [] as $seasonData) {
@@ -265,5 +266,15 @@ class TVDB implements Provider
         }
 
         return $items;
+    }
+
+    private function mapShowStatus(string $status): ?string
+    {
+        return match ($status) {
+            "Upcoming" => Show::STATUS_UPCOMING,
+            "Continuing" => Show::STATUS_CONTINUING,
+            "Ended" => Show::STATUS_ENDED,
+            default => null,
+        };
     }
 }

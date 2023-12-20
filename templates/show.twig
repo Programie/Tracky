@@ -4,6 +4,7 @@
 
 {% block content %}
     <h1>{{ show.title }}</h1>
+    {% include "components/show-status-badge.twig" with {"status": show.status, "classes": "my-2"} only %}
 
     <h2>{{ "shows.seasons"|trans }}</h2>
 

@@ -1,0 +1,3 @@
+{% if status is not null %}
+    <span class="{{ html_classes("badge", classes|default(""), {"text-bg-primary": status == "upcoming", "text-bg-success": status == "continuing", "text-bg-danger": status == "ended"}) }}">{{ ("shows.status." ~ status)|trans }}</span>
+{% endif %}

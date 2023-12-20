@@ -2,5 +2,6 @@
     <img class="card-img-top" src="{{ show.posterImageUrl }}"/>
     <div class="card-body">
         <h5 class="card-title">{{ show.title }}</h5>
+        {% include "components/show-status-badge.twig" with {"status": show.status} only %}
     </div>
 </a>

@@ -146,6 +146,7 @@ class TMDB implements Provider
 
         $show->setTitle($showData["name"]);
         $show->setPosterImageUrl($this->getImageUrl($showData["poster_path"] ?? null));
+        $show->setStatus($this->mapShowStatus($showData["status"] ?? ""));
 
         if ($createSeasonsAndEpisodes) {
             foreach ($showData["seasons"] ?? [] as $seasonData) {
@@ -257,5 +258,15 @@ class TMDB implements Provider
         }
 
         return $items;
+    }
+
+    private function mapShowStatus(string $status): ?string
+    {
+        return match ($status) {
+            "In Production", "Planned" => Show::STATUS_UPCOMING,
+            "Pilot", "Returning Series" => Show::STATUS_CONTINUING,
+            "Canceled", "Ended" => Show::STATUS_ENDED,
+            default => null,
+        };
     }
 }
