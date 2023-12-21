@@ -53,6 +53,7 @@ overview:
 shows:
   season: "Season {number}"
   episode: "Episode {number}"
+  season-count: "{count} seasons"
   episode-count: "{count} episodes"
   all-shows: "All shows"
   seasons: "Seasons"
