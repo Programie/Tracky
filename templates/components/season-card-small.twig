@@ -2,6 +2,6 @@
     <img class="card-img-top" src="{{ season.posterImageUrl }}"/>
     <div class="card-body">
         <h5 class="card-title">{% trans with {"%number%": season.number } %}shows.season{% endtrans %}</h5>
-        <small>{% trans with{"%count%": season.episodes|length} %}shows.episode-count{% endtrans %}</small>
+        <small>{% trans with{"%count%": season.episodes|length} %}shows.count.episodes{% endtrans %}</small>
     </div>
 </a>

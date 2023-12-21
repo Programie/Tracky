@@ -53,21 +53,22 @@ overview:
 shows:
   season: "Season {number}"
   episode: "Episode {number}"
-  show-count: >-
-    {count, plural,
-      =1    {1 show}
-      other {# shows}
-    }
-  season-count: >-
-    {count, plural,
-      =1    {1 season}
-      other {# seasons}
-    }
-  episode-count: >-
-    {count, plural,
-      =1    {1 episode}
-      other {# episodes}
-    }
+  count:
+    shows: >-
+      {count, plural,
+        =1    {1 show}
+        other {# shows}
+      }
+    seasons: >-
+      {count, plural,
+        =1    {1 season}
+        other {# seasons}
+      }
+    episodes: >-
+      {count, plural,
+        =1    {1 episode}
+        other {# episodes}
+      }
   all-shows: "All shows"
   seasons: "Seasons"
   episodes: "Episodes"

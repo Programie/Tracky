@@ -5,7 +5,7 @@
 {% block content %}
     <h1>{{ "shows.all-shows"|trans }}</h1>
 
-    <small class="d-block">{{ "shows.show-count"|trans({"%count%": shows|length}) }}</small>
+    <small class="d-block">{{ "shows.count.shows"|trans({"%count%": shows|length}) }}</small>
 
     {% if is_granted("IS_AUTHENTICATED") %}
         <a href="{{ path("addItemsPage", {"type": "show"}) }}" class="btn btn-primary my-3">{{ "shows.add-new"|trans }}</a>
