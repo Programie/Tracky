@@ -153,9 +153,9 @@ class TVDB implements Provider
 
                 $this->setEpisodeData($episode, $episodeData);
             }
-        }
 
-        $show->setLastUpdate(new DateTime);
+            $show->setLastUpdate(new DateTime);// Only set last update if seasons/episodes were also updated
+        }
 
         return true;
     }

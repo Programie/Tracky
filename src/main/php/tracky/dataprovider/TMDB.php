@@ -154,9 +154,9 @@ class TMDB implements Provider
 
                 $this->fetchSeason($season, true);
             }
-        }
 
-        $show->setLastUpdate(new DateTime);
+            $show->setLastUpdate(new DateTime);// Only set last update if seasons/episodes were also updated
+        }
 
         return true;
     }
