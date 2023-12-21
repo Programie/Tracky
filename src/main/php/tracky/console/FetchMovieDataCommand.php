@@ -38,9 +38,8 @@ class FetchMovieDataCommand extends Command
             $this->dataProvider->fetchMovie($movie);
 
             $this->entityManager->persist($movie);
+            $this->entityManager->flush();
         }
-
-        $this->entityManager->flush();
 
         $output->writeln("Done");
 

@@ -43,9 +43,8 @@ class UpdateDataCommand extends Command
             $this->dataProvider->fetchShow($show, true);
 
             $this->entityManager->persist($show);
+            $this->entityManager->flush();
         }
-
-        $this->entityManager->flush();
 
         return self::SUCCESS;
     }

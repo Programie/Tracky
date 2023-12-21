@@ -38,9 +38,8 @@ class FetchShowDataCommand extends Command
             $this->dataProvider->fetchShow($show, true);
 
             $this->entityManager->persist($show);
+            $this->entityManager->flush();
         }
-
-        $this->entityManager->flush();
 
         $output->writeln("Done");
 
