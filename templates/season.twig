@@ -18,10 +18,11 @@
 {% endmacro %}
 
 {% block content %}
-    <h1>
-        <a href="{{ path("showOverviewPage", {"id": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a><br/>
-        <span class="fs-4 text-body-secondary">{{ "shows.season"|trans({"%number%": season.number}) }}</span>
-    </h1>
+    <h1><a href="{{ path("showOverviewPage", {"id": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a></h1>
+
+    {% include "components/show-badges.twig" with {"show": show} only %}
+
+    <h2 class="fs-4 text-body-secondary">{{ "shows.season"|trans({"%number%": season.number}) }}</h2>
 
     {{ _self.paginationElement(pagination, show) }}
 

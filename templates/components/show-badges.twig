@@ -1,0 +1,9 @@
+<div class="my-2">
+    {% include "components/show-status-badge.twig" with {"status": show.status} only %}
+    {% if show.tmdbId %}
+        <a href="https://www.themoviedb.org/tv/{{ show.tmdbId }}" class="badge text-bg-secondary" target="_blank">TMDB</a>
+    {% endif %}
+    {% if show.tvdbId %}
+        <a href="https://www.thetvdb.com/dereferrer/series/{{ show.tvdbId }}" class="badge text-bg-secondary" target="_blank">TVDB</a>
+    {% endif %}
+</div>

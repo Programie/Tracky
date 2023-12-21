@@ -5,10 +5,10 @@
 {% block content %}
     <h1>{{ show.title }}</h1>
 
+    {% include "components/show-badges.twig" with {"show": show} only %}
+
     <small class="d-block">{% trans with{"%count%": show.seasons|length} %}shows.count.seasons{% endtrans %}</small>
     <small class="d-block">{% trans with{"%count%": show.totalEpisodes} %}shows.count.episodes{% endtrans %}</small>
-
-    {% include "components/show-status-badge.twig" with {"status": show.status, "classes": "my-2"} only %}
 
     <h2>{{ "shows.seasons"|trans }}</h2>
 
