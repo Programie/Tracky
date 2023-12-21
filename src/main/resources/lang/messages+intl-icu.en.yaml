@@ -53,8 +53,16 @@ overview:
 shows:
   season: "Season {number}"
   episode: "Episode {number}"
-  season-count: "{count} seasons"
-  episode-count: "{count} episodes"
+  season-count: >-
+    {count, plural,
+      =1    {1 season}
+      other {# seasons}
+    }
+  episode-count: >-
+    {count, plural,
+      =1    {1 episode}
+      other {# episodes}
+    }
   all-shows: "All shows"
   seasons: "Seasons"
   episodes: "Episodes"
@@ -86,7 +94,11 @@ add-items:
   add-to-library: "Add to library"
 
 views:
-  views: "{count} plays"
+  views: >-
+    {count, plural,
+      =1    {1 view}
+      other {# views}
+    }
   add-view: "Add view"
   remove:
     header: "Remove history entries?"
