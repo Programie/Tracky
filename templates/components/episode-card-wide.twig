@@ -3,7 +3,7 @@
         <div class="col-md-4 scaled-image" style="background-image: url({{ episode.posterImageUrl }});"></div>
         <div class="col-md-8">
             <div class="card-body">
-                <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}">{{ episode.title }}</a></h5>
+                <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}">{{ episode.title|default("unknown-title"|trans) }}</a></h5>
                 <h6 class="card-subtitle text-body-secondary">{{ "shows.episode"|trans({"%number%": episode.season.number ~ "x" ~ episode.number}) }}</h6>
                 <div class="card-text mt-3">
                     <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>

@@ -144,7 +144,7 @@ class TMDB implements Provider
 
         $showData = $this->getShowJson($show);
 
-        $show->setTitle($showData["name"]);
+        $show->setTitle($showData["name"] ?? "");
         $show->setPosterImageUrl($this->getImageUrl($showData["poster_path"] ?? null));
         $show->setStatus($this->mapShowStatus($showData["status"] ?? ""));
 

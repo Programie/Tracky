@@ -62,7 +62,7 @@ class TVDB implements Provider
 
     private function setEpisodeData(Episode $episode, array $data): void
     {
-        $episode->setTitle($data["name"]);
+        $episode->setTitle($data["name"] ?? "");
         $episode->setPlot($data["overview"] ?? null);
         $episode->setPosterImageUrl($this->getImageUrl($data["image"] ?? null));
 

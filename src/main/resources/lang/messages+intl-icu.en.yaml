@@ -1,3 +1,5 @@
+unknown-title: "Unknown"
+
 error-page:
   400:
     title: "Bad Request"

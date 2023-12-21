@@ -1,6 +1,6 @@
 {% extends "page.twig" %}
 
-{% block title %}{{ show.title }} - {{ season.number }}x{{ episode.number }} "{{ episode.title }}"{% endblock %}
+{% block title %}{{ show.title }} - {{ season.number }}x{{ episode.number }} "{{ episode.title|default("unknown-title"|trans) }}"{% endblock %}
 
 {% block content %}
     <h1>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="col-lg-9 col-12">
-            <h2>{{ episode.title }}</h2>
+            <h2>{{ episode.title|default("unknown-title"|trans) }}</h2>
 
             <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>
             {% if is_granted("IS_AUTHENTICATED") %}
