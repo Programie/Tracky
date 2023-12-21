@@ -1,9 +1,7 @@
 <a class="card text-reset text-decoration-none" href="{{ path("seasonPage", {"id": season.show.id, "number": season.number}) }}">
     <img class="card-img-top" src="{{ season.posterImageUrl }}"/>
     <div class="card-body">
-        <h5 class="card-title">
-            {% trans with {"%number%": season.number } %}shows.season{% endtrans %}<br/>
-            <small>{% trans with{"%count%": season.episodes|length} %}shows.episode-count{% endtrans %}</small>
-        </h5>
+        <h5 class="card-title">{% trans with {"%number%": season.number } %}shows.season{% endtrans %}</h5>
+        <small>{% trans with{"%count%": season.episodes|length} %}shows.episode-count{% endtrans %}</small>
     </div>
 </a>
