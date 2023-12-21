@@ -53,6 +53,11 @@ overview:
 shows:
   season: "Season {number}"
   episode: "Episode {number}"
+  show-count: >-
+    {count, plural,
+      =1    {1 show}
+      other {# shows}
+    }
   season-count: >-
     {count, plural,
       =1    {1 season}
@@ -79,6 +84,11 @@ movies:
   all-movies: "All movies"
   no-movies-available: "No movies available."
   add-new: "Add movie"
+  count: >-
+    {count, plural,
+      =1    {1 movie}
+      other {# movies}
+    }
 
 add-items:
   page-title: "Add movies or shows"

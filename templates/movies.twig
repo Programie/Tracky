@@ -5,6 +5,8 @@
 {% block content %}
     <h1>{{ "movies.all-movies"|trans }}</h1>
 
+    <small class="d-block">{{ "movies.count"|trans({"%count%": movies|length}) }}</small>
+
     {% if is_granted("IS_AUTHENTICATED") %}
         <a href="{{ path("addItemsPage", {"type": "movie"}) }}" class="btn btn-primary my-3">{{ "movies.add-new"|trans }}</a>
     {% endif %}
