@@ -5,7 +5,7 @@
 {% block content %}
     <h1>{{ "shows.all-shows"|trans }}</h1>
 
-    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+    {% if is_granted("IS_AUTHENTICATED") %}
         <a href="{{ path("addItemsPage", {"type": "show"}) }}" class="btn btn-primary my-3">{{ "shows.add-new"|trans }}</a>
     {% endif %}
 
