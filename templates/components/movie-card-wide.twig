@@ -8,7 +8,7 @@
                     <small class="d-block text-body-secondary">{{ movie.year }}</small>
                     {% if is_granted("IS_AUTHENTICATED") %}
                         {% set viewsForUser = movie.getViewsForUser(app.user) %}
-                        {% if viewsForUser|length %}<small class="d-block text-body-secondary"><a class="text-reset text-decoration-none" href="{{ path("userHistoryPage", {"username": app.user.username, "movie": movie.id}) }}"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }} ({% trans with {"%count%": viewsForUser|length} %}views.views{% endtrans %})</a></small>{% endif %}
+                        {% if viewsForUser|length %}<small class="d-block text-body-secondary"><a class="text-reset text-decoration-none" href="{{ path("userHistoryPage", {"username": app.user.username, "movie": movie.id}) }}"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }} ({{ "views.views"|trans({"%count%": viewsForUser|length}) }})</a></small>{% endif %}
                         <button class="btn btn-secondary btn-sm mt-3 add-view" data-type="movie" data-movie-id="{{ movie.id }}">{{ "views.add-view"|trans }}</button>
                     {% endif %}
                 </div>

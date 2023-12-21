@@ -5,8 +5,8 @@
 {% block content %}
     <h1>
         <a href="{{ path("showOverviewPage", {"id": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a><br/>
-        <a href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}" class="text-reset text-decoration-none fs-4 text-body-secondary">{% trans with {"%number%": season.number} %}shows.season{% endtrans %}</a>
-        <span class="fs-4 text-body-secondary">{% trans with {"%number%": episode.number} %}shows.episode{% endtrans %}</span>
+        <a href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}" class="text-reset text-decoration-none fs-4 text-body-secondary">{{ "shows.season"|trans({"%number%": season.number}) }}</a>
+        <span class="fs-4 text-body-secondary">{{ "shows.episode"|trans({"%number%": episode.number}) }}</span>
     </h1>
 
     <div class="episode-pagination d-flex justify-content-between mt-3 mb-3">
@@ -33,7 +33,7 @@
             <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>
             {% if is_granted("IS_AUTHENTICATED") %}
                 {% set viewsForUser = episode.getViewsForUser(app.user) %}
-                {% if viewsForUser|length %}<small class="d-block text-body-secondary"><a class="text-reset text-decoration-none" href="{{ path("userHistoryPage", {"username": app.user.username, "episode": episode.id}) }}"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }} ({% trans with {"%count%": viewsForUser|length} %}views.views{% endtrans %})</a></small>{% endif %}
+                {% if viewsForUser|length %}<small class="d-block text-body-secondary"><a class="text-reset text-decoration-none" href="{{ path("userHistoryPage", {"username": app.user.username, "episode": episode.id}) }}"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }} ({{ "views.views"|trans({"%count%": viewsForUser|length}) }})</a></small>{% endif %}
                 <button class="btn btn-secondary btn-sm mt-3 add-view" data-type="episode" data-show-id="{{ episode.season.show.id }}" data-season="{{ episode.season.number }}" data-episode="{{ episode.number }}">{{ "views.add-view"|trans }}</button>
             {% endif %}
 
