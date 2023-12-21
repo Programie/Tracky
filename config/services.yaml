@@ -33,6 +33,8 @@ services:
   tracky\dataprovider\TVDB:
     arguments:
       $authToken: "%tvdb.auth-token%"
+      $defaultMovieLanguage: "%tvdb.movies.language%"
+      $defaultShowLanguage: "%tvdb.shows.language%"
   tracky\scrobbler\Scrobbler:
     arguments:
       $useQueue: "%scrobbler.use-queue%"

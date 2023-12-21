@@ -16,7 +16,11 @@ class TVDB implements Provider
 {
     private Client $client;
 
-    public function __construct(string $authToken)
+    public function __construct(
+        string                  $authToken,
+        private readonly string $defaultMovieLanguage,
+        private readonly string $defaultShowLanguage
+    )
     {
         $this->client = new Client([
             "base_uri" => "https://api4.thetvdb.com/v4/",
@@ -130,7 +134,14 @@ class TVDB implements Provider
         $show->setPosterImageUrl($this->getImageUrl($data["image"]));
         $show->setStatus($this->mapShowStatus($data["status"]["name"] ?? ""));
 
+        $translationData = $this->getJson(sprintf("series/%d/translations/%s", $tvdbId, $this->getShowLanguage($show)));
+        if ($translationData !== null) {
+            $show->setTitle($translationData["name"]);
+        }
+
         if ($createSeasonsAndEpisodes) {
+            $episodesData = $this->getJson(sprintf("series/%d/episodes/official/%s", $tvdbId, $this->getShowLanguage($show)))["episodes"] ?? [];
+
             foreach ($data["seasons"] ?? [] as $seasonData) {
                 $seasonType = $seasonData["type"]["type"] ?? null;
                 if ($seasonType !== "official") {
@@ -144,7 +155,7 @@ class TVDB implements Provider
                 $season->setPosterImageUrl($this->getImageUrl($seasonData["image"] ?? null));
             }
 
-            foreach ($data["episodes"] ?? [] as $episodeData) {
+            foreach ($episodesData as $episodeData) {
                 $seasonNumber = $episodeData["seasonNumber"];
                 $episodeNumber = $episodeData["number"];
 
@@ -229,9 +240,14 @@ class TVDB implements Provider
         }
 
         $movie->setTitle($data["name"]);
-        $movie->setPlot(null);// TODO
         $movie->setYear($year);
         $movie->setPosterImageUrl($this->getImageUrl($data["image"]));
+
+        $translationData = $this->getJson(sprintf("movies/%d/translations/%s", $tvdbId, $this->getMovieLanguage($movie)));
+        if ($translationData !== null) {
+            $movie->setTitle($translationData["name"]);
+            $movie->setPlot($translationData["overview"] ?? null);
+        }
 
         return true;
     }
@@ -276,5 +292,15 @@ class TVDB implements Provider
             "Ended" => Show::STATUS_ENDED,
             default => null,
         };
+    }
+
+    private function getShowLanguage(Show $show): string
+    {
+        return $show->getLanguage() ?? $this->defaultShowLanguage;
+    }
+
+    private function getMovieLanguage(Movie $movie): string
+    {
+        return $movie->getLanguage() ?? $this->defaultMovieLanguage;
     }
 }
