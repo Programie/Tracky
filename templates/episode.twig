@@ -31,7 +31,7 @@
             <h2>{{ episode.title }}</h2>
 
             <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>
-            {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+            {% if is_granted("IS_AUTHENTICATED") %}
                 {% set viewsForUser = episode.getViewsForUser(app.user) %}
                 {% if viewsForUser|length %}<small class="d-block text-body-secondary"><a class="text-reset text-decoration-none" href="{{ path("userHistoryPage", {"username": app.user.username, "episode": episode.id}) }}"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }} ({% trans with {"%count%": viewsForUser|length} %}views.views{% endtrans %})</a></small>{% endif %}
                 <button class="btn btn-secondary btn-sm mt-3 add-view" data-type="episode" data-show-id="{{ episode.season.show.id }}" data-season="{{ episode.season.number }}" data-episode="{{ episode.number }}">{{ "views.add-view"|trans }}</button>
