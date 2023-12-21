@@ -28,8 +28,8 @@ services:
   tracky\dataprovider\TMDB:
     arguments:
       $apiToken: "%tmdb.api-token%"
-      $defaultMovieLanguage: "%tmdb.movies.language"
-      $defaultShowLanguage: "%tmdb.shows.language"
+      $defaultMovieLanguage: "%tmdb.movies.language%"
+      $defaultShowLanguage: "%tmdb.shows.language%"
   tracky\dataprovider\TVDB:
     arguments:
       $authToken: "%tvdb.auth-token%"
