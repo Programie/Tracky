@@ -26,7 +26,7 @@ class ShowController extends AbstractController
     public function getShowsPage(): Response
     {
         return $this->render("shows.twig", [
-            "shows" => $this->showRepository->findAll()
+            "shows" => $this->showRepository->findBy([], ["title" => "asc"])
         ]);
     }
 

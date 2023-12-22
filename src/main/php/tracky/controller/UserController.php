@@ -109,7 +109,7 @@ class UserController extends AbstractController
     {
         return $this->render("user/show-progress.twig", [
             "user" => $user,
-            "shows" => $showRepository->findAll()
+            "shows" => $showRepository->findBy([], ["title" => "asc"])
         ]);
     }
 }

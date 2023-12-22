@@ -25,7 +25,7 @@ class MovieController extends AbstractController
     public function getMoviesPage(): Response
     {
         return $this->render("movies.twig", [
-            "movies" => $this->movieRepository->findAll()
+            "movies" => $this->movieRepository->findBy([], ["title" => "asc"])
         ]);
     }
 
