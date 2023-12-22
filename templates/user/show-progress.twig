@@ -17,9 +17,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="row g-0">
-                        <div class="col-md-4">
-                            <img class="img-fluid rounded-start" src="{{ show.posterImageUrl }}"/>
-                        </div>
+                        <div class="col-md-4 scaled-image" style="background-image: url({{ show.posterImageUrl }});"></div>
                         <div class="col-md-8">
                             <div class="card-body">
                                 <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": show.id}) }}">{{ show.title }}</a></h5>
