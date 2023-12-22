@@ -37,10 +37,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             let imageModal = document.querySelector("#image-modal") as HTMLElement;
-            let imageElement = imageModal.querySelector("img");
+            let imageElement = imageModal.querySelector(".image-modal-img") as HTMLElement;
 
             imageModal.classList.add("show");
-            imageElement.src = imageUrl;
+            imageElement.style.backgroundImage = `url(${imageUrl})`;
         });
     });
 
