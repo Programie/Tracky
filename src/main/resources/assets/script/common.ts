@@ -41,12 +41,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
             imageModal.classList.add("show");
             imageElement.style.backgroundImage = `url(${imageUrl})`;
+
+            document.body.style.overflow = "hidden";
         });
     });
 
     document.querySelectorAll(".image-modal").forEach((element: HTMLElement) => {
         element.addEventListener("click", () => {
             (element.closest(".image-modal") as HTMLElement).classList.remove("show");
+            document.body.style.overflow = null;
         });
     });
 });
