@@ -42,7 +42,7 @@ class FetchShowDataCommand extends Command
             throw new UnexpectedValueException(sprintf("Show with ID %d not found", $showId));
         }
 
-        $output->writeln(sprintf("Fetching data for show %d: %s", $showId, $show->getTitle()));
+        $output->writeln(sprintf("Fetching data for show %d (%s) using provider %s", $showId, $show->getTitle(), $this->dataProvider::class));
 
         $this->dataProvider->fetchShow($show, true);
 

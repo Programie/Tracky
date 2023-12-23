@@ -42,7 +42,7 @@ class FetchMovieDataCommand extends Command
             throw new UnexpectedValueException(sprintf("Movie with ID %d not found", $movieId));
         }
 
-        $output->writeln(sprintf("Fetching data for movie %d: %s", $movieId, $movie->getTitle()));
+        $output->writeln(sprintf("Fetching data for movie %d (%s) using provider %s", $movieId, $movie->getTitle(), $this->dataProvider::class));
 
         $this->dataProvider->fetchMovie($movie);
 
