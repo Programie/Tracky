@@ -134,6 +134,13 @@ class TVDB implements Provider
         $show->setPosterImageUrl($this->getImageUrl($data["image"]));
         $show->setStatus($this->mapShowStatus($data["status"]["name"] ?? ""));
 
+        foreach ($data["remoteIds"] ?? [] as $remoteId) {
+            if ($remoteId["sourceName"] === "TheMovieDB.com") {
+                $show->setTmdbId((int)$remoteId["id"]);
+                break;
+            }
+        }
+
         $translationData = $this->getJson(sprintf("series/%d/translations/%s", $tvdbId, $this->getShowLanguage($show)));
         if ($translationData !== null) {
             $show->setTitle($translationData["name"]);
@@ -242,6 +249,13 @@ class TVDB implements Provider
         $movie->setTitle($data["name"]);
         $movie->setYear($year);
         $movie->setPosterImageUrl($this->getImageUrl($data["image"]));
+
+        foreach ($data["remoteIds"] ?? [] as $remoteId) {
+            if ($remoteId["sourceName"] === "TheMovieDB.com") {
+                $movie->setTmdbId((int)$remoteId["id"]);
+                break;
+            }
+        }
 
         $translationData = $this->getJson(sprintf("movies/%d/translations/%s", $tvdbId, $this->getMovieLanguage($movie)));
         if ($translationData !== null) {
