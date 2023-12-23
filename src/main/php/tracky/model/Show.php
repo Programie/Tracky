@@ -145,4 +145,65 @@ class Show extends BaseEntity
 
         return $totalEpisodes;
     }
+
+    public function getRandomEpisodes(int $count): array
+    {
+        $allEpisodes = [];
+        $randomEpisodes = [];
+
+        foreach ($this->getSeasons() as $season) {
+            foreach ($season->getEpisodes() as $episode) {
+                $allEpisodes[] = $episode;
+            }
+        }
+
+        foreach (array_rand($allEpisodes, $count) as $index) {
+            $randomEpisodes[] = $allEpisodes[$index];
+        }
+
+        return $randomEpisodes;
+    }
+
+    public function getMostOrLeastWatchedEpisodes(User $user, int $count, bool $leastWatched = false): array
+    {
+        $allEpisodes = [];
+
+        foreach ($this->getSeasons() as $season) {
+            foreach ($season->getEpisodes() as $episode) {
+                $views = $episode->getViewsForUser($user);
+                $viewCount = count($views);
+                if (!$viewCount) {
+                    continue;
+                }
+
+                $allEpisodes[] = [$episode, $viewCount, $views->last()->getDateTime()->getTimestamp()];
+            }
+        }
+
+        usort($allEpisodes, function ($item1, $item2) {
+            list(, $item1Count, $item1Timestamp) = $item1;
+            list(, $item2Count, $item2Timestamp) = $item2;
+
+
+            if ($item1Count === $item2Count) {
+                if ($item1Timestamp === $item2Timestamp) {
+                    return 0;
+                }
+
+                return ($item1Timestamp > $item2Timestamp) ? -1 : 1;
+            }
+
+            return ($item1Count > $item2Count) ? -1 : 1;
+        });
+
+        foreach ($allEpisodes as &$item) {
+            $item = $item[0];
+        }
+
+        if ($leastWatched) {
+            $allEpisodes = array_reverse($allEpisodes);
+        }
+
+        return array_slice($allEpisodes, 0, $count);
+    }
 }

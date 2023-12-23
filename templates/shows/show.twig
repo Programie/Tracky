@@ -2,6 +2,12 @@
 
 {% block title %}{{ show.title }}{% endblock %}
 
+{% macro navItem(path, parameters, title) %}
+    <li class="nav-item">
+        <a class="{{ html_classes("nav-link", {"active": app.request.get("_route") == path}) }}" href="{{ path(path, parameters) }}">{{ title }}</a>
+    </li>
+{% endmacro %}
+
 {% block content %}
     <h1>{{ show.title }}</h1>
 
@@ -10,11 +16,14 @@
     <small class="d-block">{% trans with{"%count%": show.seasons|length} %}shows.count.seasons{% endtrans %}</small>
     <small class="d-block">{% trans with{"%count%": show.totalEpisodes} %}shows.count.episodes{% endtrans %}</small>
 
-    <h2>{{ "shows.seasons"|trans }}</h2>
+    <ul class="nav nav-underline mb-3">
+        {{ _self.navItem("showSeasonsPage", {"id": show.id}, "shows.seasons"|trans) }}
+        {{ _self.navItem("randomEpisodesPage", {"id": show.id}, "shows.random-episodes"|trans) }}
+        {% if is_granted("IS_AUTHENTICATED") %}
+            {{ _self.navItem("mostWatchedEpisodesPage", {"id": show.id}, "shows.most-watched-episodes"|trans) }}
+            {{ _self.navItem("leastWatchedEpisodesPage", {"id": show.id}, "shows.least-watched-episodes"|trans) }}
+        {% endif %}
+    </ul>
 
-    {% if show.seasons %}
-        {% include "components/season-list-small.twig" with {"seasons": show.seasons} %}
-    {% else %}
-        <div class="alert alert-warning">{{ "shows.no-seasons-available"|trans }}</div>
-    {% endif %}
+    {% block showContent %}{% endblock %}
 {% endblock %}

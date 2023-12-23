@@ -1,0 +1,7 @@
+{% extends "shows/show.twig" %}
+
+{% block showContent %}
+    <h2>{{ title|trans }}</h2>
+
+    {% include "components/episode-list-wide.twig" with {"episodes": episodes} only %}
+{% endblock %}

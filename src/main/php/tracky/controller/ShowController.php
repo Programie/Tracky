@@ -3,6 +3,7 @@ namespace tracky\controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
@@ -11,6 +12,7 @@ use tracky\datetime\DateTime;
 use tracky\model\EpisodeView;
 use tracky\model\Show;
 use tracky\orm\ShowRepository;
+use tracky\orm\UserRepository;
 use tracky\orm\ViewRepository;
 
 class ShowController extends AbstractController
@@ -33,8 +35,46 @@ class ShowController extends AbstractController
     #[Route("/shows/{id}", name: "showOverviewPage")]
     public function getShowOverviewPage(Show $show): Response
     {
-        return $this->render("shows/show.twig", [
+        return $this->redirectToRoute("showSeasonsPage", ["id" => $show->getId()]);
+    }
+
+    #[Route("/shows/{id}/seasons", name: "showSeasonsPage")]
+    public function getSeasonsPage(Show $show): Response
+    {
+        return $this->render("shows/seasons.twig", [
             "show" => $show
+        ]);
+    }
+
+    #[Route("/shows/{id}/random-episodes", name: "randomEpisodesPage")]
+    public function getRandomEpisodesPage(Show $show): Response
+    {
+        return $this->render("shows/episodes.twig", [
+            "show" => $show,
+            "title" => "shows.random-episodes",
+            "episodes" => $show->getRandomEpisodes(10)
+        ]);
+    }
+
+    #[Route("/shows/{id}/most-watched", name: "mostWatchedEpisodesPage")]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function getMostWatchedEpisodesPage(Show $show, Request $request, UserRepository $userRepository): Response
+    {
+        return $this->render("shows/episodes.twig", [
+            "show" => $show,
+            "title" => "shows.most-watched-episodes",
+            "episodes" => $show->getMostOrLeastWatchedEpisodes($this->getUser(), 10)
+        ]);
+    }
+
+    #[Route("/shows/{id}/least-watched", name: "leastWatchedEpisodesPage")]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function getLeastWatchedEpisodesPage(Show $show, Request $request, UserRepository $userRepository): Response
+    {
+        return $this->render("shows/episodes.twig", [
+            "show" => $show,
+            "title" => "shows.least-watched-episodes",
+            "episodes" => $show->getMostOrLeastWatchedEpisodes($this->getUser(), 10, true)
         ]);
     }
 
