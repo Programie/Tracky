@@ -1,6 +1,9 @@
 <?php
 namespace tracky\dataprovider;
 
+use tracky\model\Movie;
+use tracky\model\Show;
+
 class Helper
 {
     const TYPE_MOVIE = "movie";
@@ -39,5 +42,21 @@ class Helper
     public function getProviderByType(string $type): ?Provider
     {
         return $this->getProviderByName($this->getProviderNameByType($type));
+    }
+
+    public function getProviderByEntry(Show|Movie $entry): ?Provider
+    {
+        if (method_exists($entry, "getDataProvider")) {
+            $dataProviderName = $entry->getDataProvider();
+            if ($dataProviderName !== null) {
+                return $this->getProviderByName($dataProviderName);
+            }
+        }
+
+        return match (get_class($entry)) {
+            Movie::class => $this->getProviderByType(self::TYPE_MOVIE),
+            Show::class => $this->getProviderByType(self::TYPE_SHOW),
+            default => null
+        };
     }
 }

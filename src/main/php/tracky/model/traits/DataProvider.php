@@ -13,6 +13,9 @@ trait DataProvider
     #[ORM\Column(name: "tvdbId", type: "integer")]
     private ?int $tvdbId;
 
+    #[ORM\Column(name: "dataProvider", type: "string", columnDefinition: "ENUM('tmdb', 'tvdb')")]
+    private ?string $dataProvider;
+
     public function getTmdbId(): ?int
     {
         return $this->tmdbId;
@@ -32,6 +35,17 @@ trait DataProvider
     public function setTvdbId(?int $tvdbId): self
     {
         $this->tvdbId = $tvdbId;
+        return $this;
+    }
+
+    public function getDataProvider(): ?string
+    {
+        return $this->dataProvider;
+    }
+
+    public function setDataProvider(?string $dataProvider): self
+    {
+        $this->dataProvider = $dataProvider;
         return $this;
     }
 }

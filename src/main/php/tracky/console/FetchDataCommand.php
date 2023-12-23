@@ -38,12 +38,12 @@ class FetchDataCommand extends Command
 
         switch ($type) {
             case Helper::TYPE_SHOW:
-                $dataProvider = $this->dataProviderHelper->getProviderByType(Helper::TYPE_SHOW);
-
                 $show = $this->showRepository->findOneBy(["id" => $id]);
                 if ($show === null) {
                     throw new UnexpectedValueException(sprintf("Show with ID %d not found", $show));
                 }
+
+                $dataProvider = $this->dataProviderHelper->getProviderByEntry($show);
 
                 $output->writeln(sprintf("Fetching data for show %d (%s) using provider %s", $id, $show->getTitle(), $dataProvider::class));
 
@@ -54,12 +54,12 @@ class FetchDataCommand extends Command
                 $this->entityManager->persist($show);
                 break;
             case Helper::TYPE_MOVIE:
-                $dataProvider = $this->dataProviderHelper->getProviderByType(Helper::TYPE_MOVIE);
-
                 $movie = $this->movieRepository->findOneBy(["id" => $id]);
                 if ($movie === null) {
                     throw new UnexpectedValueException(sprintf("Movie with ID %d not found", $movie));
                 }
+
+                $dataProvider = $this->dataProviderHelper->getProviderByEntry($movie);
 
                 $output->writeln(sprintf("Fetching data for movie %d (%s) using provider %s", $id, $movie->getTitle(), $dataProvider::class));
 
