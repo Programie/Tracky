@@ -138,7 +138,8 @@ class TMDB implements Provider
 
     public function fetchShow(Show $show, bool $createSeasonsAndEpisodes): bool
     {
-        if ($show->getTmdbId() === null) {
+        $tmdbId = $show->getTmdbId();
+        if ($tmdbId === null) {
             return false;
         }
 
@@ -147,6 +148,13 @@ class TMDB implements Provider
         $show->setTitle($showData["name"] ?? "");
         $show->setPosterImageUrl($this->getImageUrl($showData["poster_path"] ?? null));
         $show->setStatus($this->mapShowStatus($showData["status"] ?? ""));
+
+        $externalIds = $this->getJson(sprintf("tv/%d/external_ids", $tmdbId));
+
+        $tvdb_id = $externalIds["tvdb_id"] ?? null;
+        if ($tvdb_id) {
+            $show->setTvdbId($tvdb_id);
+        }
 
         if ($createSeasonsAndEpisodes) {
             foreach ($showData["seasons"] ?? [] as $seasonData) {
@@ -223,6 +231,13 @@ class TMDB implements Provider
         $movie->setPlot($movieData["overview"] ?? null);
         $movie->setYear($releaseDate === null ? null : (int)$releaseDate->format("Y"));
         $movie->setPosterImageUrl($this->getImageUrl($movieData["poster_path"] ?? null));
+
+        $externalIds = $this->getJson(sprintf("movie/%d/external_ids", $tmdbId));
+
+        $tvdb_id = $externalIds["tvdb_id"] ?? null;
+        if ($tvdb_id) {
+            $movie->setTvdbId($tvdb_id);
+        }
 
         return true;
     }
