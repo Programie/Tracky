@@ -25,7 +25,7 @@ class ShowController extends AbstractController
     #[Route("/shows", name: "showsPage")]
     public function getShowsPage(): Response
     {
-        return $this->render("shows.twig", [
+        return $this->render("shows/shows.twig", [
             "shows" => $this->showRepository->findBy([], ["title" => "asc"])
         ]);
     }
@@ -33,7 +33,7 @@ class ShowController extends AbstractController
     #[Route("/shows/{id}", name: "showOverviewPage")]
     public function getShowOverviewPage(Show $show): Response
     {
-        return $this->render("show.twig", [
+        return $this->render("shows/show.twig", [
             "show" => $show
         ]);
     }
@@ -46,7 +46,7 @@ class ShowController extends AbstractController
             throw new NotFoundHttpException("Season not found!");
         }
 
-        return $this->render("season.twig", [
+        return $this->render("shows/season.twig", [
             "show" => $show,
             "season" => $season,
             "pagination" => [
@@ -69,7 +69,7 @@ class ShowController extends AbstractController
             throw new NotFoundHttpException("Episode not found");
         }
 
-        return $this->render("episode.twig", [
+        return $this->render("shows/episode.twig", [
             "show" => $show,
             "season" => $season,
             "episode" => $episode,
