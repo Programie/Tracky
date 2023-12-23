@@ -47,7 +47,9 @@ class FetchDataCommand extends Command
 
                 $output->writeln(sprintf("Fetching data for show %d (%s) using provider %s", $id, $show->getTitle(), $dataProvider::class));
 
-                $dataProvider->fetchShow($show, true);
+                if (!$dataProvider->fetchShow($show, true)) {
+                    throw new UnexpectedValueException("Fetching show failed");
+                }
 
                 $this->entityManager->persist($show);
                 break;
@@ -61,7 +63,9 @@ class FetchDataCommand extends Command
 
                 $output->writeln(sprintf("Fetching data for movie %d (%s) using provider %s", $id, $movie->getTitle(), $dataProvider::class));
 
-                $dataProvider->fetchMovie($movie);
+                if (!$dataProvider->fetchMovie($movie)) {
+                    throw new UnexpectedValueException("Fetching movie failed");
+                }
 
                 $this->entityManager->persist($movie);
                 break;
