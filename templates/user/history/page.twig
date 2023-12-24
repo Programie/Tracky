@@ -19,15 +19,15 @@
 {% block profileContent %}
     <h2>{{ "user.history"|trans }}</h2>
 
-    {{ _self.paginationElement(pagination, user) }}
-
     {% if entries %}
+        {{ _self.paginationElement(pagination, user) }}
+
         {% include "components/history-entry-list-small.twig" with {"entries": entries} %}
+
+        {{ _self.paginationElement(pagination, user) }}
     {% else %}
         <div class="alert alert-warning">{{ "user.no-history-available"|trans }}</div>
     {% endif %}
-
-    {{ _self.paginationElement(pagination, user) }}
 {% endblock %}
 
 {% block additional_content %}
