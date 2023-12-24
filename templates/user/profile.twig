@@ -8,7 +8,7 @@
     {% if latestWatchedEpisodes %}
         {% include "components/history-entry-list-small.twig" with {"entries": latestWatchedEpisodes} %}
     {% else %}
-        <div class="alert alert-warning">{{ "shows.no-episodes-available"|trans }}.</div>
+        <div class="alert alert-warning">{{ "shows.no-episodes-available"|trans }}</div>
     {% endif %}
 
     <h2 class="mt-3">{{ "user.latest-watched-movies"|trans }}</h2>
