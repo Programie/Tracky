@@ -24,6 +24,6 @@
         <div class="text-body-secondary">{{ entry.datetime|format_datetime }}</div>
     </div>
     <div class="card-footer">
-        <button class="btn btn-sm history-edit-button" type="button" title="{{ views|length }} views"><i class="fa-solid fa-check"></i></button>
+        <button class="btn btn-sm history-edit-button" type="button" title="{{ "views.views"|trans({"%count%": views|length}) }}"><i class="fa-solid fa-check"></i></button>
     </div>
 </div>
