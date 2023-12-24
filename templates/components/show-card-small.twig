@@ -2,8 +2,8 @@
     <img class="card-img-top" src="{{ show.posterImageUrl }}"/>
     <div class="card-body">
         <h5 class="card-title">{{ show.title }}</h5>
-        <small class="d-block">{% trans with{"%count%": show.seasons|length} %}shows.count.seasons{% endtrans %}</small>
-        <small class="d-block">{% trans with{"%count%": show.totalEpisodes} %}shows.count.episodes{% endtrans %}</small>
+        <small class="d-block">{{ "shows.count.seasons"|trans({"%count%": show.seasons|length}) }}</small>
+        <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": show.totalEpisodes}) }}</small>
         {% include "components/show-status-badge.twig" with {"status": show.status} only %}
     </div>
 </a>

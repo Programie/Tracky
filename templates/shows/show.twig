@@ -13,8 +13,8 @@
 
     {% include "components/show-badges.twig" with {"show": show} only %}
 
-    <small class="d-block">{% trans with{"%count%": show.seasons|length} %}shows.count.seasons{% endtrans %}</small>
-    <small class="d-block">{% trans with{"%count%": show.totalEpisodes} %}shows.count.episodes{% endtrans %}</small>
+    <small class="d-block">{{ "shows.count.seasons"|trans({"%count%": show.seasons|length}) }}</small>
+    <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": show.totalEpisodes}) }}</small>
 
     <ul class="nav nav-underline mb-3">
         {{ _self.navItem("showSeasonsPage", {"id": show.id}, "shows.seasons"|trans) }}
