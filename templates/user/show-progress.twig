@@ -12,48 +12,50 @@
 {% block profileContent %}
     <h2>{{ "user.show-progress"|trans }}</h2>
 
-    <div class="row g-4">
-        {% for show in shows %}
-            <div class="col-12">
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-md-4 scaled-image" style="background-image: url({{ show.posterImageUrl }});"></div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": show.id}) }}">{{ show.title }}</a></h5>
-                                <div class="card-text mt-3">
-                                    <div class="progress-stacked">
-                                        {% set totalEpisodes = show.totalEpisodes %}
-                                        {% for season in show.seasons %}
-                                            {% if totalEpisodes %}
-                                                {% set perEpisodePercentage = 100 / totalEpisodes %}
-                                                {% for episode in season.episodes %}
-                                                    {{ _self.episodeProgressBarItem(user, episode, perEpisodePercentage) }}
-                                                {% endfor %}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-
-                                    <div class="accordion mt-3">
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#show_{{ show.id }}_seasons">{{ "shows.seasons"|trans }}</button>
-                                            </h2>
-                                            <div id="show_{{ show.id }}_seasons" class="accordion-collapse collapse">
-                                                <div class="accordion-body">
-                                                    {% for season in show.seasons %}
-                                                        {% set totalEpisodes = season.episodes.count %}
-                                                        {% if totalEpisodes %}
-                                                            <div><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}">{{ "shows.season"|trans({"%number%": season.number}) }}</a></div>
-                                                            <div class="progress-stacked">
-                                                                {% set perEpisodePercentage = 100 / totalEpisodes %}
-
-                                                                {% for episode in season.episodes %}
-                                                                    {{ _self.episodeProgressBarItem(user, episode, perEpisodePercentage) }}
-                                                                {% endfor %}
-                                                            </div>
-                                                        {% endif %}
+    {% if shows %}
+        <div class="row g-4">
+            {% for show in shows %}
+                <div class="col-12">
+                    <div class="card">
+                        <div class="row g-0">
+                            <div class="col-md-4 scaled-image" style="background-image: url({{ show.posterImageUrl }});"></div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": show.id}) }}">{{ show.title }}</a></h5>
+                                    <div class="card-text mt-3">
+                                        <div class="progress-stacked">
+                                            {% set totalEpisodes = show.totalEpisodes %}
+                                            {% for season in show.seasons %}
+                                                {% if totalEpisodes %}
+                                                    {% set perEpisodePercentage = 100 / totalEpisodes %}
+                                                    {% for episode in season.episodes %}
+                                                        {{ _self.episodeProgressBarItem(user, episode, perEpisodePercentage) }}
                                                     {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+
+                                        <div class="accordion mt-3">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#show_{{ show.id }}_seasons">{{ "shows.seasons"|trans }}</button>
+                                                </h2>
+                                                <div id="show_{{ show.id }}_seasons" class="accordion-collapse collapse">
+                                                    <div class="accordion-body">
+                                                        {% for season in show.seasons %}
+                                                            {% set totalEpisodes = season.episodes.count %}
+                                                            {% if totalEpisodes %}
+                                                                <div><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}">{{ "shows.season"|trans({"%number%": season.number}) }}</a></div>
+                                                                <div class="progress-stacked">
+                                                                    {% set perEpisodePercentage = 100 / totalEpisodes %}
+
+                                                                    {% for episode in season.episodes %}
+                                                                        {{ _self.episodeProgressBarItem(user, episode, perEpisodePercentage) }}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -63,7 +65,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">{{ "shows.no-shows-available"|trans }}</div>
+    {% endif %}
 {% endblock %}
