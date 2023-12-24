@@ -20,21 +20,23 @@ class HistoryController extends AbstractController
         $itemsPerPage = 100;
         $page = $request->query->getInt("page", 1);
 
+        $type = strtolower($request->query->get("type"));
+        $item = $request->query->getInt("item");
+
         $criteria = ["user" => $user->getId()];
 
-        $episode = $request->query->getInt("episode");
-        $movie = $request->query->getInt("movie");
-
-        if ($episode) {
-            $type = "episode";
-            $criteria["item"] = $episode;
-            $viewRepository = $entityManager->getRepository(EpisodeView::class);
-        } elseif ($movie) {
-            $type = "movie";
-            $criteria["item"] = $movie;
-            $viewRepository = $entityManager->getRepository(MovieView::class);
-        } else {
-            $type = null;
+        switch ($type) {
+            case "episode":
+                $criteria["item"] = $item;
+                $viewRepository = $entityManager->getRepository(EpisodeView::class);
+                break;
+            case "movie":
+                $criteria["item"] = $item;
+                $viewRepository = $entityManager->getRepository(MovieView::class);
+                break;
+            default:
+                $type = null;
+                break;
         }
 
         $count = $viewRepository->count($criteria, $type);
