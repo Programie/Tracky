@@ -42,6 +42,7 @@ CREATE TABLE `episodes`
     `title`          varchar(300) NOT NULL,
     `plot`           text         DEFAULT NULL,
     `firstAired`     date         DEFAULT NULL,
+    `runtime`        int(11)      DEFAULT NULL,
     `posterImageUrl` varchar(500) DEFAULT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`season`) REFERENCES `seasons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -54,6 +55,7 @@ CREATE TABLE `movies`
     `title`          varchar(300) NOT NULL,
     `plot`           text                  DEFAULT NULL,
     `year`           int(11)               DEFAULT NULL,
+    `runtime`        int(11)               DEFAULT NULL,
     `dataProvider`   enum ('tmdb', 'tvdb') DEFAULT NULL,
     `tmdbId`         int(11)               DEFAULT NULL,
     `tvdbId`         int(11)               DEFAULT NULL,

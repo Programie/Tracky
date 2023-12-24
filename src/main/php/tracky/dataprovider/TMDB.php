@@ -84,6 +84,7 @@ class TMDB implements Provider
         $episode->setTitle($data["name"]);
         $episode->setPlot($data["overview"] ?? null);
         $episode->setPosterImageUrl($this->getImageUrl($data["still_path"] ?? null));
+        $episode->setRuntime($data["runtime"] ?? null);
 
         $airDate = $data["air_date"] ?? null;
         $episode->setFirstAired($airDate === null ? null : new Date($airDate));
@@ -231,6 +232,7 @@ class TMDB implements Provider
         $movie->setPlot($movieData["overview"] ?? null);
         $movie->setYear($releaseDate === null ? null : (int)$releaseDate->format("Y"));
         $movie->setPosterImageUrl($this->getImageUrl($movieData["poster_path"] ?? null));
+        $movie->setRuntime($movieData["runtime"] ?? null);
 
         $externalIds = $this->getJson(sprintf("movie/%d/external_ids", $tmdbId));
 

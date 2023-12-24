@@ -2,6 +2,11 @@
     <img class="card-img-top" src="{{ movie.posterImageUrl }}"/>
     <div class="card-body">
         <h5 class="card-title">{{ movie.title }}</h5>
-        <div class="text-body-secondary">{{ movie.year }}</div>
+
+        {% if movie.runtime is not null %}
+            <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
+        {% endif %}
+
+        <small class="d-block text-body-secondary">{{ movie.year }}</small>
     </div>
 </a>

@@ -20,6 +20,10 @@
                 {% endif %}
             </div>
 
+            {% if movie.runtime is not null %}
+                <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
+            {% endif %}
+
             <small class="d-block text-body-secondary">{{ movie.year }}</small>
             {% include "components/view.twig" with {"type": "movie", "item": movie} only %}
 

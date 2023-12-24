@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use tracky\model\traits\Plot;
 use tracky\model\traits\PosterImage;
 use tracky\model\traits\DataProvider;
+use tracky\model\traits\Runtime;
 use tracky\orm\MovieRepository;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
@@ -15,6 +16,7 @@ class Movie extends BaseEntity
     use DataProvider;
     use Plot;
     use PosterImage;
+    use Runtime;
 
     #[ORM\Column(type: "string")]
     private string $title;

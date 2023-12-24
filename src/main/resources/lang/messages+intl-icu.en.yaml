@@ -1,4 +1,5 @@
 unknown-title: "Unknown"
+runtime: "{runtime} min"
 
 error-page:
   400:

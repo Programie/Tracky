@@ -33,6 +33,9 @@
         <div class="col-lg-9 col-12">
             <h2>{{ episode.title|default("unknown-title"|trans) }}</h2>
 
+            {% if episode.runtime is not null %}
+                <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": episode.runtime}) }}</small>
+            {% endif %}
             {% if episode.firstAired is not null %}
                 <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>
             {% endif %}

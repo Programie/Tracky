@@ -5,8 +5,11 @@
         {% if withShowTitle|default(false) %}
             <div><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": episode.season.show.id}) }}">{{ episode.season.show.title }}</a></div>
         {% endif %}
+        {% if episode.runtime is not null %}
+            <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": episode.runtime}) }}</small>
+        {% endif %}
         {% if episode.firstAired is not null %}
-            <div class="text-body-secondary">{{ episode.firstAired|format_date }}</div>
+            <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>
         {% endif %}
     </div>
 </div>

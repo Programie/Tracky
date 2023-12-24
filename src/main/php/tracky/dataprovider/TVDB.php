@@ -69,6 +69,7 @@ class TVDB implements Provider
         $episode->setTitle($data["name"] ?? "");
         $episode->setPlot($data["overview"] ?? null);
         $episode->setPosterImageUrl($this->getImageUrl($data["image"] ?? null));
+        $episode->setRuntime($data["runtime"] ?? null);
 
         $aired = $data["aired"] ?? null;
         $episode->setFirstAired($aired === null ? null : new Date($aired));
@@ -249,6 +250,7 @@ class TVDB implements Provider
         $movie->setTitle($data["name"]);
         $movie->setYear($year);
         $movie->setPosterImageUrl($this->getImageUrl($data["image"]));
+        $movie->setRuntime($data["runtime"] ?? null);
 
         foreach ($data["remoteIds"] ?? [] as $remoteId) {
             if ($remoteId["sourceName"] === "TheMovieDB.com") {

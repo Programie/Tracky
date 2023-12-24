@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use tracky\datetime\Date;
 use tracky\model\traits\Plot;
 use tracky\model\traits\PosterImage;
+use tracky\model\traits\Runtime;
 use tracky\orm\EpisodeRepository;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
@@ -14,6 +15,7 @@ class Episode extends BaseEntity
 {
     use Plot;
     use PosterImage;
+    use Runtime;
 
     #[ORM\ManyToOne(targetEntity: Season::class)]
     #[ORM\JoinColumn(name: "season", referencedColumnName: "id")]
