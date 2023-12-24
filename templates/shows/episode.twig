@@ -34,11 +34,7 @@
             <h2>{{ episode.title|default("unknown-title"|trans) }}</h2>
 
             <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>
-            {% if is_granted("IS_AUTHENTICATED") %}
-                {% set viewsForUser = episode.getViewsForUser(app.user) %}
-                {% if viewsForUser|length %}<small class="d-block text-body-secondary"><a class="text-reset text-decoration-none" href="{{ path("userHistoryPage", {"username": app.user.username, "type": "episode", "item": episode.id}) }}"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }} ({{ "views.views"|trans({"%count%": viewsForUser|length}) }})</a></small>{% endif %}
-                <button class="btn btn-secondary btn-sm mt-3 add-view" data-type="episode" data-show-id="{{ episode.season.show.id }}" data-season="{{ episode.season.number }}" data-episode="{{ episode.number }}">{{ "views.add-view"|trans }}</button>
-            {% endif %}
+            {% include "components/view.twig" with {"type": "episode", "item": episode} only %}
 
             <div class="card-text mt-3">{{ episode.plot }}</div>
         </div>

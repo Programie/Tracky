@@ -1,0 +1,16 @@
+{% if is_granted("IS_AUTHENTICATED") %}
+    {% set viewsForUser = item.getViewsForUser(app.user) %}
+    {% if viewsForUser|length %}
+        <small class="d-block text-body-secondary">
+            <a class="text-reset text-decoration-none" href="{{ path("userHistoryPage", {"username": app.user.username, "type": type, "item": item.id}) }}">
+                <i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }} ({{ "views.views"|trans({"%count%": viewsForUser|length}) }})
+            </a>
+        </small>
+    {% endif %}
+    {% if type == "movie" %}
+        {% set attributes = {"data-movie-id": item.id} %}
+    {% elseif type == "episode" %}
+        {% set attributes = {"data-show-id": item.season.show.id, "data-season": item.season.number, "data-episode": item.number} %}
+    {% endif %}
+    <button class="btn btn-secondary btn-sm mt-3 add-view" data-type="{{ type }}" {% for key, value in attributes %}{{ key }}="{{ value }}"{% endfor %}>{{ "views.add-view"|trans }}</button>
+{% endif %}

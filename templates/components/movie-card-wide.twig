@@ -6,11 +6,7 @@
                 <h5 class="card-title">{{ movie.title }}</h5>
                 <div class="card-text mt-3">
                     <small class="d-block text-body-secondary">{{ movie.year }}</small>
-                    {% if is_granted("IS_AUTHENTICATED") %}
-                        {% set viewsForUser = movie.getViewsForUser(app.user) %}
-                        {% if viewsForUser|length %}<small class="d-block text-body-secondary"><a class="text-reset text-decoration-none" href="{{ path("userHistoryPage", {"username": app.user.username, "type": "movie", "item": movie.id}) }}"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }} ({{ "views.views"|trans({"%count%": viewsForUser|length}) }})</a></small>{% endif %}
-                        <button class="btn btn-secondary btn-sm mt-3 add-view" data-type="movie" data-movie-id="{{ movie.id }}">{{ "views.add-view"|trans }}</button>
-                    {% endif %}
+                    {% include "components/view.twig" with {"type": "movie", "item": movie} only %}
                 </div>
                 <div class="card-text mt-3">{{ movie.plot }}</div>
             </div>
