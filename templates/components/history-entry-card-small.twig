@@ -1,16 +1,20 @@
+{% set metadata = {"entry-type": entry.type, "entry-id": entry.id} %}
+
 {% if entry.type == "episode" %}
     {% set episode = entry.episode %}
     {% set season = episode.season %}
     {% set show = season.show %}
     {% set imageUrl = episode.posterImageUrl %}
     {% set views = episode.viewsForUser(app.user) %}
-    <div class="d-none" data-entry-type="{{ entry.type }}" data-entry-id="{{ entry.id }}" data-views="{{ views|length }}" data-show="{{ show.id }}" data-season="{{ season.number }}" data-episode="{{ episode.number }}"></div>
+    {% set metadata = metadata|merge({"views": views|length, "show": show.id, "season": season.number, "episode": episode.number}) %}
 {% elseif entry.type == "movie" %}
     {% set movie = entry.movie %}
     {% set imageUrl = movie.posterImageUrl %}
     {% set views = movie.viewsForUser(app.user) %}
-    <div class="d-none" data-entry-type="{{ entry.type }}" data-entry-id="{{ entry.id }}" data-views="{{ views|length }}" data-movie="{{ movie.id }}"></div>
+    {% set metadata = metadata|merge({"views": views|length, "movie": movie.id}) %}
 {% endif %}
+
+<div class="d-none" {% for key, value in metadata %} data-{{ key }}="{{ value }}"{% endfor %}></div>
 
 <div class="card">
     <img class="card-img-top fullscreen-image" src="{{ imageUrl }}"/>
