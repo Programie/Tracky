@@ -5,6 +5,8 @@
         {% if withShowTitle|default(false) %}
             <div><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": episode.season.show.id}) }}">{{ episode.season.show.title }}</a></div>
         {% endif %}
-        <div class="text-body-secondary">{{ episode.firstAired|format_date }}</div>
+        {% if episode.firstAired is not null %}
+            <div class="text-body-secondary">{{ episode.firstAired|format_date }}</div>
+        {% endif %}
     </div>
 </div>

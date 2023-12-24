@@ -33,7 +33,9 @@
         <div class="col-lg-9 col-12">
             <h2>{{ episode.title|default("unknown-title"|trans) }}</h2>
 
-            <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>
+            {% if episode.firstAired is not null %}
+                <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>
+            {% endif %}
             {% include "components/view.twig" with {"type": "episode", "item": episode} only %}
 
             <div class="card-text mt-3">{{ episode.plot }}</div>
