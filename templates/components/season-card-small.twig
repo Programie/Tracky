@@ -2,6 +2,7 @@
     <img class="card-img-top" src="{{ season.posterImageUrl }}"/>
     <div class="card-body">
         <h5 class="card-title">{{ "shows.season"|trans({"%number%": season.number }) }}</h5>
-        <small>{{ "shows.count.episodes"|trans({"%count%": season.episodes|length}) }}</small>
+        <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": season.episodes|length}) }}</small>
+        <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.totalRuntime}) }}</small>
     </div>
 </a>

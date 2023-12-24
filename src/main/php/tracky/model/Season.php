@@ -111,4 +111,20 @@ class Season extends BaseEntity
     {
         return $this->getRelativeSeason(1);
     }
+
+    public function getTotalRuntime(): int
+    {
+        $totalRuntime = 0;
+
+        foreach ($this->getEpisodes() as $episode) {
+            $runtime = $episode->getRuntime();
+            if ($runtime === null) {
+                continue;
+            }
+
+            $totalRuntime += $runtime;
+        }
+
+        return $totalRuntime;
+    }
 }
