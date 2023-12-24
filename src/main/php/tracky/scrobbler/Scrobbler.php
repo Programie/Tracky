@@ -2,18 +2,24 @@
 namespace tracky\scrobbler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use tracky\DataCreator;
+use tracky\dataprovider\Helper;
 use tracky\datetime\DateTime;
 use tracky\model\EpisodeView;
+use tracky\model\Movie;
 use tracky\model\MovieView;
 use tracky\model\ScrobbleQueue;
+use tracky\model\Show;
 use tracky\model\User;
+use tracky\orm\MovieRepository;
+use tracky\orm\ShowRepository;
 use UnexpectedValueException;
 
 class Scrobbler
 {
     public function __construct(
-        private readonly DataCreator            $dataCreator,
+        private readonly Helper                 $dataProviderHelper,
+        private readonly ShowRepository         $showRepository,
+        private readonly MovieRepository        $movieRepository,
         private readonly EntityManagerInterface $entityManager,
         private readonly bool                   $useQueue = false,
     )
@@ -78,7 +84,32 @@ class Scrobbler
             throw new UnexpectedValueException("Missing episode number");
         }
 
-        $episode = $this->dataCreator->getOrCreateEpisode($json["uniqueIds"] ?? [], $seasonNumber, $episodeNumber);
+        list($dataProvider, $providerId) = $this->getDataProviderFromUniqueIds(Helper::TYPE_SHOW, $json);
+
+        $show = $this->showRepository->findOneBy([$dataProvider->getIdFieldName() => $providerId]);
+        if ($show === null) {
+            $show = new Show;
+            $dataProvider->setIdForShow($show, $providerId);
+            $dataProvider->fetchShow($show, false);
+
+            $this->entityManager->persist($show);
+        }
+
+        $created = false;
+        $season = $show->getOrCreateSeason($seasonNumber, $created);
+        if ($created) {
+            $dataProvider->fetchSeason($season, false);
+
+            $this->entityManager->persist($season);
+        }
+
+        $created = false;
+        $episode = $season->getOrCreateEpisode($episodeNumber, $created);
+        if ($created) {
+            $dataProvider->fetchEpisode($episode);
+
+            $this->entityManager->persist($episode);
+        }
 
         $episodeView = new EpisodeView;
         $episodeView->setEpisode($episode);
@@ -91,7 +122,16 @@ class Scrobbler
 
     private function addMovieView(array $json, DateTime $dateTime, User $user): void
     {
-        $movie = $this->dataCreator->getOrCreateMovie($json["uniqueIds"] ?? []);
+        list($dataProvider, $providerId) = $this->getDataProviderFromUniqueIds(Helper::TYPE_MOVIE, $json);
+
+        $movie = $this->movieRepository->findOneBy([$dataProvider->getIdFieldName() => $providerId]);
+        if ($movie === null) {
+            $movie = new Movie;
+            $dataProvider->setIdForMovie($movie, $providerId);
+            $dataProvider->fetchMovie($movie);
+
+            $this->entityManager->persist($movie);
+        }
 
         $movieView = new MovieView;
         $movieView->setMovie($movie);
@@ -100,5 +140,17 @@ class Scrobbler
 
         $this->entityManager->persist($movieView);
         $this->entityManager->flush();
+    }
+
+    private function getDataProviderFromUniqueIds(string $type, array $json): array
+    {
+        $dataProvider = $this->dataProviderHelper->getProviderByType($type);
+
+        $providerId = $dataProvider->getIdFromUniqueIds($json["uniqueIds"] ?? []);
+        if ($providerId === null) {
+            throw new UnexpectedValueException("Unable to get ID from data provider");
+        }
+
+        return [$dataProvider, $providerId];
     }
 }
