@@ -12,7 +12,7 @@ class ViewRepository extends ServiceEntityRepository
         parent::__construct($registry, $entityClass);
     }
 
-    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?string $type = null)
+    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?string $type = null): array
     {
         $queryBuilder = $this->createQueryBuilder("view")->select("view");
 
@@ -44,7 +44,7 @@ class ViewRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function findOneBy(array $criteria, ?array $orderBy = null, ?string $type = null)
+    public function findOneBy(array $criteria, ?array $orderBy = null, ?string $type = null): ?object
     {
         $items = $this->findBy($criteria, $orderBy, 1, type: $type);
 
@@ -55,7 +55,7 @@ class ViewRepository extends ServiceEntityRepository
         return $items[0];
     }
 
-    public function count(array $criteria, ?string $type = null): int
+    public function count(array $criteria = [], ?string $type = null): int
     {
         $queryBuilder = $this->createQueryBuilder("view")->select("count(view.id)");
 
