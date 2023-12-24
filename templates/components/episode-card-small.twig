@@ -1,5 +1,5 @@
 <div class="card">
-    <img class="card-img-top" src="{{ episode.posterImageUrl }}"/>
+    <img class="card-img-top fullscreen-image" src="{{ episode.posterImageUrl }}"/>
     <div class="card-body">
         <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"><b>{{ episode.season.number }}x{{ episode.number }}</b> {{ episode.title|default("unknown-title"|trans) }}</a></h5>
         {% if withShowTitle|default(false) %}

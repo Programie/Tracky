@@ -16,12 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    document.querySelectorAll(".scaled-image, img").forEach((element: HTMLElement) => {
+    document.querySelectorAll(".fullscreen-image").forEach((element: HTMLElement) => {
         element.addEventListener("click", () => {
-            if (element.closest("a")) {
-                return;
-            }
-
             let imageUrl;
 
             if (element instanceof HTMLImageElement) {
