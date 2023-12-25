@@ -53,6 +53,7 @@ CREATE TABLE `movies`
 (
     `id`             int(11)      NOT NULL AUTO_INCREMENT,
     `title`          varchar(300) NOT NULL,
+    `tagline`        varchar(500)          DEFAULT NULL,
     `plot`           text                  DEFAULT NULL,
     `year`           int(11)               DEFAULT NULL,
     `runtime`        int(11)               DEFAULT NULL,

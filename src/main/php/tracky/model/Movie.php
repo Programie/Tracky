@@ -21,6 +21,9 @@ class Movie extends BaseEntity
     #[ORM\Column(type: "string")]
     private string $title;
 
+    #[ORM\Column(type: "string")]
+    private ?string $tagline;
+
     #[ORM\Column(type: "integer")]
     private ?int $year;
 
@@ -36,6 +39,17 @@ class Movie extends BaseEntity
     public function setTitle(string $title): Movie
     {
         $this->title = $title;
+        return $this;
+    }
+
+    public function getTagline(): ?string
+    {
+        return $this->tagline;
+    }
+
+    public function setTagline(?string $tagline): Movie
+    {
+        $this->tagline = $tagline;
         return $this;
     }
 

@@ -5,6 +5,10 @@
             <div class="card-body">
                 <h5 class="card-title">{{ movie.title }}</h5>
                 <div class="card-text mt-3">
+                    {% if movie.tagline is not null %}
+                        <small class="d-block text-body-secondary fst-italic mb-2">{{ movie.tagline }}</small>
+                    {% endif %}
+
                     {% if movie.runtime is not null %}
                         <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
                     {% endif %}

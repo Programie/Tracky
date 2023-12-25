@@ -262,6 +262,7 @@ class TVDB implements Provider
         $translationData = $this->getJson(sprintf("movies/%d/translations/%s", $tvdbId, $this->getMovieLanguage($movie)));
         if ($translationData !== null) {
             $movie->setTitle($translationData["name"]);
+            $movie->setTagline($translationData["tagline"] ?? null);
             $movie->setPlot($translationData["overview"] ?? null);
         }
 

@@ -229,6 +229,7 @@ class TMDB implements Provider
         }
 
         $movie->setTitle($movieData["title"]);
+        $movie->setTagline($movieData["tagline"] ?? null);
         $movie->setPlot($movieData["overview"] ?? null);
         $movie->setYear($releaseDate === null ? null : (int)$releaseDate->format("Y"));
         $movie->setPosterImageUrl($this->getImageUrl($movieData["poster_path"] ?? null));

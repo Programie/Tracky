@@ -11,6 +11,10 @@
         <div class="col-lg-9 col-12">
             <h1>{{ movie.title }}</h1>
 
+            {% if movie.tagline is not null %}
+                <small class="d-block text-body-secondary fst-italic my-2">{{ movie.tagline }}</small>
+            {% endif %}
+
             <div class="my-2">
                 {% if movie.tmdbId %}
                     <a href="https://www.themoviedb.org/movie/{{ movie.tmdbId }}" class="badge text-bg-secondary" target="_blank">TMDB</a>
