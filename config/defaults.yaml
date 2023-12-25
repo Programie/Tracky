@@ -10,3 +10,4 @@ parameters:
   scrobbler.use-queue: false
   show-fetch-interval: 86400
   image-fetcher.storage-path: "%kernel.cache_dir%/images"
+  image-fetcher.download-all-on-update: true

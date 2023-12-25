@@ -8,6 +8,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use tracky\dataprovider\Helper;
+use tracky\ImageFetcher;
+use tracky\model\Movie;
+use tracky\model\Show;
 use tracky\orm\MovieRepository;
 use tracky\orm\ShowRepository;
 use UnexpectedValueException;
@@ -19,7 +22,9 @@ class FetchDataCommand extends Command
         private readonly Helper                 $dataProviderHelper,
         private readonly MovieRepository        $movieRepository,
         private readonly ShowRepository         $showRepository,
-        private readonly EntityManagerInterface $entityManager
+        private readonly ImageFetcher           $imageFetcher,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly bool                   $downloadAllImages
     )
     {
         parent::__construct();
@@ -38,6 +43,9 @@ class FetchDataCommand extends Command
 
         switch ($type) {
             case Helper::TYPE_SHOW:
+                /**
+                 * @var $show Show
+                 */
                 $show = $this->showRepository->findOneBy(["id" => $id]);
                 if ($show === null) {
                     throw new UnexpectedValueException(sprintf("Show with ID %d not found", $show));
@@ -52,8 +60,18 @@ class FetchDataCommand extends Command
                 }
 
                 $this->entityManager->persist($show);
+                $this->entityManager->flush();
+
+                if ($this->downloadAllImages) {
+                    $output->writeln(sprintf("Fetching images for show %d (%s)", $id, $show->getTitle()));
+
+                    $show->fetchPosterImages($this->imageFetcher, true, true);
+                }
                 break;
             case Helper::TYPE_MOVIE:
+                /**
+                 * @var $movie Movie
+                 */
                 $movie = $this->movieRepository->findOneBy(["id" => $id]);
                 if ($movie === null) {
                     throw new UnexpectedValueException(sprintf("Movie with ID %d not found", $movie));
@@ -68,12 +86,17 @@ class FetchDataCommand extends Command
                 }
 
                 $this->entityManager->persist($movie);
+                $this->entityManager->flush();
+
+                if ($this->downloadAllImages) {
+                    $output->writeln(sprintf("Fetching images for movie %d (%s)", $id, $movie->getTitle()));
+
+                    $movie->fetchPosterImage($this->imageFetcher);
+                }
                 break;
             default:
                 throw new UnexpectedValueException(sprintf("Unknown type: %s", $type));
         }
-
-        $this->entityManager->flush();
 
         $output->writeln("Done");
 

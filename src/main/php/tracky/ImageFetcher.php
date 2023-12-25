@@ -25,7 +25,7 @@ class ImageFetcher
         return $this->storagePath . DIRECTORY_SEPARATOR . hash("sha256", $url) . ".jpg";
     }
 
-    private function download(string $url, string $path): bool
+    private function downloadToPath(string $url, string $path): bool
     {
         try {
             $this->filesystem->mkdir(dirname($path));
@@ -42,14 +42,23 @@ class ImageFetcher
         }
     }
 
-    public function get(string $url): ?string
+    public function download(string $url): bool
     {
+        return $this->downloadToPath($url, $this->getFilePath($url));
+    }
+
+    public function get(?string $url): ?string
+    {
+        if ($url === null) {
+            return null;
+        }
+
         $path = $this->getFilePath($url);
         if ($this->filesystem->exists($path)) {
             return $path;
         }
 
-        if ($this->download($url, $path)) {
+        if ($this->downloadToPath($url, $path)) {
             return $path;
         }
 

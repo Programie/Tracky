@@ -7,6 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use tracky\dataprovider\Helper;
+use tracky\ImageFetcher;
 use tracky\model\Show;
 use tracky\orm\ShowRepository;
 
@@ -16,8 +17,10 @@ class UpdateDataCommand extends Command
     public function __construct(
         private readonly Helper                 $dataProviderHelper,
         private readonly ShowRepository         $showRepository,
+        private readonly ImageFetcher           $imageFetcher,
         private readonly EntityManagerInterface $entityManager,
-        private readonly int                    $showFetchInterval
+        private readonly int                    $showFetchInterval,
+        private readonly bool                   $downloadAllImages
     )
     {
         parent::__construct();
@@ -40,6 +43,10 @@ class UpdateDataCommand extends Command
 
             $this->entityManager->persist($show);
             $this->entityManager->flush();
+
+            if ($this->downloadAllImages) {
+                $show->fetchPosterImages($this->imageFetcher, true, true);
+            }
         }
 
         return self::SUCCESS;

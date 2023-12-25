@@ -4,6 +4,7 @@ namespace tracky\model;
 use Doctrine\ORM\Mapping as ORM;
 use tracky\datetime\Date;
 use tracky\datetime\DateTime;
+use tracky\ImageFetcher;
 use tracky\model\traits\PosterImage;
 use tracky\model\traits\DataProvider;
 use tracky\orm\ShowRepository;
@@ -133,6 +134,17 @@ class Show extends BaseEntity
         }
 
         return $season;
+    }
+
+    public function fetchPosterImages(ImageFetcher $imageFetcher, bool $includeSeasons, bool $includeEpisodes): void
+    {
+        $this->fetchPosterImage($imageFetcher);
+
+        if ($includeSeasons) {
+            foreach ($this->getSeasons() as $season) {
+                $season->fetchPosterImages($imageFetcher, $includeEpisodes);
+            }
+        }
     }
 
     public function getTotalEpisodes(): int

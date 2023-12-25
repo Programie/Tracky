@@ -2,6 +2,7 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
+use tracky\ImageFetcher;
 use tracky\model\traits\PosterImage;
 use tracky\orm\SeasonRepository;
 
@@ -110,6 +111,17 @@ class Season extends BaseEntity
     public function getNextSeason(): ?Season
     {
         return $this->getRelativeSeason(1);
+    }
+
+    public function fetchPosterImages(ImageFetcher $imageFetcher, bool $includeEpisodes): void
+    {
+        $this->fetchPosterImage($imageFetcher);
+
+        if ($includeEpisodes) {
+            foreach ($this->getEpisodes() as $episode) {
+                $episode->fetchPosterImage($imageFetcher);
+            }
+        }
     }
 
     public function getTotalRuntime(): int

@@ -18,9 +18,13 @@ services:
       - '../src/main/php/tracky/Entity/'
       - '../src/main/php/tracky/Kernel.php'
 
+  tracky\console\FetchDataCommand:
+    arguments:
+      $downloadAllImages: "%image-fetcher.download-all-on-update%"
   tracky\console\UpdateDataCommand:
     arguments:
       $showFetchInterval: "%show-fetch-interval%"
+      $downloadAllImages: "%image-fetcher.download-all-on-update%"
   tracky\dataprovider\Helper:
     arguments:
       $movieProvider: "%data-provider.movies%"

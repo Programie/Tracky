@@ -2,6 +2,7 @@
 namespace tracky\model\traits;
 
 use Doctrine\ORM\Mapping as ORM;
+use tracky\ImageFetcher;
 
 trait PosterImage
 {
@@ -17,5 +18,15 @@ trait PosterImage
     {
         $this->posterImageUrl = $posterImageUrl;
         return $this;
+    }
+
+    public function fetchPosterImage(ImageFetcher $imageFetcher): ?string
+    {
+        $url = $this->getPosterImageUrl();
+        if ($url === null) {
+            return null;
+        }
+
+        return $imageFetcher->get($url);
     }
 }
