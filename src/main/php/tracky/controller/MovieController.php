@@ -66,7 +66,9 @@ class MovieController extends AbstractController
 
         // Make sure no view exists for this movie
         if ($viewRepository->count(["item" => $movie->getId()], type: "movie")) {
-            throw new ConflictHttpException("At least one view of this movie exists");
+            return $this->json([
+                "error" => "view-exists"
+            ], 409);
         }
 
         $entityManager->remove($movie);

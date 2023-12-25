@@ -119,6 +119,7 @@ library-management:
   delete-item: "Delete item"
   confirm: "Confirm"
   cancel: "Cancel"
+  delete-item-failed: "Deleting item failed"
   no-items-available: "No items available."
   columns:
     title: "Title"
@@ -136,3 +137,5 @@ library-management:
     no-results: "Nothing found."
     in-library: "In library"
     add-to-library: "Add to library"
+  errors:
+    view-exists: "At least one view of this item exists. Remove all views of it and try again."

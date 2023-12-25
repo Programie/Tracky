@@ -59,6 +59,14 @@
 
         {% include "components/image-modal.twig" %}
 
+        <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container"></div>
+
         {% block additional_content %}{% endblock %}
+
+        <datalist id="translations">
+            {% for key in translations|default([]) %}
+                <option value="{{ key }}">{{ key|trans }}</option>
+            {% endfor %}
+        </datalist>
     </body>
 </html>

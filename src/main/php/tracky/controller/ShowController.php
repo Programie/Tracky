@@ -87,7 +87,9 @@ class ShowController extends AbstractController
         foreach ($show->getSeasons() as $season) {
             foreach ($season->getEpisodes() as $episode) {
                 if ($viewRepository->count(["item" => $episode->getId()], type: "episode")) {
-                    throw new ConflictHttpException("At least one view of this show exists");
+                    return $this->json([
+                        "error" => "view-exists"
+                    ], 409);
                 }
             }
         }

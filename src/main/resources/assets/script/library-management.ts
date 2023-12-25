@@ -1,4 +1,20 @@
 import {createPopper} from '@popperjs/core';
+import {createToast} from "./toast";
+import {tr} from "./utils";
+
+function deleteItem(url: string) {
+    fetch(url, {
+        method: "DELETE"
+    }).then(async (response) => {
+        if (response.ok) {
+            document.location.reload();
+        } else {
+            createToast(tr("library-management.delete-item-failed"), tr(`library-management.errors.${await (await response.json())["error"]}`), "danger");
+        }
+    }, (reason) => {
+        createToast(tr("library-management.delete-item-failed"), reason, "danger");
+    });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     let deleteItemTooltipElement: HTMLElement = document.querySelector("#library-management-delete-item");
@@ -22,19 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         switch (activeDeleteItem.type) {
             case "show":
-                fetch(`/shows/${activeDeleteItem.item}`, {
-                    method: "DELETE"
-                }).then(() => {
-                    document.location.reload();
-                });
+                deleteItem(`/shows/${activeDeleteItem.item}`);
                 break;
 
             case "movie":
-                fetch(`/movies/${activeDeleteItem.item}`, {
-                    method: "DELETE"
-                }).then(() => {
-                    document.location.reload();
-                });
+                deleteItem(`/movies/${activeDeleteItem.item}`);
                 break;
         }
     });
