@@ -4,12 +4,12 @@
     {% set episode = entry.episode %}
     {% set season = episode.season %}
     {% set show = season.show %}
-    {% set imageUrl = episode.posterImageUrl %}
+    {% set imageUrl = path("getEpisodeImage", {"show": show.id, "season": season.number, "episode": episode.number}) %}
     {% set views = episode.viewsForUser(app.user) %}
     {% set metadata = metadata|merge({"views": views|length, "show": show.id, "season": season.number, "episode": episode.number}) %}
 {% elseif entry.type == "movie" %}
     {% set movie = entry.movie %}
-    {% set imageUrl = movie.posterImageUrl %}
+    {% set imageUrl = path("getMovieImage", {"movie": movie.id}) %}
     {% set views = movie.viewsForUser(app.user) %}
     {% set metadata = metadata|merge({"views": views|length, "movie": movie.id}) %}
 {% endif %}

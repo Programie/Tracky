@@ -2,14 +2,19 @@
 namespace tracky\controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\datetime\DateTime;
+use tracky\ImageFetcher;
+use tracky\model\Episode;
 use tracky\model\EpisodeView;
+use tracky\model\Season;
 use tracky\model\Show;
 use tracky\orm\ShowRepository;
 use tracky\orm\UserRepository;
@@ -22,6 +27,39 @@ class ShowController extends AbstractController
         private readonly ViewRepository $viewRepository
     )
     {
+    }
+
+    #[Route("/shows/{show}.jpg", name: "getShowImage")]
+    public function getShowImage(Show $show, ImageFetcher $imageFetcher): Response
+    {
+        return $this->returnImage($show, $imageFetcher);
+    }
+
+    #[Route("/shows/{show}/seasons/{season}.jpg", name: "getSeasonImage")]
+    public function getSeasonImage(Show $show, int $season, ImageFetcher $imageFetcher): Response
+    {
+        $season = $show->getSeason($season);
+        if ($season === null) {
+            throw new NotFoundHttpException("Season not found");
+        }
+
+        return $this->returnImage($season, $imageFetcher);
+    }
+
+    #[Route("/shows/{show}/seasons/{season}/episodes/{episode}.jpg", name: "getEpisodeImage")]
+    public function getEpisodeImage(Show $show, int $season, int $episode, ImageFetcher $imageFetcher): Response
+    {
+        $season = $show->getSeason($season);
+        if ($season === null) {
+            throw new NotFoundHttpException("Season not found");
+        }
+
+        $episode = $season->getEpisode($episode);
+        if ($episode === null) {
+            throw new NotFoundHttpException("Episode not found");
+        }
+
+        return $this->returnImage($episode, $imageFetcher);
     }
 
     #[Route("/shows", name: "showsPage")]
@@ -201,5 +239,20 @@ class ShowController extends AbstractController
         $entityManager->flush();
 
         return new Response("View removed from database");
+    }
+
+    private function returnImage(Show|Season|Episode $entry, ImageFetcher $imageFetcher): Response
+    {
+        $url = $entry->getPosterImageUrl();
+        if ($url === null) {
+            throw new NotFoundHttpException("Image not available");
+        }
+
+        $path = $imageFetcher->get($url);
+        if ($path === null) {
+            throw new RuntimeException("Unable to fetch image");
+        }
+
+        return $this->file($path, null, ResponseHeaderBag::DISPOSITION_INLINE);
     }
 }

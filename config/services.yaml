@@ -35,6 +35,9 @@ services:
       $authToken: "%tvdb.auth-token%"
       $defaultMovieLanguage: "%tvdb.movies.language%"
       $defaultShowLanguage: "%tvdb.shows.language%"
+  tracky\ImageFetcher:
+    arguments:
+      $storagePath: "%image-fetcher.storage-path%"
   tracky\scrobbler\Scrobbler:
     arguments:
       $useQueue: "%scrobbler.use-queue%"

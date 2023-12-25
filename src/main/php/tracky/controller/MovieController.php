@@ -2,11 +2,15 @@
 namespace tracky\controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\datetime\DateTime;
+use tracky\ImageFetcher;
 use tracky\model\Movie;
 use tracky\model\MovieView;
 use tracky\orm\MovieRepository;
@@ -27,6 +31,22 @@ class MovieController extends AbstractController
         return $this->render("movies.twig", [
             "movies" => $this->movieRepository->findBy([], ["title" => "asc"])
         ]);
+    }
+
+    #[Route("/movies/{movie}.jpg", name: "getMovieImage")]
+    public function getMovieImage(Movie $movie, ImageFetcher $imageFetcher): Response
+    {
+        $url = $movie->getPosterImageUrl();
+        if ($url === null) {
+            throw new NotFoundHttpException("Image not available");
+        }
+
+        $path = $imageFetcher->get($url);
+        if ($path === null) {
+            throw new RuntimeException("Unable to fetch image");
+        }
+
+        return $this->file($path,null, ResponseHeaderBag::DISPOSITION_INLINE);
     }
 
     #[Route("/movies/{movie}", name: "moviePage")]
