@@ -6,6 +6,7 @@ use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -46,15 +47,32 @@ class MovieController extends AbstractController
             throw new RuntimeException("Unable to fetch image");
         }
 
-        return $this->file($path,null, ResponseHeaderBag::DISPOSITION_INLINE);
+        return $this->file($path, null, ResponseHeaderBag::DISPOSITION_INLINE);
     }
 
-    #[Route("/movies/{movie}", name: "moviePage")]
+    #[Route("/movies/{movie}", name: "moviePage", methods: ["GET"])]
     public function getMoviePage(Movie $movie): Response
     {
         return $this->render("movie.twig", [
             "movie" => $movie
         ]);
+    }
+
+    #[Route("/movies/{movie}", name: "removeMovie", methods: ["DELETE"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function removeMovie(Movie $movie, EntityManagerInterface $entityManager): Response
+    {
+        $viewRepository = $entityManager->getRepository(MovieView::class);
+
+        // Make sure no view exists for this movie
+        if ($viewRepository->count(["item" => $movie->getId()], type: "movie")) {
+            throw new ConflictHttpException("At least one view of this movie exists");
+        }
+
+        $entityManager->remove($movie);
+        $entityManager->flush();
+
+        return new Response("Movie removed from database");
     }
 
     #[Route("/movies/{movie}/views", name: "addMovieView", methods: ["POST"])]

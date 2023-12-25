@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -70,10 +71,31 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{id}", name: "showOverviewPage")]
+    #[Route("/shows/{id}", name: "showOverviewPage", methods: ["GET"])]
     public function getShowOverviewPage(Show $show): Response
     {
         return $this->redirectToRoute("showSeasonsPage", ["id" => $show->getId()]);
+    }
+
+    #[Route("/shows/{show}", name: "removeShow", methods: ["DELETE"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function removeShow(Show $show, EntityManagerInterface $entityManager): Response
+    {
+        $viewRepository = $entityManager->getRepository(EpisodeView::class);
+
+        // Make sure no episode view exists for this show
+        foreach ($show->getSeasons() as $season) {
+            foreach ($season->getEpisodes() as $episode) {
+                if ($viewRepository->count(["item" => $episode->getId()], type: "episode")) {
+                    throw new ConflictHttpException("At least one view of this show exists");
+                }
+            }
+        }
+
+        $entityManager->remove($show);
+        $entityManager->flush();
+
+        return new Response("Show removed from database");
     }
 
     #[Route("/shows/{id}/seasons", name: "showSeasonsPage")]

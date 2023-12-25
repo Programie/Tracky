@@ -1,0 +1,31 @@
+{% extends "page.twig" %}
+
+{% block title %}{{ "library-management.title"|trans }}{% endblock %}
+
+{% block content %}
+    <h1>{{ "library-management.title"|trans }}</h1>
+
+    <small class="d-block">{{ "library-management.count"|trans({"%count%": items|length}) }}</small>
+
+    <a href="{{ path("addItemsPage") }}" class="btn btn-primary my-3">{{ "library-management.add-item"|trans }}</a>
+
+    {% if items %}
+        {% include "library-management/item-list.twig" with {"items": items} %}
+    {% else %}
+        <div class="alert alert-warning">{{ "library-management.no-items-available"|trans }}</div>
+    {% endif %}
+{% endblock %}
+
+{% block additional_content %}
+    <div id="library-management-delete-item" class="popper">
+        <div data-popper-arrow></div>
+
+        <div class="card">
+            <div class="card-header">{{ "library-management.delete-item"|trans }}</div>
+            <div class="card-body">
+                <button class="btn btn-sm btn-danger" id="library-management-delete-item-confirm">{{ "library-management.confirm"|trans }}</button>
+                <button class="btn btn-sm btn-secondary" id="library-management-delete-item-cancel">{{ "library-management.cancel"|trans }}</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

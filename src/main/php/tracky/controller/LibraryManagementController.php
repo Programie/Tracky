@@ -9,12 +9,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\dataprovider\Helper;
+use tracky\model\BaseEntity;
 use tracky\model\Movie;
 use tracky\model\Show;
 use tracky\orm\MovieRepository;
 use tracky\orm\ShowRepository;
 
-class AddItemsController extends AbstractController
+class LibraryManagementController extends AbstractController
 {
     public function __construct(
         private readonly Helper          $dataProviderHelper,
@@ -24,7 +25,7 @@ class AddItemsController extends AbstractController
     {
     }
 
-    #[Route("/add", name: "addItemsPage", methods: ["GET"])]
+    #[Route("/library/add", name: "addItemsPage", methods: ["GET"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function getPage(Request $request): Response
     {
@@ -61,7 +62,7 @@ class AddItemsController extends AbstractController
             }
         }
 
-        return $this->render("add-items.twig", [
+        return $this->render("library-management/add-items.twig", [
             "type" => $type,
             "query" => $query,
             "year" => $year ?: "",
@@ -69,7 +70,7 @@ class AddItemsController extends AbstractController
         ]);
     }
 
-    #[Route("/add", name: "addItem", methods: ["POST"])]
+    #[Route("/library/add", name: "addItem", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function addItem(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -103,5 +104,22 @@ class AddItemsController extends AbstractController
             default:
                 throw new BadRequestException(sprintf("Invalid type: %s", $type));
         }
+    }
+
+    #[Route("/library", name: "libraryManagementPage", methods: ["GET"])]
+    public function libraryManagementPage(): Response
+    {
+        $items = [];
+
+        $items = array_merge($items, $this->showRepository->findAll());
+        $items = array_merge($items, $this->movieRepository->findAll());
+
+        usort($items, function (Show|Movie $item1, Show|Movie $item2) {
+            return strcmp($item1->getTitle(), $item2->getTitle());
+        });
+
+        return $this->render("library-management/page.twig", [
+            "items" => $items
+        ]);
     }
 }

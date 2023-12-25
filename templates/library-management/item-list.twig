@@ -1,0 +1,35 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>{{ "library-management.columns.title"|trans }}</th>
+            <th>{{ "library-management.columns.type"|trans }}</th>
+            <th>{{ "library-management.columns.options"|trans }}</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in items %}
+            {% if item.className == "Movie" %}
+                {% set itemType = "movie" %}
+                {% set itemTypeTitle = "library-management.types.movie"|trans %}
+                {% set imageUrl = path("getMovieImage", {"movie": item.id}) %}
+            {% elseif item.className == "Show" %}
+                {% set itemType = "show" %}
+                {% set itemTypeTitle = "library-management.types.show"|trans %}
+                {% set imageUrl = path("getShowImage", {"show": item.id}) %}
+            {% endif %}
+
+            <tr data-type="{{ itemType }}" data-item="{{ item.id }}">
+                <td>{{ loop.index }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ itemTypeTitle }}</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-danger library-management-delete-item-button" title="{{ "library-management.delete-item"|trans }}"><i class="fa-solid fa-times"></i></button>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

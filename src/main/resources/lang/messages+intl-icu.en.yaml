@@ -95,19 +95,6 @@ movies:
       other {# movies}
     }
 
-add-items:
-  page-title: "Add movies or shows"
-  type-title: "Type"
-  type:
-    movie: "Movie"
-    show: "Show"
-  title: "Title of the movie or show"
-  year: "Year (optional)"
-  search: "Search"
-  no-results: "Nothing found."
-  in-library: "In library"
-  add-to-library: "Add to library"
-
 views:
   views: >-
     {count, plural,
@@ -120,3 +107,32 @@ views:
     this-view: "This view"
     all-views: "All views"
     cancel: "Cancel"
+
+library-management:
+  title: "Library management"
+  count: >-
+    {count, plural,
+      =1    {1 item}
+      other {# items}
+    }
+  add-item: "Add item"
+  delete-item: "Delete item"
+  confirm: "Confirm"
+  cancel: "Cancel"
+  no-items-available: "No items available."
+  columns:
+    title: "Title"
+    type: "Type"
+    options: "Options"
+  types:
+    movie: "Movie"
+    show: "Show"
+  add-items:
+    page-title: "Add movies or shows"
+    type-title: "Type"
+    title: "Title of the movie or show"
+    year: "Year (optional)"
+    search: "Search"
+    no-results: "Nothing found."
+    in-library: "In library"
+    add-to-library: "Add to library"

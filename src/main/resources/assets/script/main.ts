@@ -1,5 +1,6 @@
 import "./common";
 import "./history";
+import "./library-management";
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".add-view").forEach((element: HTMLElement) => {
