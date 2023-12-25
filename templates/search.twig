@@ -14,7 +14,7 @@
                     {% if entry.className == "Episode" %}
                         {% set imageUrl = path("getEpisodeImage", {"show": entry.season.show.id, "season": entry.season.number, "episode": entry.number}) %}
                     {% elseif entry.className == "Movie" %}
-                        {% set imageUrl = path("getMovieImage", {"show": entry.id}) %}
+                        {% set imageUrl = path("getMovieImage", {"movie": entry.id}) %}
                     {% elseif entry.className == "Show" %}
                         {% set imageUrl = path("getShowImage", {"show": entry.id}) %}
                     {% endif %}
