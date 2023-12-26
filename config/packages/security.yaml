@@ -13,13 +13,18 @@ security:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
 
+    api:
+      pattern: ^/api/
+      stateless: true
+      provider: app_user_provider
+      http_basic:
+        realm: Tracky
+
     main:
       lazy: true
       provider: app_user_provider
       entry_point: form_login
 
-      http_basic:
-        realm: Tracky
       form_login:
         login_path: loginPage
         check_path: loginPage
