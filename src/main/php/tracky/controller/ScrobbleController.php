@@ -3,7 +3,6 @@ namespace tracky\controller;
 
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,7 +17,11 @@ class ScrobbleController extends AbstractController
     #[IsGranted("IS_AUTHENTICATED")]
     public function scrobble(Request $request, Scrobbler $scrobbler): Response
     {
-        $json = $request->toArray();
+        try {
+            $json = $request->toArray();
+        } catch (Exception) {
+            return new Response("Invalid JSON in request body", 400);
+        }
 
         $event = $json["event"] ?? "end";
 
@@ -33,13 +36,13 @@ class ScrobbleController extends AbstractController
                 $timestamp = new DateTime;
             }
         } catch (Exception) {
-            throw new BadRequestException("Invalid timestamp");
+            return new Response("Invalid timestamp", 400);
         }
 
         try {
             return $this->returnPlainText($scrobbler->cacheOrAddView($json, $timestamp, $this->getUser()));
         } catch (UnexpectedValueException $exception) {
-            throw new BadRequestException($exception->getMessage());
+            return new Response($exception->getMessage(), 400);
         }
     }
 
