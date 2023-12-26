@@ -4,7 +4,6 @@ namespace tracky\controller;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -17,7 +16,6 @@ use tracky\model\EpisodeView;
 use tracky\model\Season;
 use tracky\model\Show;
 use tracky\orm\ShowRepository;
-use tracky\orm\UserRepository;
 use tracky\orm\ViewRepository;
 
 class ShowController extends AbstractController
@@ -119,7 +117,7 @@ class ShowController extends AbstractController
 
     #[Route("/shows/{show}/most-watched", name: "mostWatchedEpisodesPage")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getMostWatchedEpisodesPage(Show $show, Request $request, UserRepository $userRepository): Response
+    public function getMostWatchedEpisodesPage(Show $show): Response
     {
         return $this->render("shows/episodes.twig", [
             "show" => $show,
@@ -130,7 +128,7 @@ class ShowController extends AbstractController
 
     #[Route("/shows/{show}/least-watched", name: "leastWatchedEpisodesPage")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getLeastWatchedEpisodesPage(Show $show, Request $request, UserRepository $userRepository): Response
+    public function getLeastWatchedEpisodesPage(Show $show): Response
     {
         return $this->render("shows/episodes.twig", [
             "show" => $show,
