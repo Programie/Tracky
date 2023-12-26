@@ -4,7 +4,7 @@
     {% set episode = entry.episode %}
     {% set season = episode.season %}
     {% set show = season.show %}
-    {% set imageUrl = path("getEpisodeImage", {"show": show.id, "season": season.number, "episode": episode.number}) %}
+    {% set imageUrl = path("getEpisodeImage", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) %}
     {% set views = episode.viewsForUser(app.user) %}
     {% set metadata = metadata|merge({"views": views|length, "show": show.id, "season": season.number, "episode": episode.number}) %}
 {% elseif entry.type == "movie" %}
@@ -21,7 +21,7 @@
     <div class="card-body">
         {% if entry.type == "episode" %}
             <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) }}"><b>{{ season.number }}x{{ episode.number }}</b> {{ episode.title|default("unknown-title"|trans) }}</a></h5>
-            <div><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": show.id}) }}">{{ show.title }}</a></div>
+            <div><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"show": show.id}) }}">{{ show.title }}</a></div>
         {% elseif entry.type == "movie" %}
             <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("moviePage", {"movie": movie.id}) }}">{{ movie.title }}</a></h5>
         {% endif %}

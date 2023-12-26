@@ -6,19 +6,19 @@
     <div class="episode-pagination d-flex justify-content-between mt-3 mb-3">
         <span>
             {% if pagination.previousSeason is not null %}
-                <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.previousSeason.number}) }}"><i class="fa-solid fa-arrow-left"></i> {{ "shows.season"|trans({"%number%": pagination.previousSeason.number}) }}</a>
+                <a class="page-link" href="{{ path("seasonPage", {"show": show.id, "number": pagination.previousSeason.number}) }}"><i class="fa-solid fa-arrow-left"></i> {{ "shows.season"|trans({"%number%": pagination.previousSeason.number}) }}</a>
             {% endif %}
         </span>
         <span class="justify-content-end">
             {% if pagination.nextSeason is not null %}
-                <a class="page-link" href="{{ path("seasonPage", {"id": show.id, "number": pagination.nextSeason.number}) }}">{{ "shows.season"|trans({"%number%": pagination.nextSeason.number}) }} <i class="fa-solid fa-arrow-right"></i></a>
+                <a class="page-link" href="{{ path("seasonPage", {"show": show.id, "number": pagination.nextSeason.number}) }}">{{ "shows.season"|trans({"%number%": pagination.nextSeason.number}) }} <i class="fa-solid fa-arrow-right"></i></a>
             {% endif %}
         </span>
     </div>
 {% endmacro %}
 
 {% block content %}
-    <h1><a href="{{ path("showOverviewPage", {"id": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a></h1>
+    <h1><a href="{{ path("showOverviewPage", {"show": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a></h1>
 
     {% include "components/show-badges.twig" with {"show": show} only %}
 

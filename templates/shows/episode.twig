@@ -3,12 +3,12 @@
 {% block title %}{{ show.title }} - {{ season.number }}x{{ episode.number }} "{{ episode.title|default("unknown-title"|trans) }}"{% endblock %}
 
 {% block content %}
-    <h1><a href="{{ path("showOverviewPage", {"id": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a></h1>
+    <h1><a href="{{ path("showOverviewPage", {"show": show.id}) }}" class="text-reset text-decoration-none">{{ show.title }}</a></h1>
 
     {% include "components/show-badges.twig" with {"show": show} only %}
 
     <h2 class="fs-4 text-body-secondary">
-        <a href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}" class="text-reset text-decoration-none">{{ "shows.season"|trans({"%number%": season.number}) }}</a>
+        <a href="{{ path("seasonPage", {"show": show.id, "number": season.number}) }}" class="text-reset text-decoration-none">{{ "shows.season"|trans({"%number%": season.number}) }}</a>
         <span>{{ "shows.episode"|trans({"%number%": episode.number}) }}</span>
     </h2>
 
@@ -27,7 +27,7 @@
 
     <div class="row">
         <div class="col-lg-3 col-12">
-            <img class="img-fluid rounded fullscreen-image" src="{{ path("getEpisodeImage", {"show": show.id, "season": season.number, "episode": episode.number}) }}"/>
+            <img class="img-fluid rounded fullscreen-image" src="{{ path("getEpisodeImage", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) }}"/>
         </div>
 
         <div class="col-lg-9 col-12">

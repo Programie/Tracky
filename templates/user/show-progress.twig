@@ -21,7 +21,7 @@
                             <div class="col-md-4 scaled-image fullscreen-image" style="background-image: url({{ path("getShowImage", {"show": show.id}) }});"></div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": show.id}) }}">{{ show.title }}</a></h5>
+                                    <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"show": show.id}) }}">{{ show.title }}</a></h5>
                                     <div class="card-text mt-3">
                                         <div class="progress-stacked">
                                             {% set totalEpisodes = show.totalEpisodes %}
@@ -45,7 +45,7 @@
                                                         {% for season in show.seasons %}
                                                             {% set totalEpisodes = season.episodes.count %}
                                                             {% if totalEpisodes %}
-                                                                <div><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"id": show.id, "number": season.number}) }}">{{ "shows.season"|trans({"%number%": season.number}) }}</a></div>
+                                                                <div><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"show": show.id, "number": season.number}) }}">{{ "shows.season"|trans({"%number%": season.number}) }}</a></div>
                                                                 <div class="progress-stacked">
                                                                     {% set perEpisodePercentage = 100 / totalEpisodes %}
 

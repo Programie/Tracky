@@ -43,7 +43,7 @@
                                     {% if result.entry.className == "Movie" %}
                                         {% set url = path("moviePage", {"movie": result.entry.id}) %}
                                     {% elseif result.entry.className == "Show" %}
-                                        {% set url = path("showOverviewPage", {"id": result.entry.id}) %}
+                                        {% set url = path("showOverviewPage", {"show": result.entry.id}) %}
                                     {% endif %}
                                     <a class="btn btn-success" href="{{ url }}"><i class="fas fa-check"></i> {{ "library-management.add-items.in-library"|trans }}</a>
                                 {% else %}

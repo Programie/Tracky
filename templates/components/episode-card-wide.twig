@@ -1,6 +1,6 @@
 <div class="card">
     <div class="row g-0">
-        <div class="col-md-4 scaled-image fullscreen-image" style="background-image: url({{ path("getEpisodeImage", {"show": episode.season.show.id, "season": episode.season.number, "episode": episode.number}) }});"></div>
+        <div class="col-md-4 scaled-image fullscreen-image" style="background-image: url({{ path("getEpisodeImage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }});"></div>
         <div class="col-md-8">
             <div class="card-body">
                 <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}">{{ episode.title|default("unknown-title"|trans) }}</a></h5>

@@ -35,10 +35,10 @@ class ShowController extends AbstractController
         return $this->returnImage($show, $imageFetcher);
     }
 
-    #[Route("/shows/{show}/seasons/{season}.jpg", name: "getSeasonImage")]
-    public function getSeasonImage(Show $show, int $season, ImageFetcher $imageFetcher): Response
+    #[Route("/shows/{show}/seasons/{seasonNumber}.jpg", name: "getSeasonImage")]
+    public function getSeasonImage(Show $show, int $seasonNumber, ImageFetcher $imageFetcher): Response
     {
-        $season = $show->getSeason($season);
+        $season = $show->getSeason($seasonNumber);
         if ($season === null) {
             throw new NotFoundHttpException("Season not found");
         }
@@ -46,15 +46,15 @@ class ShowController extends AbstractController
         return $this->returnImage($season, $imageFetcher);
     }
 
-    #[Route("/shows/{show}/seasons/{season}/episodes/{episode}.jpg", name: "getEpisodeImage")]
-    public function getEpisodeImage(Show $show, int $season, int $episode, ImageFetcher $imageFetcher): Response
+    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}.jpg", name: "getEpisodeImage")]
+    public function getEpisodeImage(Show $show, int $seasonNumber, int $episodeNumber, ImageFetcher $imageFetcher): Response
     {
-        $season = $show->getSeason($season);
+        $season = $show->getSeason($seasonNumber);
         if ($season === null) {
             throw new NotFoundHttpException("Season not found");
         }
 
-        $episode = $season->getEpisode($episode);
+        $episode = $season->getEpisode($episodeNumber);
         if ($episode === null) {
             throw new NotFoundHttpException("Episode not found");
         }
@@ -70,10 +70,10 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{id}", name: "showOverviewPage", methods: ["GET"])]
+    #[Route("/shows/{show}", name: "showOverviewPage", methods: ["GET"])]
     public function getShowOverviewPage(Show $show): Response
     {
-        return $this->redirectToRoute("showSeasonsPage", ["id" => $show->getId()]);
+        return $this->redirectToRoute("showSeasonsPage", ["show" => $show->getId()]);
     }
 
     #[Route("/shows/{show}", name: "removeShow", methods: ["DELETE"])]
@@ -99,7 +99,7 @@ class ShowController extends AbstractController
         return new Response("Show removed from database");
     }
 
-    #[Route("/shows/{id}/seasons", name: "showSeasonsPage")]
+    #[Route("/shows/{show}/seasons", name: "showSeasonsPage")]
     public function getSeasonsPage(Show $show): Response
     {
         return $this->render("shows/seasons.twig", [
@@ -107,7 +107,7 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{id}/random-episodes", name: "randomEpisodesPage")]
+    #[Route("/shows/{show}/random-episodes", name: "randomEpisodesPage")]
     public function getRandomEpisodesPage(Show $show): Response
     {
         return $this->render("shows/episodes.twig", [
@@ -117,7 +117,7 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{id}/most-watched", name: "mostWatchedEpisodesPage")]
+    #[Route("/shows/{show}/most-watched", name: "mostWatchedEpisodesPage")]
     #[IsGranted("IS_AUTHENTICATED")]
     public function getMostWatchedEpisodesPage(Show $show, Request $request, UserRepository $userRepository): Response
     {
@@ -128,7 +128,7 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{id}/least-watched", name: "leastWatchedEpisodesPage")]
+    #[Route("/shows/{show}/least-watched", name: "leastWatchedEpisodesPage")]
     #[IsGranted("IS_AUTHENTICATED")]
     public function getLeastWatchedEpisodesPage(Show $show, Request $request, UserRepository $userRepository): Response
     {
@@ -139,7 +139,7 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{id}/seasons/{number}", name: "seasonPage")]
+    #[Route("/shows/{show}/seasons/{number}", name: "seasonPage")]
     public function getSeasonPage(Show $show, int $number): Response
     {
         $season = $show->getSeason($number);
@@ -181,18 +181,10 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{showId}/seasons/{seasonNumber}/episodes/{episodeNumber}/views", name: "addEpisodeView", methods: ["POST"])]
+    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views", name: "addEpisodeView", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function addView(int $showId, int $seasonNumber, int $episodeNumber, EntityManagerInterface $entityManager): Response
+    public function addView(Show $show, int $seasonNumber, int $episodeNumber, EntityManagerInterface $entityManager): Response
     {
-        /**
-         * @var $show Show
-         */
-        $show = $this->showRepository->find($showId);
-        if ($show === null) {
-            throw new NotFoundHttpException("Show not found");
-        }
-
         $season = $show->getSeason($seasonNumber);
         if ($season === null) {
             throw new NotFoundHttpException("Season not found");

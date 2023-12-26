@@ -1,9 +1,9 @@
 <div class="card">
-    <img class="card-img-top fullscreen-image" src="{{ path("getEpisodeImage", {"show": episode.season.show.id, "season": episode.season.number, "episode": episode.number}) }}"/>
+    <img class="card-img-top fullscreen-image" src="{{ path("getEpisodeImage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"/>
     <div class="card-body">
         <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"><b>{{ episode.season.number }}x{{ episode.number }}</b> {{ episode.title|default("unknown-title"|trans) }}</a></h5>
         {% if withShowTitle|default(false) %}
-            <div><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"id": episode.season.show.id}) }}">{{ episode.season.show.title }}</a></div>
+            <div><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"show": episode.season.show.id}) }}">{{ episode.season.show.title }}</a></div>
         {% endif %}
         {% if episode.runtime is not null %}
             <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": episode.runtime}) }}</small>
