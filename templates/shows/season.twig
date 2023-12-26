@@ -23,6 +23,7 @@
     {% include "components/show-badges.twig" with {"show": show} only %}
 
     <h2 class="fs-4 text-body-secondary">{{ "shows.season"|trans({"%number%": season.number}) }}</h2>
+    <small class="d-block text-body-secondary my-1"> {{ season.year }}</small>
     <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.totalRuntime}) }}</small>
 
     {{ _self.paginationElement(pagination, show) }}

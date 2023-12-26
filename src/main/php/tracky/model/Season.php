@@ -139,4 +139,18 @@ class Season extends BaseEntity
 
         return $totalRuntime;
     }
+
+    public function getYear(): ?int
+    {
+        foreach ($this->getEpisodes() as $episode) {
+            $airDate = $episode->getFirstAired();
+            if ($airDate === null) {
+                continue;
+            }
+
+            return (int)$airDate->format("Y");
+        }
+
+        return null;
+    }
 }

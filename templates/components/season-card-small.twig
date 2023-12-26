@@ -1,7 +1,10 @@
 <a class="card text-reset text-decoration-none" href="{{ path("seasonPage", {"show": season.show.id, "number": season.number}) }}">
     <img class="card-img-top" src="{{ path("getSeasonImage", {"show": season.show.id, "seasonNumber": season.number}) }}"/>
     <div class="card-body">
-        <h5 class="card-title">{{ "shows.season"|trans({"%number%": season.number }) }}</h5>
+        <div class="card-title">
+            <h5>{{ "shows.season"|trans({"%number%": season.number }) }}</h5>
+            <small class="d-block text-body-secondary my-1">{{ season.year }}</small>
+        </div>
         <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": season.episodes|length}) }}</small>
         <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.totalRuntime}) }}</small>
     </div>
