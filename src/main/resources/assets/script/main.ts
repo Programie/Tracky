@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         element.addEventListener("click", () => {
             let dataSet = element.dataset;
 
-            fetch(`/add`, {
+            fetch("/library/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
