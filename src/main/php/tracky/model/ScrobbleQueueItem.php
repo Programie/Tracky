@@ -3,11 +3,11 @@ namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
 use tracky\datetime\DateTime;
-use tracky\orm\ScrobbleQueueRepository;
+use tracky\orm\ScrobbleQueueItemRepository;
 
-#[ORM\Entity(repositoryClass: ScrobbleQueueRepository::class)]
+#[ORM\Entity(repositoryClass: ScrobbleQueueItemRepository::class)]
 #[ORM\Table(name: "scrobblequeue")]
-class ScrobbleQueue extends BaseEntity
+class ScrobbleQueueItem extends BaseEntity
 {
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "user", referencedColumnName: "id")]
@@ -24,7 +24,7 @@ class ScrobbleQueue extends BaseEntity
         return $this->user;
     }
 
-    public function setUser(User $user): ScrobbleQueue
+    public function setUser(User $user): ScrobbleQueueItem
     {
         $this->user = $user;
         return $this;
@@ -35,7 +35,7 @@ class ScrobbleQueue extends BaseEntity
         return json_decode($this->json, true);
     }
 
-    public function setJson(array $json): ScrobbleQueue
+    public function setJson(array $json): ScrobbleQueueItem
     {
         $this->json = json_encode($json);
         return $this;
@@ -46,7 +46,7 @@ class ScrobbleQueue extends BaseEntity
         return $this->dateTime;
     }
 
-    public function setDateTime(DateTime $dateTime): ScrobbleQueue
+    public function setDateTime(DateTime $dateTime): ScrobbleQueueItem
     {
         $this->dateTime = $dateTime;
         return $this;

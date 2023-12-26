@@ -7,7 +7,7 @@ use tracky\datetime\DateTime;
 use tracky\model\EpisodeView;
 use tracky\model\Movie;
 use tracky\model\MovieView;
-use tracky\model\ScrobbleQueue;
+use tracky\model\ScrobbleQueueItem;
 use tracky\model\Show;
 use tracky\model\User;
 use tracky\orm\MovieRepository;
@@ -41,7 +41,7 @@ class Scrobbler
             throw new UnexpectedValueException("Missing media type");
         }
 
-        $cache = new ScrobbleQueue;
+        $cache = new ScrobbleQueueItem;
         $cache->setJson($json);
         $cache->setDateTime($dateTime);
         $cache->setUser($user);
@@ -70,7 +70,7 @@ class Scrobbler
         }
     }
 
-    public function addViewFromQueue(ScrobbleQueue $scrobbleQueue): string
+    public function addViewFromQueue(ScrobbleQueueItem $scrobbleQueue): string
     {
         return $this->addView($scrobbleQueue->getJson(), $scrobbleQueue->getDateTime(), $scrobbleQueue->getUser());
     }
