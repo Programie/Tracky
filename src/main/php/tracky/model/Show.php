@@ -218,4 +218,22 @@ class Show extends BaseEntity
 
         return array_slice($allEpisodes, 0, $count);
     }
+
+    public function getUnwatchedEpisodes(User $user): array
+    {
+        $episodes = [];
+
+        foreach ($this->getSeasons() as $season) {
+            foreach ($season->getEpisodes() as $episode) {
+                $views = $episode->getViewsForUser($user);
+                if (count($views)) {
+                    continue;
+                }
+
+                $episodes[] = $episode;
+            }
+        }
+
+        return $episodes;
+    }
 }

@@ -139,6 +139,17 @@ class ShowController extends AbstractController
         ]);
     }
 
+    #[Route("/shows/{show}/unwatched", name: "unwatchedEpisodesPage")]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function getUnwatchedEpisodesPage(Show $show): Response
+    {
+        return $this->render("shows/episodes.twig", [
+            "show" => $show,
+            "title" => "shows.unwatched-episodes",
+            "episodes" => $show->getUnwatchedEpisodes($this->getUser())
+        ]);
+    }
+
     #[Route("/shows/{show}/seasons/{number}", name: "seasonPage")]
     public function getSeasonPage(Show $show, int $number): Response
     {
