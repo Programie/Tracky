@@ -37,6 +37,10 @@ class Scrobbler
 
     public function queueView(array $json, DateTime $dateTime, User $user): string
     {
+        if (!isset($json["mediaType"])) {
+            throw new UnexpectedValueException("Missing media type");
+        }
+
         $cache = new ScrobbleQueue;
         $cache->setJson($json);
         $cache->setDateTime($dateTime);
