@@ -31,6 +31,15 @@ In case of the Docker setup, you may also specify the variables as environment v
 
 Create a database on your MySQL server and import the [database.sql](database.sql) file into it.
 
+## Cronjobs
+
+This application requires an external tool to execute scripts in a regular interval. On Linux, you might want to use crontab or systemd timers for that job.
+
+The following commands should be executed:
+
+* `bin/console update-data`: Fetches new seasons and episodes (also required to execute after adding a new TV show)
+* `bin/console process-scrobble-queue`: Adds all items from the scrobble queue to the database (only required if scrobble queue is used)
+
 ## Getting started
 
 After setting everything up, open the address of your webserver in your web browser and create a new account in the top right corner.
