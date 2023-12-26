@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\dataprovider\Helper;
-use tracky\model\BaseEntity;
 use tracky\model\Movie;
 use tracky\model\Show;
 use tracky\orm\MovieRepository;
