@@ -10,6 +10,7 @@ To scrobble watched movies and episodes from Kodi, you might want to check out [
 
 * Webserver with PHP 8.2 or newer
 * MySQL/MariaDB server (tested with MariaDB 11)
+* API key/token for [TheMovieDB](https://www.themoviedb.org/settings/api) and/or [TheTVDB](https://thetvdb.com/dashboard/account/apikey)
 
 ## Installation
 
@@ -26,6 +27,10 @@ In case you want to deploy Tracky as a Docker container, you can use the Docker 
 Create a `.env.local` file in the application root (i.e. the one containing this readme file). You may take a look at the [.env.sample](.env.sample) file for an example and some documentation about the available variables.
 
 In case of the Docker setup, you may also specify the variables as environment variables for the container.
+
+Create a `config.yaml` file in the `config` folder (next to the [defaults.yaml](config/defaults.yaml)) and configure your API key/token. Take a look at the [defaults.yaml](config/defaults.yaml) for possible parameters and their default values.
+
+**Note:** At least the API key/token for the used data providers must be configured! Otherwise, the application will not function correctly.
 
 ## Database
 
