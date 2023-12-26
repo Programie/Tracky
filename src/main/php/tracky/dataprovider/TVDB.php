@@ -2,6 +2,7 @@
 namespace tracky\dataprovider;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Psr7\UriResolver;
 use GuzzleHttp\Psr7\Utils;
 use GuzzleHttp\RequestOptions;
@@ -11,32 +12,91 @@ use tracky\model\Episode;
 use tracky\model\Movie;
 use tracky\model\Season;
 use tracky\model\Show;
+use UnexpectedValueException;
 
 class TVDB implements Provider
 {
     private Client $client;
 
     public function __construct(
-        string                  $authToken,
+        private readonly string $baseUrl,
+        private readonly string $apiKey,
+        private readonly string $authTokenFilePath,
+        private readonly int    $maxAuthTokenAge,
         private readonly string $defaultMovieLanguage,
         private readonly string $defaultShowLanguage
     )
     {
+        if (!$this->isTokenValid()) {
+            $this->refreshToken();
+        }
+
+        $this->createClient();
+    }
+
+    private function refreshToken(): void
+    {
+        $client = new Client([
+            "base_uri" => $this->baseUrl
+        ]);
+
+        $response = $client->post("login", [
+            RequestOptions::JSON => [
+                "apikey" => $this->apiKey
+            ]
+        ]);
+
+        $token = json_decode($response->getBody()->getContents(), true)["data"]["token"] ?? null;
+        if ($token === null) {
+            throw new UnexpectedValueException("API token not returned in login request");
+        }
+
+        file_put_contents($this->authTokenFilePath, $token);
+    }
+
+    private function createClient(): void
+    {
         $this->client = new Client([
-            "base_uri" => "https://api4.thetvdb.com/v4/",
+            "base_uri" => $this->baseUrl,
             RequestOptions::HEADERS => [
-                "Authorization" => sprintf("Bearer %s", $authToken)
+                "Authorization" => sprintf("Bearer %s", file_get_contents($this->authTokenFilePath))
             ]
         ]);
     }
 
+    private function isTokenValid(): bool
+    {
+        if (!file_exists($this->authTokenFilePath)) {
+            return false;
+        }
+
+        if (time() - filemtime($this->authTokenFilePath) > $this->maxAuthTokenAge) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function getJson(string $path, array $query = []): ?array
     {
-        $request = $this->client->get($path, [
-            RequestOptions::QUERY => $query
-        ]);
+        try {
+            $response = $this->client->get($path, [
+                RequestOptions::QUERY => $query
+            ]);
+        } catch (BadResponseException $exception) {
+            if ($exception->getResponse()->getStatusCode() !== 401) {
+                throw $exception;
+            }
 
-        return json_decode($request->getBody()->getContents(), true)["data"] ?? null;
+            $this->refreshToken();
+            $this->createClient();
+
+            $response = $this->client->get($path, [
+                RequestOptions::QUERY => $query
+            ]);
+        }
+
+        return json_decode($response->getBody()->getContents(), true)["data"] ?? null;
     }
 
     private function getTvdbIdFromRemoteId(string $remoteId): ?int

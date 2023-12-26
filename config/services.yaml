@@ -36,7 +36,10 @@ services:
       $defaultShowLanguage: "%tmdb.shows.language%"
   tracky\dataprovider\TVDB:
     arguments:
-      $authToken: "%tvdb.auth-token%"
+      $baseUrl: "https://api4.thetvdb.com/v4/"
+      $apiKey: "%tvdb.api-key%"
+      $authTokenFilePath: "%kernel.cache_dir%/tvdb-api-token"
+      $maxAuthTokenAge: 604800
       $defaultMovieLanguage: "%tvdb.movies.language%"
       $defaultShowLanguage: "%tvdb.shows.language%"
   tracky\ImageFetcher:

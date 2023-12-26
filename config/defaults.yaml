@@ -4,7 +4,7 @@ parameters:
   tmdb.api-token:
   tmdb.movies.language: en-US
   tmdb.shows.language: en-US
-  tvdb.auth-token:
+  tvdb.api-key:
   tvdb.movies.language: eng
   tvdb.shows.language: eng
   scrobbler.use-queue: false
