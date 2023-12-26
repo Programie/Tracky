@@ -43,7 +43,7 @@ user:
 search:
   title: "Search"
   placeholder: "Search for shows, episodes and movies"
-  no-results: "No results for query '{query}'."
+  no-results: "No results for query ''{query}''."
 
 overview:
   shows: "Shows"
