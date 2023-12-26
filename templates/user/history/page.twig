@@ -22,7 +22,7 @@
     {% if entries %}
         {{ _self.paginationElement(pagination, user) }}
 
-        {% include "components/history-entry-list-small.twig" with {"entries": entries} %}
+        {% include "components/history-entry-list-small.twig" with {"entries": entries, "user": user} %}
 
         {{ _self.paginationElement(pagination, user) }}
     {% else %}
