@@ -13,16 +13,16 @@
             {% if item.className == "Movie" %}
                 {% set itemType = "movie" %}
                 {% set itemTypeTitle = "library-management.types.movie"|trans %}
-                {% set imageUrl = path("getMovieImage", {"movie": item.id}) %}
+                {% set url = path("moviePage", {"movie": item.id}) %}
             {% elseif item.className == "Show" %}
                 {% set itemType = "show" %}
                 {% set itemTypeTitle = "library-management.types.show"|trans %}
-                {% set imageUrl = path("getShowImage", {"show": item.id}) %}
+                {% set url = path("showOverviewPage", {"show": item.id}) %}
             {% endif %}
 
             <tr data-type="{{ itemType }}" data-item="{{ item.id }}">
                 <td>{{ loop.index }}</td>
-                <td>{{ item.title }}</td>
+                <td><a class="text-reset text-decoration-none" href="{{ url }}">{{ item.title }}</a></td>
                 <td>{{ itemTypeTitle }}</td>
                 <td>
                     <div class="btn-group btn-group-sm">
