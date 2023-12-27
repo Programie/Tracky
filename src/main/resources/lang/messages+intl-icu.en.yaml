@@ -21,6 +21,7 @@ register:
     username-taken: "The username is already taken"
     password-missing: "No password given"
     passwords-do-not-match: "Passwords are not the same"
+    not-enabled: "Registration is not enabled"
 
 login:
   title: "Login"

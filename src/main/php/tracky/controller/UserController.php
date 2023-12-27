@@ -16,12 +16,19 @@ use tracky\orm\UserRepository;
 
 class UserController extends AbstractController
 {
+    public function __construct(
+        private readonly bool $enableRegister
+    )
+    {
+    }
+
     #[Route("/login", name: "loginPage")]
     public function getLoginPage(AuthenticationUtils $authenticationUtils): Response
     {
         return $this->render("user/login.twig", [
             "username" => $authenticationUtils->getLastUsername(),
-            "error" => $authenticationUtils->getLastAuthenticationError()
+            "error" => $authenticationUtils->getLastAuthenticationError(),
+            "registerEnabled" => $this->enableRegister
         ]);
     }
 
@@ -34,6 +41,10 @@ class UserController extends AbstractController
     #[Route("/register", name: "registerPage")]
     public function getRegisterPage(Request $request, UserPasswordHasherInterface $passwordHasher, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->enableRegister) {
+            return $this->redirectToRoute("loginPage");
+        }
+
         if ($request->isMethod("POST")) {
             $payload = $request->getPayload();
             $username = trim($payload->getString("username"));

@@ -27,6 +27,8 @@
 
         <button class="btn btn-primary w-100 py-2" type="submit">{{ "login.submit"|trans }}</button>
 
-        <a href="{{ path("registerPage") }}" class="btn btn-secondary w-100 py-2 my-2">{{ "register.title"|trans }}</a>
+        {% if registerEnabled %}
+            <a href="{{ path("registerPage") }}" class="btn btn-secondary w-100 py-2 my-2">{{ "register.title"|trans }}</a>
+        {% endif %}
     </form>
 {% endblock %}

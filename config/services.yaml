@@ -25,6 +25,9 @@ services:
     arguments:
       $showFetchInterval: "%show-fetch-interval%"
       $downloadAllImages: "%image-fetcher.download-all-on-update%"
+  tracky\controller\UserController:
+    arguments:
+      $enableRegister: "%user.enable-register%"
   tracky\dataprovider\Helper:
     arguments:
       $movieProvider: "%data-provider.movies%"

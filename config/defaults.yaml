@@ -11,3 +11,4 @@ parameters:
   show-fetch-interval: 86400
   image-fetcher.storage-path: "%kernel.cache_dir%/images"
   image-fetcher.download-all-on-update: true
+  user.enable-register: true
