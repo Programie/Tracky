@@ -269,7 +269,13 @@ class ShowController extends AbstractController
     {
         $url = $entry->getPosterImageUrl();
         if ($url === null) {
-            throw new NotFoundHttpException("Image not available");
+            if ($entry instanceof Episode) {
+                return $this->returnImage($entry->getSeason(), $imageFetcher);
+            } elseif ($entry instanceof Season) {
+                return $this->returnImage($entry->getShow(), $imageFetcher);
+            } else {
+                throw new NotFoundHttpException("Image not available");
+            }
         }
 
         $path = $imageFetcher->get($url);
