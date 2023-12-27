@@ -52,7 +52,7 @@ class HistoryController extends AbstractController
             }
         });
 
-        return $this->render("user/history/page.twig", [
+        return $this->render("user/history.twig", [
             "user" => $user,
             "pagination" => new Pagination($page, $count, $itemsPerPage, 3),
             "entries" => $entries

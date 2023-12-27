@@ -3,19 +3,45 @@
 {% block title %}{% endblock %}
 
 {% block content %}
-    <h1>{{ "overview.latest-episodes"|trans }}</h1>
+    {% if app.user %}
+        <div class="mb-3">
+            <h1 class="mb-3">{{ "user.latest-watched-episodes"|trans }}</h1>
 
-    {% if latestEpisodes %}
-        {% include "components/episode-list-small.twig" with {"episodes": latestEpisodes, "withShowTitle": true} %}
-    {% else %}
-        <div class="alert alert-warning">{{ "shows.no-episodes-available"|trans }}</div>
+            {% if latestWatchedEpisodes %}
+                {% include "components/history-entry-list-small.twig" with {"entries": latestWatchedEpisodes, "user": app.user} %}
+            {% else %}
+                <div class="alert alert-warning">{{ "shows.no-episodes-available"|trans }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <h1 class="mb-3">{{ "user.latest-watched-movies"|trans }}</h1>
+
+            {% if latestWatchedMovies %}
+                {% include "components/history-entry-list-small.twig" with {"entries": latestWatchedMovies, "user": app.user} %}
+            {% else %}
+                <div class="alert alert-warning">{{ "movies.no-movies-available"|trans }}</div>
+            {% endif %}
+        </div>
     {% endif %}
 
-    <h1 class="mt-3">{{ "overview.latest-movies"|trans }}</h1>
+    <div class="mb-3">
+        <h1 class="my-3">{{ "overview.latest-episodes"|trans }}</h1>
 
-    {% if latestMovies %}
-        {% include "components/movie-list-small.twig" with {"movies": latestMovies} %}
-    {% else %}
-        <div class="alert alert-warning">{{ "movies.no-movies-available"|trans }}</div>
-    {% endif %}
+        {% if latestEpisodes %}
+            {% include "components/episode-list-small.twig" with {"episodes": latestEpisodes, "withShowTitle": true} %}
+        {% else %}
+            <div class="alert alert-warning">{{ "shows.no-episodes-available"|trans }}</div>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        <h1 class="mt-3">{{ "overview.latest-movies"|trans }}</h1>
+
+        {% if latestMovies %}
+            {% include "components/movie-list-small.twig" with {"movies": latestMovies} %}
+        {% else %}
+            <div class="alert alert-warning">{{ "movies.no-movies-available"|trans }}</div>
+        {% endif %}
+    </div>
 {% endblock %}
