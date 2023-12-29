@@ -3,7 +3,7 @@
 {% block title %}{{ "user.history"|trans }} - {{ user.username }}{% endblock %}
 
 {% macro paginationElement(pagination, user) %}
-    <ul class="pagination justify-content-center mt-3 mb-3">
+    <ul class="pagination justify-content-center my-3">
         <li class="{{ html_classes("page-item", {"disabled": pagination.previousPage is null}) }}"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": pagination.previousPage}) }}"><i class="fa-solid fa-arrow-left"></i></a></li>
         {% if 1 not in pagination.previousPages and pagination.currentPage != 1 %}
             <li class="page-item"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": 1}) }}">1</a></li>
