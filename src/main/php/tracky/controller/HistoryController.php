@@ -14,10 +14,16 @@ use tracky\Pagination;
 
 class HistoryController extends AbstractController
 {
+    public function __construct(
+        private readonly int $itemsPerPage,
+        private readonly int $maxPreviousNextPages
+    )
+    {
+    }
+
     #[Route("/users/{username}/history", name: "userHistoryPage")]
     public function getPage(Request $request, User $user, EntityManagerInterface $entityManager, ViewRepository $viewRepository)
     {
-        $itemsPerPage = 100;
         $page = $request->query->getInt("page", 1);
 
         $type = strtolower($request->query->get("type"));
@@ -40,7 +46,7 @@ class HistoryController extends AbstractController
         }
 
         $count = $viewRepository->count($criteria, $type);
-        $entries = $viewRepository->getPaged($criteria, $page, $itemsPerPage, $type);
+        $entries = $viewRepository->getPaged($criteria, $page, $this->itemsPerPage, $type);
 
         usort($entries, function (ViewEntry $entry1, ViewEntry $entry2) {
             if ($entry1->getDateTime() < $entry2->getDateTime()) {
@@ -54,7 +60,7 @@ class HistoryController extends AbstractController
 
         return $this->render("user/history.twig", [
             "user" => $user,
-            "pagination" => new Pagination($page, $count, $itemsPerPage, 3),
+            "pagination" => new Pagination($page, $count, $this->itemsPerPage, $this->maxPreviousNextPages),
             "entries" => $entries
         ]);
     }

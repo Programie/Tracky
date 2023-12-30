@@ -25,6 +25,10 @@ services:
     arguments:
       $showFetchInterval: "%show-fetch-interval%"
       $downloadAllImages: "%image-fetcher.download-all-on-update%"
+  tracky\controller\HistoryController:
+    arguments:
+      $itemsPerPage: "%history.items-per-page%"
+      $maxPreviousNextPages: "%history.max-previous-next-pages%"
   tracky\controller\UserController:
     arguments:
       $enableRegister: "%user.enable-register%"

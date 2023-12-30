@@ -12,3 +12,5 @@ parameters:
   image-fetcher.storage-path: "%kernel.cache_dir%/images"
   image-fetcher.download-all-on-update: true
   user.enable-register: true
+  history.items-per-page: 100
+  history.max-previous-next-pages: 3
