@@ -1,0 +1,37 @@
+{% macro paginationElement(page, self, context) %}
+    {% from self import paginationUrl %}
+
+    <li class="page-item"><a class="page-link" href="{{ paginationUrl(page, context) }}">{{ page }}</a></li>
+{% endmacro %}
+
+{% macro paginationContainer(pagination, self, context) %}
+    {% from self import paginationUrl %}
+
+    <ul class="pagination justify-content-center my-3">
+        <li class="{{ html_classes("page-item", {"disabled": pagination.previousPage is null}) }}">
+            <a class="page-link" href="{{ paginationUrl(pagination.previousPage, context) }}"><i class="fa-solid fa-arrow-left"></i></a>
+        </li>
+
+        {% if 1 not in pagination.previousPages and pagination.currentPage != 1 %}
+            {{ _self.paginationElement(1, self, context) }}
+            <li class="page-item page-link">...</li>
+        {% endif %}
+        {% for page in pagination.previousPages %}
+            {{ _self.paginationElement(page, self, context) }}
+        {% endfor %}
+
+        <li class="page-item active"><a class="page-link">{{ pagination.currentPage }}</a></li>
+
+        {% for page in pagination.nextPages %}
+            {{ _self.paginationElement(page, self, context) }}
+        {% endfor %}
+        {% if pagination.lastPage not in pagination.nextPages and pagination.currentPage != pagination.lastPage %}
+            <li class="page-item page-link">...</li>
+            {{ _self.paginationElement(pagination.lastPage, self, context) }}
+        {% endif %}
+
+        <li class="{{ html_classes("page-item", {"disabled": pagination.nextPage is null}) }}">
+            <a class="page-link" href="{{ paginationUrl(pagination.nextPage, context) }}"><i class="fa-solid fa-arrow-right"></i></a>
+        </li>
+    </ul>
+{% endmacro %}

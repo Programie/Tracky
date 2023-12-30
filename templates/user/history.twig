@@ -1,38 +1,21 @@
 {% extends "user/page.twig" %}
+{% from "components/macros.twig" import paginationContainer %}
+
+{% macro paginationUrl(page, context) %}
+    {{ path("userHistoryPage", {"username": context.user.username, "page": page}) }}
+{% endmacro %}
 
 {% block title %}{{ "user.history"|trans }} - {{ user.username }}{% endblock %}
-
-{% macro paginationElement(pagination, user) %}
-    <ul class="pagination justify-content-center my-3">
-        <li class="{{ html_classes("page-item", {"disabled": pagination.previousPage is null}) }}"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": pagination.previousPage}) }}"><i class="fa-solid fa-arrow-left"></i></a></li>
-        {% if 1 not in pagination.previousPages and pagination.currentPage != 1 %}
-            <li class="page-item"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": 1}) }}">1</a></li>
-            <li class="page-item page-link">...</li>
-        {% endif %}
-        {% for page in pagination.previousPages %}
-            <li class="page-item"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": page}) }}">{{ page }}</a></li>
-        {% endfor %}
-        <li class="page-item active"><a class="page-link">{{ pagination.currentPage }}</a></li>
-        {% for page in pagination.nextPages %}
-            <li class="page-item"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": page}) }}">{{ page }}</a></li>
-        {% endfor %}
-        {% if pagination.lastPage not in pagination.nextPages and pagination.currentPage != pagination.lastPage %}
-            <li class="page-item page-link">...</li>
-            <li class="page-item"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": pagination.lastPage}) }}">{{ pagination.lastPage }}</a></li>
-        {% endif %}
-        <li class="{{ html_classes("page-item", {"disabled": pagination.nextPage is null}) }}"><a class="page-link" href="{{ path("userHistoryPage", {"username": user.username, "page": pagination.nextPage}) }}"><i class="fa-solid fa-arrow-right"></i></a></li>
-    </ul>
-{% endmacro %}
 
 {% block profileContent %}
     <h2>{{ "user.history"|trans }}</h2>
 
     {% if entries %}
-        {{ _self.paginationElement(pagination, user) }}
+        {{ paginationContainer(pagination, _self, _context) }}
 
         {% include "components/history-entry-list-small.twig" with {"entries": entries, "user": user} %}
 
-        {{ _self.paginationElement(pagination, user) }}
+        {{ paginationContainer(pagination, _self, _context) }}
     {% else %}
         <div class="alert alert-warning">{{ "user.no-history-available"|trans }}</div>
     {% endif %}
