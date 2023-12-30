@@ -35,7 +35,7 @@
                 {% for result in results %}
                     <div class="col">
                         <div class="card text-reset text-decoration-none">
-                            <img class="card-img-top fullscreen-image" src="{{ result.image }}"/>
+                            <img class="card-img-top fullscreen-image" loading="lazy" src="{{ result.image }}"/>
                             <div class="card-body">
                                 <h5 class="card-title">{{ result.title }}</h5>
                                 <div class="text-body-secondary my-2">{{ result.year }}</div>

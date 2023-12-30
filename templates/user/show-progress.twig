@@ -18,7 +18,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="row g-0">
-                            <div class="col-md-4 scaled-image fullscreen-image" style="background-image: url({{ path("getShowImage", {"show": show.id}) }});"></div>
+                            <div class="col-md-4 scaled-image fullscreen-image lazy-background" data-image-url="{{ path("getShowImage", {"show": show.id}) }}"></div>
                             <div class="col-md-8">
                                 <div class="card-body">
                                     <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"show": show.id}) }}">{{ show.title }}</a></h5>

@@ -1,5 +1,5 @@
 <a class="card text-reset text-decoration-none" href="{{ path("moviePage", {"movie": movie.id}) }}">
-    <img class="card-img-top" src="{{ path("getMovieImage", {"movie": movie.id}) }}"/>
+    <img class="card-img-top" loading="lazy" src="{{ path("getMovieImage", {"movie": movie.id}) }}"/>
     <div class="card-body">
         <h5 class="card-title">{{ movie.title }}</h5>
 

@@ -5,7 +5,7 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-3 col-12">
-            <img class="img-fluid rounded fullscreen-image" src="{{ path("getMovieImage", {"movie": movie.id}) }}"/>
+            <img class="img-fluid rounded fullscreen-image" loading="lazy" src="{{ path("getMovieImage", {"movie": movie.id}) }}"/>
         </div>
 
         <div class="col-lg-9 col-12">

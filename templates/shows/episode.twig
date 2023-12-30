@@ -27,7 +27,7 @@
 
     <div class="row">
         <div class="col-lg-3 col-12">
-            <img class="img-fluid rounded fullscreen-image" src="{{ path("getEpisodeImage", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) }}"/>
+            <img class="img-fluid rounded fullscreen-image" loading="lazy" src="{{ path("getEpisodeImage", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) }}"/>
         </div>
 
         <div class="col-lg-9 col-12">

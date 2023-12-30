@@ -17,7 +17,7 @@
 <div class="d-none" {% for key, value in metadata %} data-{{ key }}="{{ value }}"{% endfor %}></div>
 
 <div class="card">
-    <img class="card-img-top fullscreen-image" src="{{ imageUrl }}"/>
+    <img class="card-img-top fullscreen-image" loading="lazy" src="{{ imageUrl }}"/>
     <div class="card-body">
         {% if entry.type == "episode" %}
             <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) }}"><b>{{ season.number }}x{{ episode.number }}</b> {{ episode.title|default("unknown-title"|trans) }}</a></h5>

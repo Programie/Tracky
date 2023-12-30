@@ -20,7 +20,7 @@
                     {% endif %}
                     <div class="col">
                         <div class="card">
-                            <img class="card-img-top fullscreen-image" src="{{ imageUrl }}"/>
+                            <img class="card-img-top fullscreen-image" loading="lazy" src="{{ imageUrl }}"/>
                             <div class="card-body">
                                 {% if entry.className == "Episode" %}
                                     <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": entry.season.show.id, "seasonNumber": entry.season.number, "episodeNumber": entry.number}) }}"><b>{{ entry.season.number }}x{{ entry.number }}</b> {{ entry.title }}</a></h5>
