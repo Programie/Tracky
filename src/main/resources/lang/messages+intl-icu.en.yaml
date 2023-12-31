@@ -37,8 +37,6 @@ user:
   show-progress: "TV show progress"
   logout: "Logout"
   login: "Login"
-  latest-watched-episodes: "Latest watched episodes"
-  latest-watched-movies: "Latest watched movies"
   no-history-available: "No history available."
 
 search:
@@ -46,11 +44,9 @@ search:
   placeholder: "Search for shows, episodes and movies"
   no-results: "No results for query ''{query}''."
 
-overview:
+navbar:
   shows: "Shows"
   movies: "Movies"
-  latest-episodes: "Latest episodes"
-  latest-movies: "Latest movies"
 
 shows:
   season: "Season {number}"
@@ -74,7 +70,9 @@ shows:
   all-shows: "All shows"
   seasons: "Seasons"
   episodes: "Episodes"
+  latest-episodes: "Latest episodes"
   random-episodes: "Random episodes"
+  latest-watched-episodes: "Latest watched episodes"
   most-watched-episodes: "Most watched episodes"
   least-watched-episodes: "Least watched episodes"
   unwatched-episodes: "Unwatched episodes"
@@ -96,6 +94,8 @@ movies:
       =1    {1 movie}
       other {# movies}
     }
+  latest-movies: "Latest movies"
+  latest-watched-movies: "Latest watched movies"
 
 views:
   views: >-

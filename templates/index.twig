@@ -5,7 +5,7 @@
 {% block content %}
     {% if app.user %}
         <div class="mb-3">
-            <h1 class="mb-3">{{ "user.latest-watched-episodes"|trans }}</h1>
+            <h1 class="mb-3">{{ "shows.latest-watched-episodes"|trans }}</h1>
 
             {% if latestWatchedEpisodes %}
                 {% include "components/history-entry-list-small.twig" with {"entries": latestWatchedEpisodes, "user": app.user} %}
@@ -15,7 +15,7 @@
         </div>
 
         <div class="mb-3">
-            <h1 class="mb-3">{{ "user.latest-watched-movies"|trans }}</h1>
+            <h1 class="mb-3">{{ "movies.latest-watched-movies"|trans }}</h1>
 
             {% if latestWatchedMovies %}
                 {% include "components/history-entry-list-small.twig" with {"entries": latestWatchedMovies, "user": app.user} %}
@@ -26,7 +26,7 @@
     {% endif %}
 
     <div class="mb-3">
-        <h1 class="my-3">{{ "overview.latest-episodes"|trans }}</h1>
+        <h1 class="my-3">{{ "shows.latest-episodes"|trans }}</h1>
 
         {% if latestEpisodes %}
             {% include "components/episode-list-small.twig" with {"episodes": latestEpisodes, "withShowTitle": true} %}
@@ -36,7 +36,7 @@
     </div>
 
     <div class="mb-3">
-        <h1 class="mt-3">{{ "overview.latest-movies"|trans }}</h1>
+        <h1 class="mt-3">{{ "movies.latest-movies"|trans }}</h1>
 
         {% if latestMovies %}
             {% include "components/movie-list-small.twig" with {"movies": latestMovies} %}
