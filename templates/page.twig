@@ -18,6 +18,8 @@
             <div class="container-fluid px-3 py-2 d-flex justify-content-md-between">
                 <a class="navbar-brand" href="/"><b>Tracky</b></a>
 
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"><span class="navbar-toggler-icon"></span></button>
+
                 <div class="navbar-collapse collapse d-md-flex">
                     <ul class="navbar-nav me-auto mb-md-0">
                         <li class="nav-item"><a class="nav-link" href="{{ path("showsPage") }}">{{ "navbar.shows"|trans }}</a></li>
@@ -48,8 +50,6 @@
                         {% endif %}
                     </div>
                 </div>
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"><span class="navbar-toggler-icon"></span></button>
             </div>
         </nav>
 
