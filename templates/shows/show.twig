@@ -16,7 +16,13 @@
     <small class="d-block">{{ "shows.count.seasons"|trans({"%count%": show.seasons|length}) }}</small>
     <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": show.totalEpisodes}) }}</small>
 
-    <ul class="nav nav-underline mb-3">
+    {% if is_granted("IS_AUTHENTICATED") %}
+        {% set flexRowClass = "xl" %}
+    {% else %}
+        {% set flexRowClass = "sm" %}
+    {% endif %}
+
+    <ul class="nav nav-underline flex-column flex-{{ flexRowClass }}-row mb-3">
         {{ _self.navItem("showSeasonsPage", {"show": show.id}, "shows.seasons"|trans) }}
         {{ _self.navItem("randomEpisodesPage", {"show": show.id}, "shows.random-episodes"|trans) }}
         {% if is_granted("IS_AUTHENTICATED") %}
