@@ -74,6 +74,24 @@
             </div>
         </div>
 
+        <div id="add-view-tooltip" class="popper">
+            <div data-popper-arrow></div>
+
+            <div class="card">
+                <div class="card-header">{{ "views.add.header"|trans }}</div>
+                <form class="card-body form" id="add-view-tooltip-form">
+                    <div class="input-group mb-3">
+                        <input class="form-control" type="datetime-local" id="add-view-tooltip-datetime" required/>
+                        <button class="btn btn-sm btn-secondary" id="add-view-tooltip-now" type="button">{{ "views.add.now"|trans }}</button>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-primary" type="submit">{{ "views.add.ok"|trans }}</button>
+                        <button class="btn btn-sm btn-secondary" id="add-view-tooltip-cancel" type="button">{{ "views.add.cancel"|trans }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         {% block additional_content %}{% endblock %}
 
         <datalist id="translations">

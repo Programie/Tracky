@@ -109,6 +109,12 @@ views:
     this-view: "This view"
     all-views: "All views"
     cancel: "Cancel"
+  add:
+    header: "Add view"
+    datetime: "Date and time"
+    now: "Now"
+    ok: "OK"
+    cancel: "Cancel"
 
 library-management:
   title: "Library management"

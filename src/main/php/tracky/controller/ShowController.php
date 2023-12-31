@@ -2,8 +2,11 @@
 namespace tracky\controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -192,7 +195,7 @@ class ShowController extends AbstractController
 
     #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views", name: "addEpisodeView", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function addView(Show $show, int $seasonNumber, int $episodeNumber, EntityManagerInterface $entityManager): Response
+    public function addView(Show $show, int $seasonNumber, int $episodeNumber, Request $request, EntityManagerInterface $entityManager): Response
     {
         $season = $show->getSeason($seasonNumber);
         if ($season === null) {
@@ -204,10 +207,16 @@ class ShowController extends AbstractController
             throw new NotFoundHttpException("Episode not found");
         }
 
+        try {
+            $dateTime = new DateTime($request->getPayload()->get("timestamp"));
+        } catch (Exception) {
+            throw new BadRequestException("Invalid payload");
+        }
+
         $episodeView = new EpisodeView;
         $episodeView->setEpisode($episode);
         $episodeView->setUser($this->getUser());
-        $episodeView->setDateTime(new DateTime);
+        $episodeView->setDateTime($dateTime);
 
         $entityManager->persist($episodeView);
         $entityManager->flush();

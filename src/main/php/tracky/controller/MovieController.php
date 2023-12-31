@@ -2,8 +2,11 @@
 namespace tracky\controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -78,12 +81,18 @@ class MovieController extends AbstractController
 
     #[Route("/movies/{movie}/views", name: "addMovieView", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function addView(Movie $movie, EntityManagerInterface $entityManager): Response
+    public function addView(Movie $movie, Request $request, EntityManagerInterface $entityManager): Response
     {
+        try {
+            $dateTime = new DateTime($request->getPayload()->get("timestamp"));
+        } catch (Exception) {
+            throw new BadRequestException("Invalid payload");
+        }
+
         $movieView = new MovieView;
         $movieView->setMovie($movie);
         $movieView->setUser($this->getUser());
-        $movieView->setDateTime(new DateTime);
+        $movieView->setDateTime($dateTime);
 
         $entityManager->persist($movieView);
         $entityManager->flush();
