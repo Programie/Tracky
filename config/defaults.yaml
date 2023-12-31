@@ -14,3 +14,4 @@ parameters:
   user.enable-register: true
   history.items-per-page: 100
   history.max-previous-next-pages: 3
+  shows.max-episodes: 10

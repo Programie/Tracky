@@ -25,7 +25,8 @@ class ShowController extends AbstractController
 {
     public function __construct(
         private readonly ShowRepository $showRepository,
-        private readonly ViewRepository $viewRepository
+        private readonly ViewRepository $viewRepository,
+        private readonly int $maxEpisodes,
     )
     {
     }
@@ -116,7 +117,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.random-episodes",
-            "episodes" => $show->getRandomEpisodes(10)
+            "episodes" => $show->getRandomEpisodes($this->maxEpisodes)
         ]);
     }
 
@@ -129,7 +130,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.latest-watched-episodes",
-            "episodes" => $show->getLatestWatchedEpisodes($this->getUser(), 10)
+            "episodes" => $show->getLatestWatchedEpisodes($this->getUser(), $this->maxEpisodes)
         ]);
     }
 
@@ -142,7 +143,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.most-watched-episodes",
-            "episodes" => $show->getMostOrLeastWatchedEpisodes($this->getUser(), 10)
+            "episodes" => $show->getMostOrLeastWatchedEpisodes($this->getUser(), $this->maxEpisodes)
         ]);
     }
 
@@ -155,7 +156,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.least-watched-episodes",
-            "episodes" => $show->getMostOrLeastWatchedEpisodes($this->getUser(), 10, true)
+            "episodes" => $show->getMostOrLeastWatchedEpisodes($this->getUser(), $this->maxEpisodes, true)
         ]);
     }
 

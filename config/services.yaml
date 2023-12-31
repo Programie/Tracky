@@ -29,6 +29,9 @@ services:
     arguments:
       $itemsPerPage: "%history.items-per-page%"
       $maxPreviousNextPages: "%history.max-previous-next-pages%"
+  tracky\controller\ShowController:
+    arguments:
+      $maxEpisodes: "%shows.max-episodes%"
   tracky\controller\UserController:
     arguments:
       $enableRegister: "%user.enable-register%"
