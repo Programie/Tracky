@@ -10,6 +10,13 @@ use tracky\orm\ViewRepository;
 
 class HomeController extends AbstractController
 {
+    public function __construct(
+        private readonly int $maxEpisodes,
+        private readonly int $maxMovies
+    )
+    {
+    }
+
     #[Route("/", name: "homePage")]
     public function home(EpisodeRepository $episodeRepository, MovieRepository $movieRepository, ViewRepository $viewRepository): Response
     {
@@ -18,13 +25,13 @@ class HomeController extends AbstractController
 
         $user = $this->getUser();
         if ($user !== null) {
-            $latestWatchedEpisodes = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 5, type: "episode");
-            $latestWatchedMovies = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 5, type: "movie");
+            $latestWatchedEpisodes = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxEpisodes, type: "episode");
+            $latestWatchedMovies = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxMovies, type: "movie");
         }
 
         return $this->render("index.twig", [
-            "latestEpisodes" => $episodeRepository->findBy([], ["firstAired" => "DESC"], 5),
-            "latestMovies" => $movieRepository->findBy([], ["year" => "DESC"], 5),
+            "latestEpisodes" => $episodeRepository->findBy([], ["firstAired" => "DESC"], $this->maxEpisodes),
+            "latestMovies" => $movieRepository->findBy([], ["year" => "DESC"], $this->maxMovies),
             "latestWatchedEpisodes" => $latestWatchedEpisodes,
             "latestWatchedMovies" => $latestWatchedMovies
         ]);
