@@ -20,6 +20,25 @@ document.addEventListener("DOMContentLoaded", () => {
     let deleteItemTooltipElement: HTMLElement = document.querySelector("#library-management-delete-item");
     let activeDeleteItem: DOMStringMap = null;
 
+    document.querySelectorAll(".add-item-to-library").forEach((element: HTMLElement) => {
+        element.addEventListener("click", () => {
+            let dataSet = element.dataset;
+
+            fetch("/library/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: dataSet.id,
+                    type: dataSet.type
+                })
+            }).then(() => {
+                document.location.reload();
+            });
+        });
+    });
+
     document.querySelectorAll(".library-management-delete-item-button").forEach((buttonElement) => {
         buttonElement.addEventListener("click", () => {
             createPopper(buttonElement, deleteItemTooltipElement, {

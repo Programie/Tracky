@@ -4,25 +4,6 @@ import "./library-management";
 import "./view";
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".add-item-to-library").forEach((element: HTMLElement) => {
-        element.addEventListener("click", () => {
-            let dataSet = element.dataset;
-
-            fetch("/library/add", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    id: dataSet.id,
-                    type: dataSet.type
-                })
-            }).then(() => {
-                document.location.reload();
-            });
-        });
-    });
-
     let lazyBackgroundObserver = new IntersectionObserver((entries) => {
         entries.forEach(function (entry) {
             if (entry.isIntersecting) {
