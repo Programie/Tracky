@@ -20,8 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let deleteItemTooltipElement: HTMLElement = document.querySelector("#library-management-delete-item");
     let activeDeleteItem: DOMStringMap = null;
 
-    document.querySelectorAll(".add-item-to-library").forEach((element: HTMLElement) => {
+    document.querySelectorAll(".add-item-to-library").forEach((element: HTMLButtonElement) => {
         element.addEventListener("click", () => {
+            element.disabled = true;
+
             let dataSet = element.dataset;
 
             fetch("/library/add", {
