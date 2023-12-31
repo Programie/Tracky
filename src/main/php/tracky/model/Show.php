@@ -176,6 +176,41 @@ class Show extends BaseEntity
         return $randomEpisodes;
     }
 
+    public function getLatestWatchedEpisodes(User $user, int $count): array
+    {
+        $allEpisodes = [];
+
+        foreach ($this->getSeasons() as $season) {
+            foreach ($season->getEpisodes() as $episode) {
+                $views = $episode->getViewsForUser($user);
+                $viewCount = count($views);
+                if (!$viewCount) {
+                    continue;
+                }
+
+                $allEpisodes[] = [$episode, $views->last()->getDateTime()->getTimestamp()];
+            }
+        }
+
+        usort($allEpisodes, function ($item1, $item2) {
+            list(, $item1Timestamp) = $item1;
+            list(, $item2Timestamp) = $item2;
+
+
+            if ($item1Timestamp === $item2Timestamp) {
+                return 0;
+            }
+
+            return ($item1Timestamp > $item2Timestamp) ? -1 : 1;
+        });
+
+        foreach ($allEpisodes as &$item) {
+            $item = $item[0];
+        }
+
+        return array_slice($allEpisodes, 0, $count);
+    }
+
     public function getMostOrLeastWatchedEpisodes(User $user, int $count, bool $leastWatched = false): array
     {
         $allEpisodes = [];

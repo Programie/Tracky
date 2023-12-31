@@ -118,6 +118,17 @@ class ShowController extends AbstractController
         ]);
     }
 
+    #[Route("/shows/{show}/latest-watched", name: "latestWatchedEpisodesPage")]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function getLatestWatchedEpisodesPage(Show $show): Response
+    {
+        return $this->render("shows/episodes.twig", [
+            "show" => $show,
+            "title" => "shows.latest-watched-episodes",
+            "episodes" => $show->getLatestWatchedEpisodes($this->getUser(), 10)
+        ]);
+    }
+
     #[Route("/shows/{show}/most-watched", name: "mostWatchedEpisodesPage")]
     #[IsGranted("IS_AUTHENTICATED")]
     public function getMostWatchedEpisodesPage(Show $show): Response
