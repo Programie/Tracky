@@ -8,6 +8,9 @@ error-page:
   404:
     title: "Page not found"
     message: "The requested page could not be found!"
+  500:
+    title: "Internal server error"
+    message: "An internal server error occurred! Check server logs for details."
 
 register:
   title: "Register new account"
