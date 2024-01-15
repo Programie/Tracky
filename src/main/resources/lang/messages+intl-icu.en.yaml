@@ -31,7 +31,7 @@ login:
   header: "Login to your account"
   username: "Username"
   password: "Password"
-  remember-me: "Remember me"
+  remember-me: "Stay logged-in"
   submit: "Login"
 
 user:
