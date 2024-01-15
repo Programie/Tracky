@@ -116,7 +116,7 @@ views:
     cancel: "Abbrechen"
 
 library-management:
-  title: "Bibliotheksverwaltung"
+  title: "Administration"
   count: >-
     {count, plural,
       =1    {1 Eintrag}

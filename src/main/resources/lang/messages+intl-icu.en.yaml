@@ -120,7 +120,7 @@ views:
     cancel: "Cancel"
 
 library-management:
-  title: "Library management"
+  title: "Administration"
   count: >-
     {count, plural,
       =1    {1 item}
