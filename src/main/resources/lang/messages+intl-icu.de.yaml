@@ -1,0 +1,148 @@
+unknown-title: "Unbekannt"
+runtime: "{runtime} min"
+
+error-page:
+  400:
+    title: "Ungültige Anfrage"
+    message: "Dein Browser hat eine Anfrage an den Server gesendet welche nicht verarbeitet werden konnte!"
+  404:
+    title: "Seite nicht gefunden"
+    message: "Die angeforderte Seite wurde nicht gefunden!"
+  500:
+    title: "Interner Serverfehler"
+    message: "Ein interner Serverfehler ist aufgetreten! Prüfe die Logs auf dem Server für mehr Details."
+
+register:
+  title: "Neuen Account anlegen"
+  username: "Benutzername"
+  password: "Passwort"
+  password-repeat: "Passwort (wiederholen)"
+  submit: "Registrieren"
+  already-have-account: "Du hast bereits einen Account?"
+  error:
+    username-missing: "Kein Benutzername angegeben"
+    username-taken: "Der Benutzername wird bereits verwendet"
+    password-missing: "Kein Passwort angegeben"
+    passwords-do-not-match: "Die Passwörter sind nicht die selben"
+    not-enabled: "Registrierung ist nicht aktiviert"
+
+login:
+  title: "Anmelden"
+  header: "Melde dich in deinem Account an"
+  username: "Benutzername"
+  password: "Passwort"
+  remember-me: "Eingeloggt bleiben"
+  submit: "Login"
+
+user:
+  profile: "Profil"
+  history: "Verlauf"
+  show-progress: "Serienfortschritt"
+  logout: "Logout"
+  login: "Login"
+  no-history-available: "Kein Verlauf verfügbar."
+
+search:
+  title: "Suche"
+  placeholder: "Suche nach Serien, Folgen und Filmen"
+  no-results: "Keine Ergebnisse für Suchanfrage ''{query}''."
+
+navbar:
+  shows: "Serien"
+  movies: "Filme"
+
+shows:
+  season: "Staffel {number}"
+  episode: "Folge {number}"
+  count:
+    shows: >-
+      {count, plural,
+        =1    {1 Serie}
+        other {# Serien}
+      }
+    seasons: >-
+      {count, plural,
+        =1    {1 Staffel}
+        other {# Staffeln}
+      }
+    episodes: >-
+      {count, plural,
+        =1    {1 Folge}
+        other {# Folgen}
+      }
+  all-shows: "Alle Serien"
+  seasons: "Staffeln"
+  episodes: "Folgen"
+  latest-episodes: "Neuste Folgen"
+  random-episodes: "Zufällige Folgen"
+  latest-watched-episodes: "Zuletzt gesehene Folgen"
+  most-watched-episodes: "Meist gesehene Folgen"
+  least-watched-episodes: "Am seltensten gesehene Folgen"
+  unwatched-episodes: "Ungesehene Folgen"
+  no-shows-available: "Keine Serien verfügbar."
+  no-seasons-available: "Keine Staffeln verfügbar."
+  no-episodes-available: "Keine Folgen verfügbar."
+  add-new: "Serie hinzufügen"
+  status:
+    upcoming: "Geplant"
+    continuing: "Wird fortgesetzt"
+    ended: "Beendet"
+
+movies:
+  all-movies: "Alle Filme"
+  no-movies-available: "Keine Filme verfügbar."
+  add-new: "Film hinzufügen"
+  count: >-
+    {count, plural,
+      =1    {1 Film}
+      other {# Filme}
+    }
+  latest-movies: "Neuste Filme"
+  latest-watched-movies: "Zuletzt gesehene Filme"
+
+views:
+  views: "{count} mal gesehen"
+  add-view: "Als gesehen markieren"
+  remove:
+    header: "Verlauf entfernen?"
+    this-view: "Diesen Eintrag"
+    all-views: "Alle Einträge"
+    cancel: "Abbrechen"
+  add:
+    header: "Als gesehen markieren"
+    datetime: "Datum und Uhrzeit"
+    now: "Jetzt"
+    ok: "OK"
+    cancel: "Abbrechen"
+
+library-management:
+  title: "Bibliotheksverwaltung"
+  count: >-
+    {count, plural,
+      =1    {1 Eintrag}
+      other {# Einträge}
+    }
+  add-item: "Eintrag hinzufügen"
+  delete-item: "Eintrag entfernen"
+  confirm: "Bestätigen"
+  cancel: "Abbrechen"
+  delete-item-failed: "Löschen des Eintrags fehlgeschlagen"
+  no-items-available: "Keine Einträge verfügbar."
+  columns:
+    title: "Titel"
+    type: "Typ"
+    options: "Optionen"
+  types:
+    movie: "Film"
+    show: "Serie"
+  add-items:
+    page-title: "Filme oder Serien hinzufügen"
+    type-title: "Typ"
+    title: "Titel des Films oder der Serie"
+    year: "Jahr (optional)"
+    search: "Suchen"
+    no-results: "Nichts gefunden."
+    in-library: "In der Bibliothek"
+    add-to-library: "Zur Bibliothek hinzufügen"
+  errors:
+    view-exists: "Es gibt bereits einen Verlauf von diesem Eintrag. Bitte vorher entfernen."
