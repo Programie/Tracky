@@ -95,7 +95,12 @@ class Episode extends BaseEntity
             return $episode;
         }
 
-        return $season->getPreviousSeason()?->getEpisodes()->last();
+        $episode = $season->getPreviousSeason()?->getEpisodes()->last();
+        if ($episode !== false) {
+            return $episode;
+        }
+
+        return null;
     }
 
     public function getNextEpisode(): ?Episode
@@ -107,7 +112,12 @@ class Episode extends BaseEntity
             return $episode;
         }
 
-        return $season->getNextSeason()?->getEpisodes()->first();
+        $episode = $season->getNextSeason()?->getEpisodes()->first();
+        if ($episode !== false) {
+            return $episode;
+        }
+
+        return null;
     }
 
     public function __toString(): string
