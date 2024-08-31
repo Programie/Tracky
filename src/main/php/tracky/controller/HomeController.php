@@ -4,6 +4,8 @@ namespace tracky\controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use tracky\model\Episode;
+use tracky\model\User;
 use tracky\orm\EpisodeRepository;
 use tracky\orm\MovieRepository;
 use tracky\orm\ShowRepository;
@@ -24,25 +26,13 @@ class HomeController extends AbstractController
     {
         $latestWatchedEpisodes = null;
         $latestWatchedMovies = null;
-        $nextEpisodes = [];
+        $nextEpisodes = null;
 
         $user = $this->getUser();
         if ($user !== null) {
             $latestWatchedEpisodes = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxEpisodes, type: "episode");
             $latestWatchedMovies = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxMovies, type: "movie");
-
-            if ($this->maxNextEpisodeShows > 0) {
-                foreach ($showRepository->findAllWithEpisodesAndViews($user->getId()) as $show) {
-                    if (count($nextEpisodes) >= $this->maxNextEpisodeShows) {
-                        break;
-                    }
-
-                    $episode = $show->getNextEpisodeToWatch($user, false);
-                    if ($episode !== null) {
-                        $nextEpisodes[] = $episode;
-                    }
-                }
-            }
+            $nextEpisodes = $this->getNextEpisodes($showRepository, $user);
         }
 
         return $this->render("index.twig", [
@@ -52,5 +42,43 @@ class HomeController extends AbstractController
             "latestWatchedMovies" => $latestWatchedMovies,
             "nextEpisodes" => $nextEpisodes
         ]);
+    }
+
+    private function getNextEpisodes(ShowRepository $showRepository, User $user)
+    {
+        $latestEpisodes = [];
+        $nextEpisodes = [];
+
+        foreach ($showRepository->findAllWithEpisodesAndViews($user->getId()) as $show) {
+            $latestWatchedEpisodes = $show->getLatestWatchedEpisodes($user, 1, true);
+            if (!empty($latestWatchedEpisodes)) {
+                $latestEpisodes[] = $latestWatchedEpisodes[0];
+            }
+        }
+
+        usort($latestEpisodes, function ($item1, $item2) {
+            list(, $item1Timestamp) = $item1;
+            list(, $item2Timestamp) = $item2;
+
+
+            if ($item1Timestamp === $item2Timestamp) {
+                return 0;
+            }
+
+            return ($item1Timestamp > $item2Timestamp) ? -1 : 1;
+        });
+
+        foreach ($latestEpisodes as $item) {
+            /**
+             * @var Episode $episode
+             */
+            $episode = $item[0];
+            $nextEpisode = $episode->getNextEpisode();
+            if ($nextEpisode !== null) {
+                $nextEpisodes[] = $nextEpisode;
+            }
+        }
+
+        return array_slice($nextEpisodes, 0, $this->maxNextEpisodeShows);
     }
 }

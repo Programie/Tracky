@@ -176,7 +176,7 @@ class Show extends BaseEntity
         return $randomEpisodes;
     }
 
-    public function getLatestWatchedEpisodes(User $user, int $count): array
+    public function getLatestWatchedEpisodes(User $user, int $count, bool $includeTimestamp = false): array
     {
         $allEpisodes = [];
 
@@ -204,8 +204,10 @@ class Show extends BaseEntity
             return ($item1Timestamp > $item2Timestamp) ? -1 : 1;
         });
 
-        foreach ($allEpisodes as &$item) {
-            $item = $item[0];
+        if (!$includeTimestamp) {
+            foreach ($allEpisodes as &$item) {
+                $item = $item[0];
+            }
         }
 
         return array_slice($allEpisodes, 0, $count);
@@ -270,20 +272,5 @@ class Show extends BaseEntity
         }
 
         return $episodes;
-    }
-
-    public function getNextEpisodeToWatch(User $user, bool $firstOnUnwatched = true): ?Episode
-    {
-        /**
-         * @var Episode[] $latestWatchedEpisodes
-         */
-        $latestWatchedEpisodes = $this->getLatestWatchedEpisodes($user, 1);
-        if (!empty($latestWatchedEpisodes)) {
-            return $latestWatchedEpisodes[0]->getNextEpisode();
-        } elseif ($firstOnUnwatched) {
-            return $this->getSeason(1)?->getEpisode(1);
-        } else {
-            return null;
-        }
     }
 }
