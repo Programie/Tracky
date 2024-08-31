@@ -23,6 +23,16 @@
                 <div class="alert alert-warning">{{ "movies.no-movies-available"|trans }}</div>
             {% endif %}
         </div>
+
+        <div class="mb-3">
+            <h1 class="mb-3">{{ "shows.next-episodes"|trans }}</h1>
+
+            {% if nextEpisodes %}
+                {% include "components/episode-list-small.twig" with {"episodes": nextEpisodes, "withShowTitle": true} %}
+            {% else %}
+                <div class="alert alert-warning">{{ "shows.no-episodes-available"|trans }}</div>
+            {% endif %}
+        </div>
     {% endif %}
 
     <div class="mb-3">

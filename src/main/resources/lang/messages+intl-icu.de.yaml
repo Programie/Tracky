@@ -79,6 +79,7 @@ shows:
   most-watched-episodes: "Meist gesehene Folgen"
   least-watched-episodes: "Am seltensten gesehene Folgen"
   unwatched-episodes: "Ungesehene Folgen"
+  next-episodes: "Nächste Folgen"
   no-shows-available: "Keine Serien verfügbar."
   no-seasons-available: "Keine Staffeln verfügbar."
   no-episodes-available: "Keine Folgen verfügbar."

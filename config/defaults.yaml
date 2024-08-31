@@ -17,3 +17,4 @@ parameters:
   shows.max-episodes: 10
   overview.max-episodes: 5
   overview.max-movies: 5
+  overview.max-next-episode-shows: 5
