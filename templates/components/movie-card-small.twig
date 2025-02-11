@@ -8,5 +8,13 @@
         {% endif %}
 
         <small class="d-block text-body-secondary">{{ movie.year }}</small>
+
+        {% if is_granted("IS_AUTHENTICATED") %}
+            {% set viewsForUser = movie.getViewsForUser(app.user) %}
+            {% if viewsForUser|length %}
+                <small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ "views.views"|trans({"%count%": viewsForUser|length}) }}</small>
+                <small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }}</small>
+            {% endif %}
+        {% endif %}
     </div>
 </a>
