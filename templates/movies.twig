@@ -7,9 +7,38 @@
 
     <small class="d-block">{{ "movies.count"|trans({"%count%": movies|length}) }}</small>
 
-    {% if is_granted("IS_AUTHENTICATED") %}
-        <a href="{{ path("addItemsPage", {"type": "movie"}) }}" class="btn btn-primary my-3">{{ "movies.add-new"|trans }}</a>
-    {% endif %}
+    <div class="row my-3">
+        <div class="col">
+            {% if is_granted("IS_AUTHENTICATED") %}
+                <a href="{{ path("addItemsPage", {"type": "movie"}) }}" class="btn btn-primary">{{ "movies.add-new"|trans }}</a>
+            {% endif %}
+        </div>
+
+        <div class="col">
+            <div class="dropdown text-end">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">{{ "sort-by"|trans }} ({{ ("movies.sort." ~ sort.field)|trans }})</button>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+                    {% for field in sortOptions %}
+                        {% if sort.field == field %}
+                            {% if sort.direction == "asc" %}
+                                {% set icon = "up" %}
+                                {% set nextDirection = "desc" %}
+                            {% else %}
+                                {% set icon = "down" %}
+                                {% set nextDirection = "asc" %}
+                            {% endif %}
+                        {% else %}
+                            {% set icon = null %}
+                            {% set nextDirection = "asc" %}
+                        {% endif %}
+
+                        <li><a href="{{ path("moviesPage", {"sort": field ~ "/" ~ nextDirection }) }}" class="{{ html_classes("dropdown-item", "d-flex", "justify-content-between", "align-items-center", {"active": sort.field == field}) }}">{{ ("movies.sort." ~ field)|trans }}{% if icon %}<i class="fa-solid fa-sort-{{ icon }}"></i>{% endif %}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 
     {% if movies %}
         {% include "components/movie-list-small.twig" with {"movies": movies} %}

@@ -1,5 +1,6 @@
 unknown-title: "Unbekannt"
 runtime: "{runtime} min"
+sort-by: "Sortieren nach"
 
 error-page:
   400:
@@ -100,6 +101,12 @@ movies:
     }
   latest-movies: "Neuste Filme"
   latest-watched-movies: "Zuletzt gesehene Filme"
+  sort:
+    title: "Titel"
+    year: "Jahr"
+    runtime: "Filmlänge"
+    playCount: "Anzahl gesehen"
+    lastPlayed: "Zuletzt gesehen"
 
 views:
   views: "{count} mal gesehen"

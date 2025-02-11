@@ -29,10 +29,29 @@ class MovieController extends AbstractController
     }
 
     #[Route("/movies", name: "moviesPage")]
-    public function getMoviesPage(): Response
+    public function getMoviesPage(Request $request): Response
     {
+        $sort = explode("/", trim($request->query->get("sort", "")), 2);
+
+        list($sortField, $sortDirection) = $sort + ["", ""];
+
+        $sortOptions = ["title", "year", "runtime"];//, "playCount", "lastPlayed"];
+
+        if (!in_array($sortField, $sortOptions)) {
+            $sortField = "title";
+        }
+
+        if (!in_array($sortDirection, ["asc", "desc"])) {
+            $sortDirection = "asc";
+        }
+
         return $this->render("movies.twig", [
-            "movies" => $this->movieRepository->findBy([], ["title" => "asc"])
+            "sortOptions" => $sortOptions,
+            "sort" => [
+                "field" => $sortField,
+                "direction" => $sortDirection
+            ],
+            "movies" => $this->movieRepository->findBy([], [$sortField => $sortDirection])
         ]);
     }
 
