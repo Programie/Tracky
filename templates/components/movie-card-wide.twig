@@ -13,7 +13,7 @@
                         <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
                     {% endif %}
 
-                    <small class="d-block text-body-secondary">{{ movie.year }}</small>
+                    <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ movie.year }}</small>
                     {% include "components/view.twig" with {"type": "movie", "item": movie} only %}
                 </div>
                 <div class="card-text mt-3">{{ movie.plot }}</div>

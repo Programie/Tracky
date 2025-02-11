@@ -7,7 +7,7 @@
             <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
         {% endif %}
 
-        <small class="d-block text-body-secondary">{{ movie.year }}</small>
+        <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ movie.year }}</small>
 
         {% if is_granted("IS_AUTHENTICATED") %}
             {% set viewsForUser = movie.getViewsForUser(app.user) %}
