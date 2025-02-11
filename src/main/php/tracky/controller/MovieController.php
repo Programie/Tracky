@@ -21,6 +21,9 @@ use tracky\orm\ViewRepository;
 
 class MovieController extends AbstractController
 {
+    const SORT_ASC = "asc";
+    const SORT_DESC = "desc";
+
     public function __construct(
         private readonly MovieRepository $movieRepository,
         private readonly ViewRepository  $viewRepository
@@ -31,18 +34,64 @@ class MovieController extends AbstractController
     #[Route("/movies", name: "moviesPage")]
     public function getMoviesPage(Request $request): Response
     {
+        $user = $this->getUser();
+
         $sort = explode("/", trim($request->query->get("sort", "")), 2);
 
         list($sortField, $sortDirection) = $sort + ["", ""];
 
-        $sortOptions = ["title", "year", "runtime"];//, "playCount", "lastPlayed"];
+        $sortOptions = ["title", "year", "runtime"];
+
+        if ($user !== null) {
+            $sortOptions = array_merge($sortOptions, ["playCount", "lastPlayed"]);
+        }
 
         if (!in_array($sortField, $sortOptions)) {
             $sortField = "title";
         }
 
-        if (!in_array($sortDirection, ["asc", "desc"])) {
-            $sortDirection = "asc";
+        if (!in_array($sortDirection, [self::SORT_ASC, self::SORT_DESC])) {
+            $sortDirection = self::SORT_ASC;
+        }
+
+        // Special sorting for playCount and lastPlayed
+        if ($user !== null and ($sortField === "playCount" or $sortField === "lastPlayed")) {
+            $movies = $this->movieRepository->findAllWithViews($user->getId());
+            usort($movies, function (Movie $movie1, Movie $movie2) use ($user, $sortField, $sortDirection) {
+                $views1 = $movie1->getViewsForUser($user);
+                $views2 = $movie2->getViewsForUser($user);
+
+                switch ($sortField) {
+                    case "playCount":
+                        $value1 = count($views1);
+                        $value2 = count($views2);
+                        break;
+                    case "lastPlayed":
+                        $lastView1 = $views1->last();
+                        if ($lastView1 === false) {
+                            $lastView1 = null;
+                        }
+
+                        $lastView2 = $views2->last();
+                        if ($lastView2 === false) {
+                            $lastView2 = null;
+                        }
+
+                        $value1 = $lastView1?->getDateTime()?->getTimestamp() ?? 0;
+                        $value2 = $lastView2?->getDateTime()?->getTimestamp() ?? 0;
+                        break;
+                }
+
+                if ($value1 < $value2) {
+                    return $sortDirection == self::SORT_ASC ? -1 : 1;
+                } elseif ($value1 > $value2) {
+                    return $sortDirection == self::SORT_ASC ? 1 : -1;
+                } else {
+                    return 0;
+                }
+            });
+        } else {
+            $movies = $this->movieRepository->findBy([], [$sortField => $sortDirection]);
         }
 
         return $this->render("movies.twig", [
@@ -51,7 +100,7 @@ class MovieController extends AbstractController
                 "field" => $sortField,
                 "direction" => $sortDirection
             ],
-            "movies" => $this->movieRepository->findBy([], [$sortField => $sortDirection])
+            "movies" => $movies
         ]);
     }
 

@@ -13,4 +13,22 @@ class MovieRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Movie::class);
     }
+
+    /**
+     * @return Movie[]
+     */
+    public function findAllWithViews(int $userId): array
+    {
+        $query = $this->getEntityManager()->createQuery("
+            SELECT movie, view
+            FROM tracky\model\Movie movie
+            LEFT JOIN movie.views view
+            LEFT JOIN view.user user
+            WHERE user.id IS NULL OR user.id = :userId
+        ");
+
+        $query->setParameter("userId", $userId);
+
+        return $query->getResult();
+    }
 }
