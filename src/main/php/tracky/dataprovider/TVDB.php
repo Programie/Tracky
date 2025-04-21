@@ -77,7 +77,7 @@ class TVDB implements Provider
         return true;
     }
 
-    private function getJson(string $path, array $query = []): ?array
+    private function getRawJson(string $path, array $query = []): ?array
     {
         try {
             $response = $this->client->get($path, [
@@ -96,7 +96,12 @@ class TVDB implements Provider
             ]);
         }
 
-        return json_decode($response->getBody()->getContents(), true)["data"] ?? null;
+        return json_decode($response->getBody()->getContents(), true) ?? null;
+    }
+
+    private function getJson(string $path, array $query = []): ?array
+    {
+        return $this->getRawJson($path, $query)["data"] ?? null;
     }
 
     private function getTvdbIdFromRemoteId(string $remoteId): ?int
@@ -208,8 +213,6 @@ class TVDB implements Provider
         }
 
         if ($createSeasonsAndEpisodes) {
-            $episodesData = $this->getJson(sprintf("series/%d/episodes/official/%s", $tvdbId, $this->getShowLanguage($show)))["episodes"] ?? [];
-
             foreach ($data["seasons"] ?? [] as $seasonData) {
                 $seasonType = $seasonData["type"]["type"] ?? null;
                 if ($seasonType !== "official") {
@@ -223,14 +226,22 @@ class TVDB implements Provider
                 $season->setPosterImageUrl($this->getImageUrl($seasonData["image"] ?? null));
             }
 
-            foreach ($episodesData as $episodeData) {
-                $seasonNumber = $episodeData["seasonNumber"];
-                $episodeNumber = $episodeData["number"];
+            for ($page = 0; $page < 100; $page++) {
+                $episodesData = $this->getRawJson(sprintf("series/%d/episodes/official/%s", $tvdbId, $this->getShowLanguage($show)), ["page" => $page]) ?? [];
 
-                $season = $show->getOrCreateSeason($seasonNumber);
-                $episode = $season->getOrCreateEpisode($episodeNumber);
+                foreach ($episodesData["data"]["episodes"] ?? [] as $episodeData) {
+                    $seasonNumber = $episodeData["seasonNumber"];
+                    $episodeNumber = $episodeData["number"];
 
-                $this->setEpisodeData($episode, $episodeData);
+                    $season = $show->getOrCreateSeason($seasonNumber);
+                    $episode = $season->getOrCreateEpisode($episodeNumber);
+
+                    $this->setEpisodeData($episode, $episodeData);
+                }
+
+                if (($episodesData["links"]["next"] ?? null) === null) {
+                    break;
+                }
             }
 
             $show->setLastUpdate(new DateTime);// Only set last update if seasons/episodes were also updated
@@ -256,7 +267,7 @@ class TVDB implements Provider
             return false;
         }
 
-        foreach ($data["episodes"] ?? [] as $episodeData) {
+        foreach ($data["data"]["episodes"] ?? [] as $episodeData) {
             $episode = $season->getOrCreateEpisode($episodeData["number"]);
 
             $this->setEpisodeData($episode, $episodeData);

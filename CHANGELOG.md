@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.1] - 2025-04-21
+
+* Fixed only adding first 500 episodes while fetching TV show data from TVDB
+
 ## [1.2.0] - 2025-02-12
 
 * Add dropdown on movies view to sort them by title, release year, runtime, play count and date of last view
