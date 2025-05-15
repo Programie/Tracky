@@ -106,6 +106,7 @@ class LibraryManagementController extends AbstractController
     }
 
     #[Route("/library", name: "libraryManagementPage", methods: ["GET"])]
+    #[IsGranted("IS_AUTHENTICATED")]
     public function libraryManagementPage(): Response
     {
         $items = [];
