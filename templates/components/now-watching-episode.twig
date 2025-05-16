@@ -1,0 +1,25 @@
+<div class="card">
+    <div class="row g-0">
+        <div class="col-md-4 scaled-image rounded-bottom-0 fullscreen-image lazy-background" data-image-url="{{ path("getEpisodeImage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"></div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}">{{ episode.title|default("unknown-title"|trans) }}</a></h5>
+                <h6 class="card-subtitle text-body-secondary">{{ "shows.episode"|trans({"%number%": episode.season.number ~ "x" ~ episode.number}) }}</h6>
+                <div class="card-text mt-3">
+                    {% if episode.runtime is not null %}
+                        <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": episode.runtime}) }}</small>
+                    {% endif %}
+                    {% if episode.firstAired is not null %}
+                        <small class="d-block text-body-secondary"><i class="fa-solid fa-tower-cell"></i> {{ episode.firstAired|format_date }}</small>
+                    {% endif %}
+                    {% include "components/view.twig" with {"type": "episode", "item": episode} only %}
+                </div>
+                <div class="card-text mt-3">{{ episode.plot }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="progress rounded-top-0 position-relative">
+        <div class="progress-bar bg-success" style="width: {{ progress.percent }}%;"></div>
+        <div class="progress-text">{{ progress.percent }}% - {{ progress.time|duration }}/{{ duration|duration }}</div>
+    </div>
+</div>

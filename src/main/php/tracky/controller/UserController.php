@@ -13,6 +13,7 @@ use tracky\model\User;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\orm\UserRepository;
+use tracky\scrobbler\Scrobbler;
 
 class UserController extends AbstractController
 {
@@ -106,10 +107,11 @@ class UserController extends AbstractController
     }
 
     #[Route("/users/{username}", name: "profilePage")]
-    public function getProfilePage(User $user, ViewRepository $viewRepository): Response
+    public function getProfilePage(User $user, ViewRepository $viewRepository, Scrobbler $scrobbler): Response
     {
         return $this->render("user/profile.twig", [
             "user" => $user,
+            "nowWatching" => $scrobbler->getNowWatching($user),
             "latestWatchedEpisodes" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: "episode"),
             "latestWatchedMovies" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: "movie")
         ]);

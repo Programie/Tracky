@@ -1,0 +1,27 @@
+<div class="card">
+    <div class="row g-0">
+        <div class="col-md-4 scaled-image rounded-bottom-0 fullscreen-image lazy-background" data-image-url="{{ path("getMovieImage", {"movie": movie.id}) }}"></div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{ movie.title }}</h5>
+                <div class="card-text mt-3">
+                    {% if movie.tagline is not null %}
+                        <small class="d-block text-body-secondary fst-italic mb-2">{{ movie.tagline }}</small>
+                    {% endif %}
+
+                    {% if movie.runtime is not null %}
+                        <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
+                    {% endif %}
+
+                    <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ movie.year }}</small>
+                    {% include "components/view.twig" with {"type": "movie", "item": movie} only %}
+                </div>
+                <div class="card-text mt-3">{{ movie.plot }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="progress rounded-top-0 position-relative">
+        <div class="progress-bar bg-success" style="width: {{ progress.percent }}%;"></div>
+        <div class="progress-text">{{ progress.percent }}% - {{ progress.time|duration }}/{{ duration|duration }}</div>
+    </div>
+</div>

@@ -9,6 +9,15 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "history";
 @import "login";
 
+.progress-text {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+}
+
 .episode-pagination > * {
     display: inline-flex;
     width: 50%;

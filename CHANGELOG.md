@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.3.0] - pending
+
+* Show currently watching movie or episode on profile page (as reported in scrobble endpoint)
+
 ## [1.2.1] - 2025-04-21
 
 * Fixed only adding first 500 episodes while fetching TV show data from TVDB

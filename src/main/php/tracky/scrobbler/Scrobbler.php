@@ -4,6 +4,7 @@ namespace tracky\scrobbler;
 use Doctrine\ORM\EntityManagerInterface;
 use tracky\dataprovider\Helper;
 use tracky\datetime\DateTime;
+use tracky\model\Episode;
 use tracky\model\EpisodeView;
 use tracky\model\Movie;
 use tracky\model\MovieView;
@@ -21,6 +22,7 @@ class Scrobbler
         private readonly ShowRepository         $showRepository,
         private readonly MovieRepository        $movieRepository,
         private readonly EntityManagerInterface $entityManager,
+        private readonly NowWatchingHelper      $nowWatchingHelper,
         private readonly bool                   $useQueue = false,
     )
     {
@@ -75,7 +77,77 @@ class Scrobbler
         return $this->addView($scrobbleQueue->getJson(), $scrobbleQueue->getDateTime(), $scrobbleQueue->getUser());
     }
 
+    public function setNowWatching(array $json, DateTime $dateTime, User $user): string
+    {
+        if (!isset($json["mediaType"])) {
+            throw new UnexpectedValueException("Missing media type");
+        }
+
+        switch (strtolower($json["mediaType"])) {
+            case "episode":
+                $this->nowWatchingHelper->store($json, $user);
+                return "Episode set as now watching";
+            case "movie":
+                $this->nowWatchingHelper->store($json, $user);
+                return "Movie set as now watching";
+            default:
+                throw new UnexpectedValueException(sprintf("Invalid media type: %s", $json["mediaType"]));
+        }
+    }
+
+    public function getNowWatching(User $user): array|null
+    {
+        $json = $this->nowWatchingHelper->get($user);
+
+        if ($json === null) {
+            return null;
+        }
+
+        if (!isset($json["mediaType"])) {
+            throw new UnexpectedValueException("Missing media type");
+        }
+
+        switch (strtolower($json["mediaType"])) {
+            case "episode":
+                $json["entry"] = $this->getEpisode($json);
+                break;
+            case "movie":
+                $json["entry"] = $this->getMovie($json);
+                break;
+            default:
+                throw new UnexpectedValueException(sprintf("Invalid media type: %s", $json["mediaType"]));
+        }
+
+        return $json;
+    }
+
     private function addEpisodeView(array $json, DateTime $dateTime, User $user): void
+    {
+        $episode = $this->getEpisode($json);
+
+        $episodeView = new EpisodeView;
+        $episodeView->setEpisode($episode);
+        $episodeView->setUser($user);
+        $episodeView->setDateTime($dateTime);
+
+        $this->entityManager->persist($episodeView);
+        $this->entityManager->flush();
+    }
+
+    private function addMovieView(array $json, DateTime $dateTime, User $user): void
+    {
+        $movie = $this->getMovie($json);
+
+        $movieView = new MovieView;
+        $movieView->setMovie($movie);
+        $movieView->setUser($user);
+        $movieView->setDateTime($dateTime);
+
+        $this->entityManager->persist($movieView);
+        $this->entityManager->flush();
+    }
+
+    private function getEpisode(array $json): Episode
     {
         $seasonNumber = $json["season"] ?? null;
         $episodeNumber = $json["episode"] ?? null;
@@ -97,6 +169,7 @@ class Scrobbler
             $dataProvider->fetchShow($show, false);
 
             $this->entityManager->persist($show);
+            $this->entityManager->flush();
         }
 
         $created = false;
@@ -105,6 +178,7 @@ class Scrobbler
             $dataProvider->fetchSeason($season, false);
 
             $this->entityManager->persist($season);
+            $this->entityManager->flush();
         }
 
         $created = false;
@@ -113,18 +187,13 @@ class Scrobbler
             $dataProvider->fetchEpisode($episode);
 
             $this->entityManager->persist($episode);
+            $this->entityManager->flush();
         }
 
-        $episodeView = new EpisodeView;
-        $episodeView->setEpisode($episode);
-        $episodeView->setUser($user);
-        $episodeView->setDateTime($dateTime);
-
-        $this->entityManager->persist($episodeView);
-        $this->entityManager->flush();
+        return $episode;
     }
 
-    private function addMovieView(array $json, DateTime $dateTime, User $user): void
+    private function getMovie(array $json): Movie
     {
         list($dataProvider, $providerId) = $this->getDataProviderFromUniqueIds(Helper::TYPE_MOVIE, $json);
 
@@ -135,15 +204,10 @@ class Scrobbler
             $dataProvider->fetchMovie($movie);
 
             $this->entityManager->persist($movie);
+            $this->entityManager->flush();
         }
 
-        $movieView = new MovieView;
-        $movieView->setMovie($movie);
-        $movieView->setUser($user);
-        $movieView->setDateTime($dateTime);
-
-        $this->entityManager->persist($movieView);
-        $this->entityManager->flush();
+        return $movie;
     }
 
     private function getDataProviderFromUniqueIds(string $type, array $json): array

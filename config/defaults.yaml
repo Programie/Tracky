@@ -18,3 +18,5 @@ parameters:
   overview.max-episodes: 5
   overview.max-movies: 5
   overview.max-next-episode-shows: 5
+  now-watching.storage-path: "%kernel.cache_dir%/now-watching"
+  now-watching.max-age: 300

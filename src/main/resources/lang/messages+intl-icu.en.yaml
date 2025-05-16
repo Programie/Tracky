@@ -1,6 +1,7 @@
 unknown-title: "Unknown"
 runtime: "{runtime} min"
 sort-by: "Sort by"
+now-watching: "Now watching"
 
 error-page:
   400:

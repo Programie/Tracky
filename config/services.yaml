@@ -60,6 +60,10 @@ services:
   tracky\ImageFetcher:
     arguments:
       $storagePath: "%image-fetcher.storage-path%"
+  tracky\scrobbler\NowWatchingHelper:
+    arguments:
+      $storagePath: "%now-watching.storage-path%"
+      $maxAge: "%now-watching.max-age%"
   tracky\scrobbler\Scrobbler:
     arguments:
       $useQueue: "%scrobbler.use-queue%"

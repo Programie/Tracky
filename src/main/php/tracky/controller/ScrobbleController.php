@@ -13,9 +13,13 @@ use UnexpectedValueException;
 
 class ScrobbleController extends AbstractController
 {
+    public function __construct(private readonly Scrobbler $scrobbler)
+    {
+    }
+
     #[Route("/api/scrobble", name: "scrobble", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function scrobble(Request $request, Scrobbler $scrobbler): Response
+    public function scrobble(Request $request): Response
     {
         try {
             $json = $request->toArray();
@@ -23,12 +27,27 @@ class ScrobbleController extends AbstractController
             return new Response("Invalid JSON in request body", 400);
         }
 
-        $event = $json["event"] ?? "end";
+        $event = $json["event"] ?? "";
 
-        if ($event !== "end") {
-            return $this->returnPlainText(sprintf("Event is '%s', only accepting 'end'", $event));
+        switch ($event) {
+            case "start":
+                return $this->scrobbleStart($json);
+            case "interval":
+                return $this->scrobbleInterval($json);
+            case "end":
+                return $this->scrobbleEnd($json);
+            default:
+                return $this->returnPlainText(sprintf("Event is '%s', only accepting 'start', 'interval' and 'end'", $event));
         }
+    }
 
+    private function scrobbleStart(array $json): Response
+    {
+        return $this->scrobbleInterval($json);
+    }
+
+    private function scrobbleInterval(array $json): Response
+    {
         try {
             if (isset($json["timestamp"])) {
                 $timestamp = new DateTime($json["timestamp"]);
@@ -40,7 +59,26 @@ class ScrobbleController extends AbstractController
         }
 
         try {
-            return $this->returnPlainText($scrobbler->cacheOrAddView($json, $timestamp, $this->getUser()));
+            return $this->returnPlainText($this->scrobbler->setNowWatching($json, $timestamp, $this->getUser()));
+        } catch (UnexpectedValueException $exception) {
+            return new Response($exception->getMessage(), 400);
+        }
+    }
+
+    private function scrobbleEnd(array $json): Response
+    {
+        try {
+            if (isset($json["timestamp"])) {
+                $timestamp = new DateTime($json["timestamp"]);
+            } else {
+                $timestamp = new DateTime;
+            }
+        } catch (Exception) {
+            return new Response("Invalid timestamp", 400);
+        }
+
+        try {
+            return $this->returnPlainText($this->scrobbler->cacheOrAddView($json, $timestamp, $this->getUser()));
         } catch (UnexpectedValueException $exception) {
             return new Response($exception->getMessage(), 400);
         }
