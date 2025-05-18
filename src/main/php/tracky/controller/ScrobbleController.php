@@ -31,22 +31,23 @@ class ScrobbleController extends AbstractController
 
         switch ($event) {
             case "start":
-                return $this->scrobbleStart($json);
             case "interval":
-                return $this->scrobbleInterval($json);
+            case "seek":
+            case "resume":
+                return $this->scrobbleNowWatching($json);
+            case "stop":
+                return $this->clearNowWatching($json);
             case "end":
-                return $this->scrobbleEnd($json);
+                $response = $this->scrobbleEnd($json);
+                $this->clearNowWatching($json);
+
+                return $response;
             default:
                 return $this->returnPlainText(sprintf("Event is '%s', only accepting 'start', 'interval' and 'end'", $event));
         }
     }
 
-    private function scrobbleStart(array $json): Response
-    {
-        return $this->scrobbleInterval($json);
-    }
-
-    private function scrobbleInterval(array $json): Response
+    private function scrobbleNowWatching(array $json): Response
     {
         try {
             if (isset($json["timestamp"])) {
@@ -60,6 +61,25 @@ class ScrobbleController extends AbstractController
 
         try {
             return $this->returnPlainText($this->scrobbler->setNowWatching($json, $timestamp, $this->getUser()));
+        } catch (UnexpectedValueException $exception) {
+            return new Response($exception->getMessage(), 400);
+        }
+    }
+
+    private function clearNowWatching(array $json): Response
+    {
+        try {
+            if (isset($json["timestamp"])) {
+                $timestamp = new DateTime($json["timestamp"]);
+            } else {
+                $timestamp = new DateTime;
+            }
+        } catch (Exception) {
+            return new Response("Invalid timestamp", 400);
+        }
+
+        try {
+            return $this->returnPlainText($this->scrobbler->clearNowWatching($timestamp, $this->getUser()));
         } catch (UnexpectedValueException $exception) {
             return new Response($exception->getMessage(), 400);
         }

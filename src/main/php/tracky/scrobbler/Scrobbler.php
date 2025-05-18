@@ -77,6 +77,13 @@ class Scrobbler
         return $this->addView($scrobbleQueue->getJson(), $scrobbleQueue->getDateTime(), $scrobbleQueue->getUser());
     }
 
+    public function clearNowWatching(DateTime $dateTime, User $user)
+    {
+        $this->nowWatchingHelper->clear($dateTime, $user);
+
+        return "Now watching cleared";
+    }
+
     public function setNowWatching(array $json, DateTime $dateTime, User $user): string
     {
         if (!isset($json["mediaType"])) {
@@ -85,10 +92,10 @@ class Scrobbler
 
         switch (strtolower($json["mediaType"])) {
             case "episode":
-                $this->nowWatchingHelper->store($json, $user);
+                $this->nowWatchingHelper->store($json, $dateTime, $user);
                 return "Episode set as now watching";
             case "movie":
-                $this->nowWatchingHelper->store($json, $user);
+                $this->nowWatchingHelper->store($json, $dateTime, $user);
                 return "Movie set as now watching";
             default:
                 throw new UnexpectedValueException(sprintf("Invalid media type: %s", $json["mediaType"]));

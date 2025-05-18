@@ -15,28 +15,34 @@ class NowWatchingHelper
         }
     }
 
-    public function store(array $json, User $user)
+    public function clear(DateTime $dateTime, User $user)
     {
-        if (isset($json["timestamp"])) {
-            $timestamp = new DateTime($json["timestamp"]);
-        } else {
-            $timestamp = new DateTime;
-            $json["timestamp"] = $timestamp->format("c");
+        if (!is_file($this->getFilename($user))) {
+            return;
         }
 
-        $filename = $this->getFilename($user);
+        $existingTimestamp = $this->getTimestamp($user);
 
-        if (is_file($filename)) {
-            $existingJson = json_decode(file_get_contents($filename), true);
-            $existingTimestamp = $existingJson["timestamp"] ?? null;
-
-            // Ignore current store request if existing file is more recent
-            if ($existingTimestamp !== null and $timestamp < new DateTime($existingTimestamp)) {
-                return;
-            }
+        // Do not clear if existing timestamp is more recent
+        if ($existingTimestamp !== null and $dateTime < $existingTimestamp) {
+            return;
         }
 
-        file_put_contents($filename, json_encode($json));
+        unlink($this->getFilename($user));
+    }
+
+    public function store(array $json, DateTime $dateTime, User $user)
+    {
+        $existingTimestamp = $this->getTimestamp($user);
+
+        // Do not store if existing timestamp is more recent
+        if ($existingTimestamp !== null and $dateTime < $existingTimestamp) {
+            return;
+        }
+
+        $json["timestamp"] = $dateTime->format("c");
+
+        file_put_contents($this->getFilename($user), json_encode($json));
     }
 
     public function get(User $user)
@@ -63,6 +69,24 @@ class NowWatchingHelper
         $json["progress"]["percent"] = (int) ($json["progress"]["time"] / $json["duration"] * 100);
 
         return $json;
+    }
+
+    private function getTimestamp(User $user): DateTime|null
+    {
+        $filename = $this->getFilename($user);
+
+        if (!is_file($filename)) {
+            return null;
+        }
+
+        $json = json_decode(file_get_contents($filename), true);
+        $timestamp = $json["timestamp"] ?? null;
+
+        if ($timestamp === null) {
+            return null;
+        }
+
+        return new DateTime($timestamp);
     }
 
     private function getFilename(User $user)
