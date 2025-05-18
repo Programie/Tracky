@@ -2,7 +2,7 @@
 
 ## [1.3.0] - pending
 
-* Show currently watching movie or episode on profile page (as reported in scrobble endpoint)
+* Show currently watching movie or episode on home page (if logged in) and on profile page (as reported in scrobble endpoint)
 
 ## [1.2.1] - 2025-04-21
 
