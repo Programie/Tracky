@@ -1,3 +1,10 @@
+@import "~daterangepicker";
+@import "daterangepicker-dark";
+
+.daterangepicker::before, .daterangepicker::after {
+    content: none;
+}
+
 .history-edit-button:hover {
     background-color: rgba(#000, 0.5);
     color: white;

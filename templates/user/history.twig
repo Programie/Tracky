@@ -1,21 +1,45 @@
+{% set translations = [
+    "date-ranges.last-7-days",
+    "date-ranges.last-30-days",
+    "date-ranges.this-month",
+    "date-ranges.last-month",
+    "date-ranges.this-year",
+    "date-ranges.last-year",
+    "date-ranges.all",
+    "date-ranges.custom",
+    "modal.ok",
+    "modal.cancel"
+] %}
+
 {% extends "user/page.twig" %}
 {% from "components/macros.twig" import paginationContainer %}
 
 {% macro paginationUrl(page, context) %}
-    {{ path("userHistoryPage", {"username": context.user.username, "page": page}) }}
+    {{ path("userHistoryPage", app.request.query.all|merge({"username": context.user.username, "page": page})) }}
 {% endmacro %}
 
 {% block title %}{{ "user.history"|trans }} - {{ user.username }}{% endblock %}
 
 {% block profileContent %}
-    <h2>{{ "user.history"|trans }}</h2>
+    <h1 class="my-3">
+        {{ "user.history"|trans }}
+        {% if dateRange %}
+            <p id="history-date-selection" class="text-body-secondary fs-6 my-2" role="button" data-startdate="{{ dateRange.startDate.formatForKey }}" data-enddate="{{ dateRange.endDate.formatForKey }}">
+                {{ "date-range"|trans }}:
+
+                <span>{{ dateRange.startDate.formatForDisplay }}</span>
+                <span>-</span>
+                <span>{{ dateRange.endDate.formatForDisplay }}</span>
+            </p>
+        {% endif %}
+    </h1>
 
     {% if entries %}
-        {{ paginationContainer(pagination, _self, _context) }}
+        {{ paginationContainer(pagination, _self, _context, ["my-3"]) }}
 
         {% include "components/history-entry-list-small.twig" with {"entries": entries, "user": user} %}
 
-        {{ paginationContainer(pagination, _self, _context) }}
+        {{ paginationContainer(pagination, _self, _context, ["my-3"]) }}
     {% else %}
         <div class="alert alert-warning">{{ "user.no-history-available"|trans }}</div>
     {% endif %}

@@ -159,3 +159,19 @@ library-management:
     add-to-library: "Add to library"
   errors:
     view-exists: "At least one view of this item exists. Remove all views of it and try again."
+
+date-ranges:
+  last-7-days: "Last 7 Days"
+  last-30-days: "Last 30 Days"
+  this-month: "This Month"
+  last-month: "Last Month"
+  this-year: "This Year"
+  last-year: "Last Year"
+  all: "All"
+  custom: "Custom"
+
+date-range: "Date range"
+
+modal:
+  ok: "OK"
+  cancel: "Cancel"

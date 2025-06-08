@@ -5,6 +5,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use tracky\datetime\Date;
+use tracky\datetime\DateRange;
 use tracky\model\EpisodeView;
 use tracky\model\MovieView;
 use tracky\model\User;
@@ -29,6 +31,12 @@ class HistoryController extends AbstractController
         $type = strtolower($request->query->get("type"));
         $item = $request->query->getInt("item");
 
+        if (!$item) {
+            $item = null;
+        }
+
+        $dateRange = DateRange::fromString(trim($request->query->getString("startdate")), trim($request->query->getString("enddate", (new Date())->format("c"))), Date::class);
+
         $criteria = ["user" => $user->getId()];
 
         switch ($type) {
@@ -45,9 +53,33 @@ class HistoryController extends AbstractController
                 break;
         }
 
-        $count = $viewRepository->count($criteria, $type);
-        $entries = $viewRepository->getPaged($criteria, $page, $this->itemsPerPage, $type);
+        $count = $viewRepository->count($criteria, $type, $dateRange);
 
+        $pagination = new Pagination($page, $count, $this->itemsPerPage, $this->maxPreviousNextPages);
+
+        if ($dateRange === null) {
+            $firstPage = $this->sorted($viewRepository->getPaged($criteria, 1, $this->itemsPerPage, $type, $dateRange));
+            $lastPage = $this->sorted($viewRepository->getPaged($criteria, $pagination->getLastPage(), $this->itemsPerPage, $type, $dateRange));
+
+            if (!empty($firstPage) and !empty($lastPage)) {
+                $dateRange = new DateRange($lastPage[count($lastPage) - 1]->getDateTime()->toDate(), $firstPage[0]->getDateTime()->toDate());
+            }
+        }
+
+        return $this->render("user/history.twig", [
+            "user" => $user,
+            "dateRange" => $dateRange,
+            "filter" => [
+                "type" => $type,
+                "item" => $item
+            ],
+            "pagination" => $pagination,
+            "entries" => $this->sorted($viewRepository->getPaged($criteria, $page, $this->itemsPerPage, $type, $dateRange))
+        ]);
+    }
+
+    private function sorted(array $entries): array
+    {
         usort($entries, function (ViewEntry $entry1, ViewEntry $entry2) {
             if ($entry1->getDateTime() < $entry2->getDateTime()) {
                 return 1;
@@ -58,10 +90,6 @@ class HistoryController extends AbstractController
             }
         });
 
-        return $this->render("user/history.twig", [
-            "user" => $user,
-            "pagination" => new Pagination($page, $count, $this->itemsPerPage, $this->maxPreviousNextPages),
-            "entries" => $entries
-        ]);
+        return $entries;
     }
 }

@@ -1,0 +1,86 @@
+.daterangepicker {
+    background-color: #313539;
+    border-color: var(--bs-border-color);
+}
+
+.daterangepicker:before, .daterangepicker:after {
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+}
+
+.daterangepicker:before {
+    border-bottom-color: var(--bs-border-color);
+}
+
+.daterangepicker:after {
+    border-bottom-color: var(--bs-border-color);
+}
+
+.daterangepicker.drop-up:before {
+    border-top-color: var(--bs-border-color);
+}
+
+.daterangepicker.drop-up:after {
+    border-top-color: var(--bs-border-color);
+}
+
+.daterangepicker .calendar-table {
+    border: none;
+    background-color: transparent;
+}
+
+.daterangepicker .calendar-table .next span, .daterangepicker .calendar-table .prev span {
+    border-color: #fff;
+}
+
+.daterangepicker td.available:hover, .daterangepicker th.available:hover {
+    background-color: var(--bs-primary);
+}
+
+.daterangepicker td.off, .daterangepicker td.off.in-range, .daterangepicker td.off.start-date, .daterangepicker td.off.end-date {
+    background-color: transparent;
+    color: #666;
+}
+
+.daterangepicker td.in-range {
+    background-color: var(--bs-primary);
+    color: #fff;
+}
+
+.daterangepicker td.active, .daterangepicker td.active:hover {
+    background-color: var(--bs-primary);
+    color: #fff;
+}
+
+.daterangepicker td.disabled, .daterangepicker option.disabled {
+    color: #999;
+}
+
+.daterangepicker .drp-buttons {
+    border-top-color: var(--bs-border-color);
+}
+
+.daterangepicker.show-ranges.single.rtl .drp-calendar.left {
+    border-right-color: var(--bs-border-color);
+}
+
+.daterangepicker.show-ranges.single.ltr .drp-calendar.left {
+    border-left-color: var(--bs-border-color);
+}
+
+.daterangepicker.show-ranges.rtl .drp-calendar.right {
+    border-right-color: var(--bs-border-color);
+}
+
+.daterangepicker.show-ranges.ltr .drp-calendar.left {
+    border-left-color: var(--bs-border-color);
+}
+
+.daterangepicker .ranges li:hover {
+    background-color: var(--bs-primary);
+    color: #fff;
+}
+
+.daterangepicker .ranges li.active {
+    background-color: var(--bs-primary);
+    color: #fff;
+}

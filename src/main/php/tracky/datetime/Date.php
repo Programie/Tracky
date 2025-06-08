@@ -2,26 +2,51 @@
 namespace tracky\datetime;
 
 use DateInterval;
-use DateTime;
+use DateTime as BaseDateTime;
 use JsonSerializable;
 
-class Date extends DateTime implements JsonSerializable
+class Date extends BaseDateTime implements JsonSerializable
 {
-    public function getPreviousWeek(): Date
+    public static function fromUtc(string $datetime): static
+    {
+        return new static($datetime);// No conversion as dates to not have a timezone
+    }
+
+    public function toUtc(): static
+    {
+        return clone $this;// No conversion as dates to not have a timezone
+    }
+
+    public function toDateTime(): DateTime
+    {
+        return new DateTime($this->format("Y-m-d"));
+    }
+
+    public function isInTheFuture(): bool
+    {
+        return $this > new static;
+    }
+
+    public function isInThePast(): bool
+    {
+        return $this < new static;
+    }
+
+    public function getPreviousWeek(): static
     {
         $date = clone $this;
         $date->sub(new DateInterval("P1W"));
         return $date;
     }
 
-    public function getNextWeek(): Date
+    public function getNextWeek(): static
     {
         $date = clone $this;
         $date->add(new DateInterval("P1W"));
         return $date;
     }
 
-    public function getStartOfWeek(): Date
+    public function getStartOfWeek(): static
     {
         $date = clone $this;
         $currentWeekDay = $date->format("N");
@@ -29,7 +54,7 @@ class Date extends DateTime implements JsonSerializable
         return $date;
     }
 
-    public function getEndOfWeek(): Date
+    public function getEndOfWeek(): static
     {
         $date = clone $this;
         $currentWeekDay = $date->format("N");

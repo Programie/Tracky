@@ -155,3 +155,19 @@ library-management:
     add-to-library: "Zur Bibliothek hinzufügen"
   errors:
     view-exists: "Es gibt bereits einen Verlauf von diesem Eintrag. Bitte vorher entfernen."
+
+date-ranges:
+  last-7-days: "Letzte 7 Tage"
+  last-30-days: "Letzte 30 Tage"
+  this-month: "Aktueller Monat"
+  last-month: "Letzter Monat"
+  this-year: "Aktuelles Jahr"
+  last-year: "Letztes Jahr"
+  all: "Alles"
+  custom: "Benutzerdefiniert"
+
+date-range: "Datumsbereich"
+
+modal:
+  ok: "OK"
+  cancel: "Abbrechen"

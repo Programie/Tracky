@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.4.0] - 2025-06-08
+
+* Allow to filter history by date range
+
 ## [1.3.0] - 2025-05-18
 
 * Show currently watching movie or episode on home page (if logged in) and on profile page (as reported in scrobble endpoint)
