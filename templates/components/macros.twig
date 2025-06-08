@@ -14,7 +14,7 @@
 
         {% if 1 not in pagination.previousPages and pagination.currentPage != 1 %}
             {{ _self.paginationElement(1, self, context) }}
-            <li class="page-item page-link">...</li>
+            <li class="page-item"><span class="page-link">...</span></li>
         {% endif %}
         {% for page in pagination.previousPages %}
             {{ _self.paginationElement(page, self, context) }}
@@ -26,7 +26,7 @@
             {{ _self.paginationElement(page, self, context) }}
         {% endfor %}
         {% if pagination.lastPage not in pagination.nextPages and pagination.currentPage != pagination.lastPage %}
-            <li class="page-item page-link">...</li>
+            <li class="page-item"><span class="page-link">...</span></li>
             {{ _self.paginationElement(pagination.lastPage, self, context) }}
         {% endif %}
 
