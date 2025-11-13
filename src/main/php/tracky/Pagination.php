@@ -21,6 +21,10 @@ class Pagination
 
     public function getLastPage(): int
     {
+        if (!$this->totalItems) {
+            return 1;
+        }
+
         return (int)ceil($this->totalItems / $this->itemsPerPage);
     }
 
