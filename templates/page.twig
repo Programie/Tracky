@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
         {% set pageTitle = block("title") %}
-        <title>{% if pageTitle is not empty %}{{ pageTitle }} - {% endif %}Tracky</title>
+        <title>{% if pageTitle is not empty %}{{ pageTitle|raw }} - {% endif %}Tracky</title>
 
         <link rel="icon" type="image/x-icon" href="{{ asset("favicon.svg") }}"/>
         <link rel="stylesheet" href="{{ asset("styles.css") }}"/>

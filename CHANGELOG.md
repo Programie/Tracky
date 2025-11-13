@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.5.1] - 2025-11-13
+
+* Fixed duplicate escaping of page title (e.g. & in show/movie title)
+
 ## [1.5.0] - 2025-11-13
 
 * Fixed showing error on user history page if there are no items to show
