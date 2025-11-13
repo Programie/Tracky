@@ -28,6 +28,10 @@ class HistoryController extends AbstractController
     {
         $page = $request->query->getInt("page", 1);
 
+        if ($page <= 0) {
+            $page = 1;
+        }
+
         $type = strtolower($request->query->get("type"));
         $item = $request->query->getInt("item");
 
