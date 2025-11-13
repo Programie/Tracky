@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.0] - 2025-11-13
+
+* Fixed showing error on user history page if there are no items to show
+* Show number of unwatched episodes on TV show pages
+* Show percentage in TV show progress bars on profile page
+
 ## [1.4.0] - 2025-06-08
 
 * Allow to filter history by date range
