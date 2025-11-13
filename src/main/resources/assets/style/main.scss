@@ -18,6 +18,13 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
     text-align: center;
 }
 
+.progress-text-right {
+    text-align: right;
+    width: 2rem;
+    height: 1rem;
+    font-size: 0.75rem;
+}
+
 .episode-pagination > * {
     display: inline-flex;
     width: 50%;

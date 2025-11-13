@@ -2,8 +2,7 @@
 
 {% block title %}{{ "user.show-progress"|trans }} - {{ user.username }}{% endblock %}
 
-{% macro episodeProgressBarItem(user, episode, percentage) %}
-    {% set watched = episode.getViewsForUser(user)|length > 0 %}
+{% macro episodeProgressBarItem(user, episode, watched, percentage) %}
     <div class="progress" role="progressbar" style="width: {{ percentage }}%" title="{{ episode }}">
         <a class="{{ html_classes("progress-bar", {"bg-success": watched, "bg-secondary": not watched}) }}" href="{{ path("episodePage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"></a>
     </div>
@@ -23,17 +22,27 @@
                                 <div class="card-body">
                                     <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"show": show.id}) }}">{{ show.title }}</a></h5>
                                     <div class="card-text mt-3">
-                                        <div class="progress-stacked">
-                                            {% set totalEpisodes = show.totalEpisodes %}
-                                            {% for season in show.seasons %}
-                                                {% if totalEpisodes %}
-                                                    {% set perEpisodePercentage = 100 / totalEpisodes %}
-                                                    {% for episode in season.episodes %}
-                                                        {{ _self.episodeProgressBarItem(user, episode, perEpisodePercentage) }}
+                                        {% set totalEpisodes = show.totalEpisodes %}
+                                        {% set watchedEpisodes = 0 %}
+
+                                        {% if totalEpisodes %}
+                                            <div class="d-flex">
+                                                <div class="progress-stacked w-100">
+                                                    {% for season in show.seasons %}
+                                                            {% set perEpisodePercentage = 100 / totalEpisodes %}
+                                                            {% for episode in season.episodes %}
+                                                                {% set watched = episode.getViewsForUser(user)|length > 0 %}
+                                                                {% if watched %}
+                                                                    {% set watchedEpisodes = watchedEpisodes + 1 %}
+                                                                {% endif %}
+                                                                {{ _self.episodeProgressBarItem(user, episode, watched, perEpisodePercentage) }}
+                                                            {% endfor %}
                                                     {% endfor %}
-                                                {% endif %}
-                                            {% endfor %}
-                                        </div>
+                                                </div>
+
+                                                <span class="mx-1 flex-shrink-1 progress-text-right">{{ ((watchedEpisodes / totalEpisodes) * 100)|round }}%</span>
+                                            </div>
+                                        {% endif %}
 
                                         <div class="accordion mt-3">
                                             <div class="accordion-item">
@@ -44,14 +53,25 @@
                                                     <div class="accordion-body">
                                                         {% for season in show.seasons %}
                                                             {% set totalEpisodes = season.episodes.count %}
+                                                            {% set watchedEpisodes = 0 %}
+
                                                             {% if totalEpisodes %}
                                                                 <div><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"show": show.id, "number": season.number}) }}">{{ "shows.season"|trans({"%number%": season.number}) }}</a></div>
-                                                                <div class="progress-stacked">
-                                                                    {% set perEpisodePercentage = 100 / totalEpisodes %}
 
-                                                                    {% for episode in season.episodes %}
-                                                                        {{ _self.episodeProgressBarItem(user, episode, perEpisodePercentage) }}
-                                                                    {% endfor %}
+                                                                <div class="d-flex">
+                                                                    <div class="progress-stacked w-100">
+                                                                        {% set perEpisodePercentage = 100 / totalEpisodes %}
+
+                                                                        {% for episode in season.episodes %}
+                                                                            {% set watched = episode.getViewsForUser(user)|length > 0 %}
+                                                                            {% if watched %}
+                                                                                {% set watchedEpisodes = watchedEpisodes + 1 %}
+                                                                            {% endif %}
+                                                                            {{ _self.episodeProgressBarItem(user, episode, watched, perEpisodePercentage) }}
+                                                                        {% endfor %}
+                                                                    </div>
+
+                                                                    <span class="mx-1 flex-shrink-1 progress-text-right">{{ ((watchedEpisodes / totalEpisodes) * 100)|round }}%</span>
                                                                 </div>
                                                             {% endif %}
                                                         {% endfor %}
