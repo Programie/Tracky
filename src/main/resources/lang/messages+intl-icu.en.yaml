@@ -80,7 +80,7 @@ shows:
   latest-watched-episodes: "Latest watched episodes"
   most-watched-episodes: "Most watched episodes"
   least-watched-episodes: "Least watched episodes"
-  unwatched-episodes: "Unwatched episodes"
+  unwatched-episodes: "Unwatched episodes ({count})"
   next-episodes: "Next episodes"
   no-shows-available: "No shows available."
   no-seasons-available: "No seasons available."
