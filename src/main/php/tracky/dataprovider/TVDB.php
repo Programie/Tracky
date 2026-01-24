@@ -16,7 +16,7 @@ use UnexpectedValueException;
 
 class TVDB implements Provider
 {
-    private Client $client;
+    private ?Client $client = null;
 
     public function __construct(
         private readonly string $baseUrl,
@@ -25,14 +25,7 @@ class TVDB implements Provider
         private readonly int    $maxAuthTokenAge,
         private readonly string $defaultMovieLanguage,
         private readonly string $defaultShowLanguage
-    )
-    {
-        if (!$this->isTokenValid()) {
-            $this->refreshToken();
-        }
-
-        $this->createClient();
-    }
+    ) {}
 
     private function refreshToken(): void
     {
@@ -54,14 +47,24 @@ class TVDB implements Provider
         file_put_contents($this->authTokenFilePath, $token);
     }
 
-    private function createClient(): void
+    private function getClient(): Client
     {
+        if ($this->client !== null) {
+            return $this->client;
+        }
+
+        if (!$this->isTokenValid()) {
+            $this->refreshToken();
+        }
+
         $this->client = new Client([
             "base_uri" => $this->baseUrl,
             RequestOptions::HEADERS => [
                 "Authorization" => sprintf("Bearer %s", file_get_contents($this->authTokenFilePath))
             ]
         ]);
+
+        return $this->client;
     }
 
     private function isTokenValid(): bool
@@ -80,7 +83,7 @@ class TVDB implements Provider
     private function getRawJson(string $path, array $query = []): ?array
     {
         try {
-            $response = $this->client->get($path, [
+            $response = $this->getClient()->get($path, [
                 RequestOptions::QUERY => $query
             ]);
         } catch (BadResponseException $exception) {
@@ -89,9 +92,9 @@ class TVDB implements Provider
             }
 
             $this->refreshToken();
-            $this->createClient();
+            $this->client = null;// Clear client to create a new one on next call to getClient()
 
-            $response = $this->client->get($path, [
+            $response = $this->getClient()->get($path, [
                 RequestOptions::QUERY => $query
             ]);
         }
