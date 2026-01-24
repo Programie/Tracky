@@ -269,7 +269,7 @@ class TMDB implements Provider
 
             $items[] = [
                 "id" => $result["id"],
-                "title" => $result["title"],
+                "title" => $result["title"] ?? $result["name"],
                 "year" => $date === null ? null : (new Date($date))->format("Y"),
                 "image" => $this->getImageUrl($result["poster_path"] ?? null)
             ];
