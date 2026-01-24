@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.2] - 2026-01-24
+
+* Fixed requiring TVDB api key if only using TMDB (and vice versa) - fixes #9
+* Fixed throwing error when searching for shows using TMDB due to using wrong field in response
+
 ## [1.5.1] - 2025-11-13
 
 * Fixed duplicate escaping of page title (e.g. & in show/movie title)
