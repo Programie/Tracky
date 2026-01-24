@@ -1,10 +1,10 @@
 parameters:
   data-provider.movies: tmdb
   data-provider.shows: tvdb
-  tmdb.api-token:
+  tmdb.api-token: ""
   tmdb.movies.language: en-US
   tmdb.shows.language: en-US
-  tvdb.api-key:
+  tvdb.api-key: ""
   tvdb.movies.language: eng
   tvdb.shows.language: eng
   scrobbler.use-queue: false
