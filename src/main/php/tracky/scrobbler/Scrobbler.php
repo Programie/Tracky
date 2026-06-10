@@ -167,7 +167,7 @@ class Scrobbler
             throw new UnexpectedValueException("Missing episode number");
         }
 
-        list($dataProvider, $providerId) = $this->getDataProviderFromUniqueIds(Helper::TYPE_SHOW, $json);
+        list($dataProvider, $providerId) = $this->getDataProviderFromUniqueIds(Helper::TYPE_SHOW, $json["tvShowUniqueIds"] ?? $json["uniqueIds"] ?? []);
 
         $show = $this->showRepository->findOneBy([$dataProvider->getIdFieldName() => $providerId]);
         if ($show === null) {
@@ -202,7 +202,7 @@ class Scrobbler
 
     private function getMovie(array $json): Movie
     {
-        list($dataProvider, $providerId) = $this->getDataProviderFromUniqueIds(Helper::TYPE_MOVIE, $json);
+        list($dataProvider, $providerId) = $this->getDataProviderFromUniqueIds(Helper::TYPE_MOVIE, $json["uniqueIds"] ?? []);
 
         $movie = $this->movieRepository->findOneBy([$dataProvider->getIdFieldName() => $providerId]);
         if ($movie === null) {
@@ -217,11 +217,11 @@ class Scrobbler
         return $movie;
     }
 
-    private function getDataProviderFromUniqueIds(string $type, array $json): array
+    private function getDataProviderFromUniqueIds(string $type, array $uniqueIds): array
     {
         $dataProvider = $this->dataProviderHelper->getProviderByType($type);
 
-        $providerId = $dataProvider->getIdFromUniqueIds($json["uniqueIds"] ?? []);
+        $providerId = $dataProvider->getIdFromUniqueIds($uniqueIds);
         if ($providerId === null) {
             throw new UnexpectedValueException("Unable to get ID from data provider");
         }

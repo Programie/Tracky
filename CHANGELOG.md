@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.6.0] - 2026-06-10
+
+* Scrobbler: Add support for providing IMDB/TMDB/TVDB IDs for TV shows in `tvShowUniqueIds` property additionally to `uniqueIds`
+
 ## [1.5.2] - 2026-01-24
 
 * Fixed requiring TVDB api key if only using TMDB (and vice versa) - fixes #9
