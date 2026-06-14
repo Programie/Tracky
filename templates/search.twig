@@ -9,7 +9,7 @@
 
     {% if results is not null %}
         {% if results %}
-            <div class="row row-cols-1 row-cols-md-5 g-4 mt-1">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 mt-1">
                 {% for entry in results %}
                     {% if entry.className == "Episode" %}
                         {% set imageUrl = path("getEpisodeImage", {"show": entry.season.show.id, "seasonNumber": entry.season.number, "episodeNumber": entry.number}) %}
