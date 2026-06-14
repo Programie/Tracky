@@ -20,10 +20,10 @@
     <img class="card-img-top fullscreen-image" loading="lazy" src="{{ imageUrl }}"/>
     <div class="card-body">
         {% if entry.type == "episode" %}
-            <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) }}"><b>{{ season.number }}x{{ episode.number }}</b> {{ episode.title|default("unknown-title"|trans) }}</a></h5>
-            <div><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"show": show.id}) }}">{{ show.title }}</a></div>
+            <h5 class="card-title text-truncate" title="{{ season.number }}x{{ episode.number }} {{ episode.title|default("unknown-title"|trans) }}"><a class="text-reset text-decoration-none" href="{{ path("episodePage", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) }}"><b>{{ season.number }}x{{ episode.number }}</b> {{ episode.title|default("unknown-title"|trans) }}</a></h5>
+            <div class="text-truncate" title="{{ show.title }}"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"show": show.id}) }}">{{ show.title }}</a></div>
         {% elseif entry.type == "movie" %}
-            <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("moviePage", {"movie": movie.id}) }}">{{ movie.title }}</a></h5>
+            <h5 class="card-title text-truncate" title="{{ movie.title }}"><a class="text-reset text-decoration-none" href="{{ path("moviePage", {"movie": movie.id}) }}">{{ movie.title }}</a></h5>
         {% endif %}
         <div class="text-body-secondary">{{ entry.datetime|format_datetime }}</div>
     </div>

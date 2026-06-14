@@ -1,7 +1,7 @@
 <a class="card text-reset text-decoration-none" href="{{ path("moviePage", {"movie": movie.id}) }}">
     <img class="card-img-top" loading="lazy" src="{{ path("getMovieImage", {"movie": movie.id}) }}"/>
     <div class="card-body">
-        <h5 class="card-title">{{ movie.title }}</h5>
+        <h5 class="card-title text-truncate" title="{{ movie.title }}">{{ movie.title }}</h5>
 
         {% if movie.runtime is not null %}
             <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
