@@ -9,6 +9,14 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "history";
 @import "login";
 
+html {
+    scroll-behavior: smooth;
+}
+
+[id] {
+    scroll-margin-top: 80px;
+}
+
 .progress-text {
     position: absolute;
     left: 0;
@@ -28,6 +36,11 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 .episode-pagination > * {
     display: inline-flex;
     width: 50%;
+}
+
+.card {
+    background: var(--bs-tertiary-bg);
+    border: 0;
 }
 
 .scaled-image {

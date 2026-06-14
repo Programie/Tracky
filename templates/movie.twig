@@ -9,29 +9,38 @@
         </div>
 
         <div class="col-lg-9 col-12">
-            <h1>{{ movie.title }}</h1>
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h1>{{ movie.title }}</h1>
 
-            {% if movie.tagline is not null %}
-                <small class="d-block text-body-secondary fst-italic my-2">{{ movie.tagline }}</small>
-            {% endif %}
+                    {% if movie.tagline is not null %}
+                        <small class="d-block text-body-secondary fst-italic my-2">{{ movie.tagline }}</small>
+                    {% endif %}
 
-            <div class="my-2">
-                {% if movie.tmdbId %}
-                    <a href="https://www.themoviedb.org/movie/{{ movie.tmdbId }}" class="badge text-bg-secondary" target="_blank">TMDB</a>
-                {% endif %}
-                {% if movie.tvdbId %}
-                    <a href="https://www.thetvdb.com/dereferrer/movie/{{ movie.tvdbId }}" class="badge text-bg-secondary" target="_blank">TVDB</a>
-                {% endif %}
+                    <div class="my-2">
+                        {% if movie.tmdbId %}
+                            <a href="https://www.themoviedb.org/movie/{{ movie.tmdbId }}" class="badge text-bg-secondary" target="_blank">TMDB</a>
+                        {% endif %}
+                        {% if movie.tvdbId %}
+                            <a href="https://www.thetvdb.com/dereferrer/movie/{{ movie.tvdbId }}" class="badge text-bg-secondary" target="_blank">TVDB</a>
+                        {% endif %}
+                    </div>
+
+                    {% if movie.runtime is not null %}
+                        <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
+                    {% endif %}
+
+                    <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ movie.year }}</small>
+                </div>
+
+                {% include "components/view-buttons.twig" with {"type": "movie", "item": movie} only %}
             </div>
 
-            {% if movie.runtime is not null %}
-                <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
-            {% endif %}
-
-            <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ movie.year }}</small>
-            {% include "components/view.twig" with {"type": "movie", "item": movie} only %}
-
             <div class="card-text mt-3">{{ movie.plot }}</div>
+
+            <div class="card-text mt-3">
+                {% include "components/view-last-watched.twig" with {"type": "movie", "item": movie} only %}
+            </div>
         </div>
     </div>
 {% endblock %}

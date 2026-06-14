@@ -112,6 +112,8 @@ movies:
 views:
   views: "{count} mal gesehen"
   add-view: "Als gesehen markieren"
+  show-all-views: "Gesamten Verlauf anzeigen"
+  last-watched: "Zuletzt gesehen"
   remove:
     header: "Verlauf entfernen?"
     this-view: "Diesen Eintrag"

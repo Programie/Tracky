@@ -1,0 +1,6 @@
+{% if is_granted("IS_AUTHENTICATED") %}
+    {% set viewsForUser = item.getViewsForUser(app.user) %}
+    {% if viewsForUser|length %}
+        <small class="d-block text-body-secondary">{{ "views.last-watched"|trans }}: {{ viewsForUser.last.dateTime|format_datetime }} ({{ "views.views"|trans({"%count%": viewsForUser|length}) }})</small>
+    {% endif %}
+{% endif %}

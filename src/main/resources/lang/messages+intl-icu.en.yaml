@@ -116,6 +116,8 @@ views:
       other {# views}
     }
   add-view: "Add view"
+  show-all-views: "Show all views"
+  last-watched: "Last watched"
   remove:
     header: "Remove history entries?"
     this-view: "This view"

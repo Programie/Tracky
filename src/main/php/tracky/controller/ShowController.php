@@ -191,30 +191,6 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}", name: "episodePage")]
-    public function getEpisodePage(Show $show, int $seasonNumber, int $episodeNumber): Response
-    {
-        $season = $show->getSeason($seasonNumber);
-        if ($season === null) {
-            throw new NotFoundHttpException("Season not found");
-        }
-
-        $episode = $season->getEpisode($episodeNumber);
-        if ($episode === null) {
-            throw new NotFoundHttpException("Episode not found");
-        }
-
-        return $this->render("shows/episode.twig", [
-            "show" => $show,
-            "season" => $season,
-            "episode" => $episode,
-            "pagination" => [
-                "previousEpisode" => $episode->getPreviousEpisode(),
-                "nextEpisode" => $episode->getNextEpisode()
-            ]
-        ]);
-    }
-
     #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views", name: "addEpisodeView", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function addView(Show $show, int $seasonNumber, int $episodeNumber, Request $request, EntityManagerInterface $entityManager): Response
