@@ -1,3 +1,8 @@
+$primary: #2563eb;
+$secondary: #475569;
+$card-bg: var(--bs-tertiary-bg);
+$card-border-width: 0;
+
 @import "~bootstrap/scss/bootstrap";
 
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
@@ -8,6 +13,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 
 @import "history";
 @import "login";
+@import "sidebar";
 
 html {
     scroll-behavior: smooth;
@@ -38,9 +44,8 @@ html {
     width: 50%;
 }
 
-.card {
-    background: var(--bs-tertiary-bg);
-    border: 0;
+.navbar {
+    background: #1e293b;
 }
 
 .scaled-image {
@@ -55,4 +60,14 @@ html {
         height: 300px;
         border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
     }
+}
+
+.app-layout {
+    display: flex;
+    min-height: calc(100vh - 56px);
+}
+
+#nav-searchbar {
+    width: 100%;
+    max-width: 700px;
 }

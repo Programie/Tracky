@@ -1,0 +1,44 @@
+.sidebar {
+    position: fixed;
+    width: 260px;
+    background: #1a1d20;
+    overflow-y: auto;
+    z-index: 1045;
+}
+
+.sidebar li {
+    a {
+        color: #ababab;
+    }
+
+    :hover {
+        background-color: #212529;
+    }
+}
+
+@media (min-width: 992px) {
+    .sidebar {
+        transform: none;
+        top: 56px;
+        left: 0;
+        bottom: 0;
+    }
+
+    .content {
+        margin-left: 260px;
+    }
+}
+
+@media (max-width: 991px) {
+    .sidebar {
+        top: 0;
+        left: 0;
+        height: 100%;
+        transform: translateX(-100%);
+        transition: transform 0.2s ease;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+}

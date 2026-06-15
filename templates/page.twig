@@ -14,48 +14,53 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top">
-            <div class="container-fluid px-3 py-2 d-flex justify-content-md-between">
-                <a class="navbar-brand" href="/"><img src="{{ asset("app-icon.svg") }}" height="28" class="d-inline-block align-text-top"/> <b>Tracky</b></a>
+        <nav class="navbar navbar-expand-md navbar-dark sticky-top px-3">
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"><span class="navbar-toggler-icon"></span></button>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"><span class="navbar-toggler-icon"></span></button>
+                <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+                    <img src="{{ asset("app-icon.svg") }}" height="28" class="d-inline-block align-text-top"/>
+                    <span class="fw-bold">Tracky</span>
+                </a>
+            </div>
 
-                <div class="navbar-collapse collapse d-md-flex">
-                    <ul class="navbar-nav me-auto mb-md-0">
-                        <li class="nav-item"><a class="nav-link" href="{{ path("showsPage") }}">{{ "navbar.shows"|trans }}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ path("moviesPage") }}">{{ "navbar.movies"|trans }}</a></li>
-                        {% if is_granted("IS_AUTHENTICATED") %}
-                            <li class="nav-item"><a class="nav-link" href="{{ path("libraryManagementPage") }}">{{ "library-management.title"|trans }}</a></li>
-                        {% endif %}
-                    </ul>
-
-                    <div class="navbar-nav ms-auto mb-md-0">
-                        <form action="{{ path("searchPage") }}" method="get" role="search">
-                            <input class="form-control" type="search" name="query" placeholder="{{ "search.placeholder"|trans }}"/>
-                        </form>
-
-                        {% if app.user %}
-                            <div class="nav-item dropdown">
-                                <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ app.user.username }}</button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="{{ path("profilePage", {"username": app.user.username}) }}">{{ "user.profile"|trans }}</a></li>
-                                    <li><a class="dropdown-item" href="{{ path("userHistoryPage", {"username": app.user.username}) }}">{{ "user.history"|trans }}</a></li>
-                                    <li><a class="dropdown-item" href="{{ path("userShowProgressPage", {"username": app.user.username}) }}">{{ "user.show-progress"|trans }}</a></li>
-                                    <li class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ path("logout") }}">{{ "user.logout"|trans }}</a></li>
-                                </ul>
-                            </div>
-                        {% else %}
-                            <a class="nav-link" href="{{ path("loginPage") }}">{{ "user.login"|trans }}</a>
-                        {% endif %}
-                    </div>
-                </div>
+            <div class="d-flex flex-grow-1 justify-content-center">
+                <form action="{{ path("searchPage") }}" method="get" role="search" id="nav-searchbar">
+                    <input class="form-control" type="search" name="query" placeholder="{{ "search.placeholder"|trans }}"/>
+                </form>
             </div>
         </nav>
 
-        <main class="container my-3">
-            {% block content %}{% endblock %}
-        </main>
+        <div class="app-layout">
+            <div class="sidebar p-3" id="sidebar">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ path("showsPage") }}"><i class="fa-solid fa-tv"></i> {{ "navbar.shows"|trans }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path("moviesPage") }}"><i class="fa-solid fa-film"></i> {{ "navbar.movies"|trans }}</a></li>
+                    {% if is_granted("IS_AUTHENTICATED") %}
+                        <li class="nav-item"><a class="nav-link" href="{{ path("libraryManagementPage") }}"><i class="fa-solid fa-wrench"></i> {{ "library-management.title"|trans }}</a></li>
+                    {% endif %}
+                </ul>
+
+                <hr/>
+
+                <ul class="nav nav-pills flex-column mb-auto">
+                    {% if app.user %}
+                        <li class="nav-item"><a class="nav-link" href="{{ path("profilePage", {"username": app.user.username}) }}"><i class="fa-solid fa-user"></i> {{ "user.profile"|trans }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path("userHistoryPage", {"username": app.user.username}) }}"><i class="fa-solid fa-calendar-days"></i> {{ "user.history"|trans }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path("userShowProgressPage", {"username": app.user.username}) }}"><i class="fa-solid fa-bars-progress"></i> {{ "user.show-progress"|trans }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path("logout") }}"><i class="fa-solid fa-arrow-right-from-bracket"></i> {{ "user.logout"|trans }}</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{{ path("loginPage") }}"><i class="fa-solid fa-arrow-right-to-bracket"></i> {{ "user.login"|trans }}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <main class="content w-100">
+                <div class="container my-3">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
 
         {% include "components/image-modal.twig" %}
 
