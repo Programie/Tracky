@@ -6,6 +6,7 @@ import {Tooltip} from "bootstrap";
 import "./popper";
 import "../style/main.scss";
 import "../style/image-modal.scss";
+import "../images/app-icon.svg";
 
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("[title]").forEach(element => {
