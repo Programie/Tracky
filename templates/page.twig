@@ -18,7 +18,7 @@
             <div class="d-flex align-items-center gap-2">
                 <button class="btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"><span class="navbar-toggler-icon"></span></button>
 
-                <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+                <a class="navbar-brand d-none d-lg-flex align-items-center gap-2" href="/">
                     <img src="{{ asset("app-icon.svg") }}" height="28" class="d-inline-block align-text-top"/>
                     <span class="fw-bold">Tracky</span>
                 </a>
@@ -33,6 +33,13 @@
 
         <div class="app-layout">
             <div class="sidebar p-3" id="sidebar">
+                <a class="d-flex d-lg-none align-items-center mb-3 mx-auto text-white text-decoration-none gap-2 fs-3" href="/">
+                    <img src="{{ asset("app-icon.svg") }}" height="28" class="d-inline-block align-text-top"/>
+                    <span class="fw-bold">Tracky</span>
+                </a>
+
+                <hr class="d-lg-none"/>
+
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item"><a class="nav-link" href="{{ path("showsPage") }}"><i class="fa-solid fa-tv"></i> {{ "navbar.shows"|trans }}</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ path("moviesPage") }}"><i class="fa-solid fa-film"></i> {{ "navbar.movies"|trans }}</a></li>
