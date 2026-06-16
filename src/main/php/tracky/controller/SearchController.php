@@ -19,7 +19,7 @@ class SearchController extends AbstractController
     {
     }
 
-    #[Route("/search", name: "searchPage")]
+    #[Route("/search", name: "search_page")]
     public function getSearchPage(Request $request): Response
     {
         $query = trim($request->query->get("query", ""));

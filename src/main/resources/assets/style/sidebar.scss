@@ -1,31 +1,35 @@
 .sidebar {
     position: fixed;
-    width: 260px;
-    background: #1a1d20;
-    overflow-y: auto;
+    width: $sidebar-width;
+    background: $sidebar-bg;
+    border-right: 1px solid $sidebar-border-color;
     z-index: 1045;
 }
 
-.sidebar li {
+.sidebar .nav .nav-item {
     a {
-        color: #ababab;
+        color: $sidebar-text-color;
     }
 
     :hover {
-        background-color: #212529;
+        background-color: $sidebar-hover-color;
+    }
+
+    .active {
+        background-color: $sidebar-active-color;
     }
 }
 
 @media (min-width: 992px) {
     .sidebar {
         transform: none;
-        top: 56px;
+        top: $navbar-height;
         left: 0;
         bottom: 0;
     }
 
     .content {
-        margin-left: 260px;
+        margin-left: $sidebar-width;
     }
 }
 

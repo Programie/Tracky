@@ -3,7 +3,7 @@
 {% block title %}{{ "register.title"|trans }}{% endblock %}
 
 {% block content %}
-    <form class="w-100 m-auto" id="login-form" action="{{ path("registerPage") }}" method="post">
+    <form class="w-100 m-auto" id="login-form" action="{{ path("register_page") }}" method="post">
         <h1 class="h3 mb-3 fw-normal">{{ "register.title"|trans }}</h1>
 
         <div class="form-floating">
@@ -27,6 +27,6 @@
 
         <button class="btn btn-primary w-100 py-2" type="submit">{{ "register.submit"|trans }}</button>
 
-        <a href="{{ path("loginPage") }}" class="btn btn-secondary w-100 py-2 my-2">{{ "register.already-have-account"|trans }}</a>
+        <a href="{{ path("login_page") }}" class="btn btn-secondary w-100 py-2 my-2">{{ "register.already-have-account"|trans }}</a>
     </form>
 {% endblock %}

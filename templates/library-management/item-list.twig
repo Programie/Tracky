@@ -13,11 +13,11 @@
             {% if item.className == "Movie" %}
                 {% set itemType = "movie" %}
                 {% set itemTypeTitle = "library-management.types.movie"|trans %}
-                {% set url = path("moviePage", {"movie": item.id}) %}
+                {% set url = path("movies_single_page", {"movie": item.id}) %}
             {% elseif item.className == "Show" %}
                 {% set itemType = "show" %}
                 {% set itemTypeTitle = "library-management.types.show"|trans %}
-                {% set url = path("showOverviewPage", {"show": item.id}) %}
+                {% set url = path("shows_show_page", {"show": item.id}) %}
             {% endif %}
 
             <tr data-type="{{ itemType }}" data-item="{{ item.id }}">

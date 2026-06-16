@@ -1,9 +1,9 @@
 <div class="card">
     <div class="row g-0">
-        <div class="col-md-4 scaled-image rounded-bottom-0 fullscreen-image lazy-background" data-image-url="{{ path("getEpisodeImage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"></div>
+        <div class="col-md-4 scaled-image rounded-bottom-0 fullscreen-image lazy-background" data-image-url="{{ path("shows_episode_image", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"></div>
         <div class="col-md-8">
             <div class="card-body">
-                <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"show": episode.season.show.id, "number": episode.season.number}) }}#e{{ episode.number }}">{{ episode.title|default("unknown-title"|trans) }}</a></h5>
+                <h5 class="card-title"><a class="text-reset text-decoration-none" href="{{ path("shows_season_page", {"show": episode.season.show.id, "number": episode.season.number}) }}#e{{ episode.number }}">{{ episode.title|default("unknown-title"|trans) }}</a></h5>
                 <h6 class="card-subtitle text-body-secondary">{{ "shows.episode"|trans({"%number%": episode.season.number ~ "x" ~ episode.number}) }}</h6>
                 <div class="card-text mt-3">
                     {% if episode.runtime is not null %}

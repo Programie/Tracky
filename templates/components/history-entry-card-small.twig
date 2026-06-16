@@ -4,12 +4,12 @@
     {% set episode = entry.episode %}
     {% set season = episode.season %}
     {% set show = season.show %}
-    {% set imageUrl = path("getEpisodeImage", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) %}
+    {% set imageUrl = path("shows_episode_image", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) %}
     {% set views = episode.viewsForUser(user) %}
     {% set metadata = metadata|merge({"views": views|length, "show": show.id, "season": season.number, "episode": episode.number}) %}
 {% elseif entry.type == "movie" %}
     {% set movie = entry.movie %}
-    {% set imageUrl = path("getMovieImage", {"movie": movie.id}) %}
+    {% set imageUrl = path("movies_get_image", {"movie": movie.id}) %}
     {% set views = movie.viewsForUser(user) %}
     {% set metadata = metadata|merge({"views": views|length, "movie": movie.id}) %}
 {% endif %}
@@ -20,10 +20,10 @@
     <img class="card-img-top fullscreen-image" loading="lazy" src="{{ imageUrl }}"/>
     <div class="card-body">
         {% if entry.type == "episode" %}
-            <h5 class="card-title text-truncate" title="{{ season.number }}x{{ episode.number }} {{ episode.title|default("unknown-title"|trans) }}"><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"show": show.id, "number": season.number}) }}#e{{ episode.number }}"><b>{{ season.number }}x{{ episode.number }}</b> {{ episode.title|default("unknown-title"|trans) }}</a></h5>
-            <div class="text-truncate" title="{{ show.title }}"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"show": show.id}) }}">{{ show.title }}</a></div>
+            <h5 class="card-title text-truncate" title="{{ season.number }}x{{ episode.number }} {{ episode.title|default("unknown-title"|trans) }}"><a class="text-reset text-decoration-none" href="{{ path("shows_season_page", {"show": show.id, "number": season.number}) }}#e{{ episode.number }}"><b>{{ season.number }}x{{ episode.number }}</b> {{ episode.title|default("unknown-title"|trans) }}</a></h5>
+            <div class="text-truncate" title="{{ show.title }}"><a class="text-reset text-decoration-none" href="{{ path("shows_show_page", {"show": show.id}) }}">{{ show.title }}</a></div>
         {% elseif entry.type == "movie" %}
-            <h5 class="card-title text-truncate" title="{{ movie.title }}"><a class="text-reset text-decoration-none" href="{{ path("moviePage", {"movie": movie.id}) }}">{{ movie.title }}</a></h5>
+            <h5 class="card-title text-truncate" title="{{ movie.title }}"><a class="text-reset text-decoration-none" href="{{ path("movies_single_page", {"movie": movie.id}) }}">{{ movie.title }}</a></h5>
         {% endif %}
         <div class="text-body-secondary">{{ entry.datetime|format_datetime }}</div>
     </div>

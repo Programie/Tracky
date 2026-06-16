@@ -12,7 +12,7 @@
 
     <small class="d-block">{{ "library-management.count"|trans({"%count%": items|length}) }}</small>
 
-    <a href="{{ path("addItemsPage") }}" class="btn btn-primary my-3">{{ "library-management.add-item"|trans }}</a>
+    <a href="{{ path("library_add_page") }}" class="btn btn-primary my-3">{{ "library-management.add-item"|trans }}</a>
 
     {% if items %}
         {% include "library-management/item-list.twig" with {"items": items} %}

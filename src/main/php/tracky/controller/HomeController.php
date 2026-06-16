@@ -22,7 +22,7 @@ class HomeController extends AbstractController
     {
     }
 
-    #[Route("/", name: "homePage")]
+    #[Route("/", name: "home_page")]
     public function home(ShowRepository $showRepository, EpisodeRepository $episodeRepository, MovieRepository $movieRepository, ViewRepository $viewRepository, Scrobbler $scrobbler): Response
     {
         $nowWatching = null;

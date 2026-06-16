@@ -10,9 +10,9 @@
     <h1>{{ user.username }}</h1>
 
     <ul class="nav nav-underline mb-3">
-        {{ _self.navItem("profilePage", {"username": user.username}, "user.profile"|trans) }}
-        {{ _self.navItem("userHistoryPage", {"username": user.username}, "user.history"|trans) }}
-        {{ _self.navItem("userShowProgressPage", {"username": user.username}, "user.show-progress"|trans) }}
+        {{ _self.navItem("user_profile_page", {"username": user.username}, "user.profile"|trans) }}
+        {{ _self.navItem("user_profile_history_page", {"username": user.username}, "user.history"|trans) }}
+        {{ _self.navItem("user_profile_show_progress_page", {"username": user.username}, "user.show-progress"|trans) }}
     </ul>
 
     {% block profileContent %}{% endblock %}

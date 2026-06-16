@@ -1,11 +1,11 @@
 <div class="card">
     <div class="row g-0">
-        <div class="col-md-4 scaled-image fullscreen-image lazy-background" data-image-url="{{ path("getEpisodeImage", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"></div>
+        <div class="col-md-4 scaled-image fullscreen-image lazy-background" data-image-url="{{ path("shows_episode_image", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"></div>
         <div class="col-md-8">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h5 class="card-title fw-bold"><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"show": episode.season.show.id, "number": episode.season.number}) }}#e{{ episode.number }}">{{ episode.title|default("unknown-title"|trans) }}</a></h5>
+                        <h5 class="card-title fw-bold"><a class="text-reset text-decoration-none" href="{{ path("shows_season_page", {"show": episode.season.show.id, "number": episode.season.number}) }}#e{{ episode.number }}">{{ episode.title|default("unknown-title"|trans) }}</a></h5>
                         <small class="card-subtitle text-body-secondary">
                             {{ "shows.episode"|trans({"%number%": episode.number}) }}
                             {% if episode.firstAired is not null %}

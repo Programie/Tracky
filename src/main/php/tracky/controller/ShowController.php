@@ -31,13 +31,13 @@ class ShowController extends AbstractController
     {
     }
 
-    #[Route("/shows/{show}.jpg", name: "getShowImage")]
+    #[Route("/shows/{show}.jpg", name: "shows_show_image")]
     public function getShowImage(Show $show, ImageFetcher $imageFetcher): Response
     {
         return $this->returnImage($show, $imageFetcher);
     }
 
-    #[Route("/shows/{show}/seasons/{seasonNumber}.jpg", name: "getSeasonImage")]
+    #[Route("/shows/{show}/seasons/{seasonNumber}.jpg", name: "shows_season_image")]
     public function getSeasonImage(Show $show, int $seasonNumber, ImageFetcher $imageFetcher): Response
     {
         $season = $show->getSeason($seasonNumber);
@@ -48,7 +48,7 @@ class ShowController extends AbstractController
         return $this->returnImage($season, $imageFetcher);
     }
 
-    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}.jpg", name: "getEpisodeImage")]
+    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}.jpg", name: "shows_episode_image")]
     public function getEpisodeImage(Show $show, int $seasonNumber, int $episodeNumber, ImageFetcher $imageFetcher): Response
     {
         $season = $show->getSeason($seasonNumber);
@@ -64,7 +64,7 @@ class ShowController extends AbstractController
         return $this->returnImage($episode, $imageFetcher);
     }
 
-    #[Route("/shows", name: "showsPage")]
+    #[Route("/shows", name: "shows_page")]
     public function getShowsPage(): Response
     {
         return $this->render("shows/shows.twig", [
@@ -72,13 +72,13 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{show}", name: "showOverviewPage", methods: ["GET"])]
+    #[Route("/shows/{show}", name: "shows_show_page", methods: ["GET"])]
     public function getShowOverviewPage(Show $show): Response
     {
-        return $this->redirectToRoute("showSeasonsPage", ["show" => $show->getId()]);
+        return $this->redirectToRoute("shows_seasons_page", ["show" => $show->getId()]);
     }
 
-    #[Route("/shows/{show}", name: "removeShow", methods: ["DELETE"])]
+    #[Route("/shows/{show}", name: "shows_show_remove_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function removeShow(Show $show, EntityManagerInterface $entityManager): Response
     {
@@ -101,7 +101,7 @@ class ShowController extends AbstractController
         return new Response("Show removed from database");
     }
 
-    #[Route("/shows/{show}/seasons", name: "showSeasonsPage")]
+    #[Route("/shows/{show}/seasons", name: "shows_seasons_page")]
     public function getSeasonsPage(int $show): Response
     {
         return $this->render("shows/seasons.twig", [
@@ -109,7 +109,7 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{show}/random-episodes", name: "randomEpisodesPage")]
+    #[Route("/shows/{show}/random-episodes", name: "shows_random_episodes_page")]
     public function getRandomEpisodesPage(int $show): Response
     {
         $show = $this->showRepository->findByIdWithEpisodes($show);
@@ -121,7 +121,7 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{show}/latest-watched", name: "latestWatchedEpisodesPage")]
+    #[Route("/shows/{show}/latest-watched", name: "shows_latest_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
     public function getLatestWatchedEpisodesPage(int $show): Response
     {
@@ -134,7 +134,7 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{show}/most-watched", name: "mostWatchedEpisodesPage")]
+    #[Route("/shows/{show}/most-watched", name: "shows_most_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
     public function getMostWatchedEpisodesPage(int $show): Response
     {
@@ -147,7 +147,7 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{show}/least-watched", name: "leastWatchedEpisodesPage")]
+    #[Route("/shows/{show}/least-watched", name: "shows_least_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
     public function getLeastWatchedEpisodesPage(int $show): Response
     {
@@ -160,7 +160,7 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{show}/unwatched", name: "unwatchedEpisodesPage")]
+    #[Route("/shows/{show}/unwatched", name: "shows_unwatched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
     public function getUnwatchedEpisodesPage(int $show): Response
     {
@@ -173,7 +173,7 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{show}/seasons/{number}", name: "seasonPage")]
+    #[Route("/shows/{show}/seasons/{number}", name: "shows_season_page")]
     public function getSeasonPage(Show $show, int $number): Response
     {
         $season = $show->getSeason($number);
@@ -191,7 +191,7 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views", name: "addEpisodeView", methods: ["POST"])]
+    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views", name: "shows_add_episode_view_action", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function addView(Show $show, int $seasonNumber, int $episodeNumber, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -222,7 +222,7 @@ class ShowController extends AbstractController
         return new Response("View added to database");
     }
 
-    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views/all", name: "removeEpisodeViews", methods: ["DELETE"])]
+    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views/all", name: "shows_remove_episode_view_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function removeViewsByEpisode(Show $show, int $seasonNumber, int $episodeNumber, EntityManagerInterface $entityManager): Response
     {
@@ -247,7 +247,7 @@ class ShowController extends AbstractController
         return new Response("Views removed from database");
     }
 
-    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views/{entryId}", name: "removeEpisodeViewById", methods: ["DELETE"])]
+    #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views/{entryId}", name: "shows_remove_episode_view_by_id_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function removeViewById(Show $show, int $seasonNumber, int $episodeNumber, int $entryId, EntityManagerInterface $entityManager): Response
     {

@@ -1,5 +1,5 @@
-<a class="card text-reset text-decoration-none" href="{{ path("showOverviewPage", {"show": show.id}) }}">
-    <img class="card-img-top" loading="lazy" src="{{ path("getShowImage", {"show": show.id}) }}"/>
+<a class="card text-reset text-decoration-none" href="{{ path("shows_show_page", {"show": show.id}) }}">
+    <img class="card-img-top" loading="lazy" src="{{ path("shows_show_image", {"show": show.id}) }}"/>
     <div class="card-body">
         <h5 class="card-title text-truncate" title="{{ show.title }}">{{ show.title }}</h5>
         <small class="d-block">{{ "shows.count.seasons"|trans({"%count%": show.seasons|length}) }}</small>

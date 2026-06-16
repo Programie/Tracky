@@ -15,13 +15,13 @@
 {% from "components/macros.twig" import paginationContainer %}
 
 {% macro paginationUrl(page, context) %}
-    {{ path("userHistoryPage", app.request.query.all|merge({"username": context.user.username, "page": page})) }}
+    {{ path("user_profile_history_page", app.request.query.all|merge({"username": context.user.username, "page": page})) }}
 {% endmacro %}
 
 {% block title %}{{ "user.history"|trans }} - {{ user.username }}{% endblock %}
 
 {% block profileContent %}
-    <h1 class="my-3">
+    <h2 class="mb-3">
         {{ "user.history"|trans }}
         {% if dateRange %}
             <p id="history-date-selection" class="text-body-secondary fs-6 my-2" role="button" data-startdate="{{ dateRange.startDate.formatForKey }}" data-enddate="{{ dateRange.endDate.formatForKey }}">

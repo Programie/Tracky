@@ -12,23 +12,23 @@
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 mt-1">
                 {% for entry in results %}
                     {% if entry.className == "Episode" %}
-                        {% set imageUrl = path("getEpisodeImage", {"show": entry.season.show.id, "seasonNumber": entry.season.number, "episodeNumber": entry.number}) %}
+                        {% set imageUrl = path("shows_episode_image", {"show": entry.season.show.id, "seasonNumber": entry.season.number, "episodeNumber": entry.number}) %}
                     {% elseif entry.className == "Movie" %}
-                        {% set imageUrl = path("getMovieImage", {"movie": entry.id}) %}
+                        {% set imageUrl = path("movies_get_image", {"movie": entry.id}) %}
                     {% elseif entry.className == "Show" %}
-                        {% set imageUrl = path("getShowImage", {"show": entry.id}) %}
+                        {% set imageUrl = path("shows_show_image", {"show": entry.id}) %}
                     {% endif %}
                     <div class="col">
                         <div class="card">
                             <img class="card-img-top fullscreen-image" loading="lazy" src="{{ imageUrl }}"/>
                             <div class="card-body">
                                 {% if entry.className == "Episode" %}
-                                    <h5 class="card-title text-truncate" title="{{ entry.season.number }}x{{ entry.number }} {{ entry.title }}"><a class="text-reset text-decoration-none" href="{{ path("seasonPage", {"show": entry.season.show.id, "number": entry.season.number}) }}#e{{ entry.number }}"><b>{{ entry.season.number }}x{{ entry.number }}</b> {{ entry.title }}</a></h5>
-                                    <div class="text-truncate" title="{{ entry.season.show.title }}"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"show": entry.season.show.id}) }}">{{ entry.season.show.title }}</a></div>
+                                    <h5 class="card-title text-truncate" title="{{ entry.season.number }}x{{ entry.number }} {{ entry.title }}"><a class="text-reset text-decoration-none" href="{{ path("shows_season_page", {"show": entry.season.show.id, "number": entry.season.number}) }}#e{{ entry.number }}"><b>{{ entry.season.number }}x{{ entry.number }}</b> {{ entry.title }}</a></h5>
+                                    <div class="text-truncate" title="{{ entry.season.show.title }}"><a class="text-reset text-decoration-none" href="{{ path("shows_show_page", {"show": entry.season.show.id}) }}">{{ entry.season.show.title }}</a></div>
                                 {% elseif entry.className == "Movie" %}
-                                    <h5 class="card-title text-truncate" title="{{ entry.title }}"><a class="text-reset text-decoration-none" href="{{ path("moviePage", {"movie": entry.id}) }}">{{ entry.title }}</a></h5>
+                                    <h5 class="card-title text-truncate" title="{{ entry.title }}"><a class="text-reset text-decoration-none" href="{{ path("movies_single_page", {"movie": entry.id}) }}">{{ entry.title }}</a></h5>
                                 {% elseif entry.className == "Show" %}
-                                    <h5 class="card-title text-truncate" title="{{ entry.title }}"><a class="text-reset text-decoration-none" href="{{ path("showOverviewPage", {"show": entry.id}) }}">{{ entry.title }}</a></h5>
+                                    <h5 class="card-title text-truncate" title="{{ entry.title }}"><a class="text-reset text-decoration-none" href="{{ path("shows_show_page", {"show": entry.id}) }}">{{ entry.title }}</a></h5>
                                 {% endif %}
                             </div>
                         </div>

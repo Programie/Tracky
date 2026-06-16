@@ -26,8 +26,8 @@ security:
       entry_point: form_login
 
       form_login:
-        login_path: loginPage
-        check_path: loginPage
+        login_path: login_page
+        check_path: login_page
 
       logout:
         path: logout

@@ -1,6 +1,20 @@
 $primary: #2563eb;
 $secondary: #475569;
-$card-bg: var(--bs-tertiary-bg);
+
+// Navbar (top)
+$navbar-bg: #1e293b;
+$navbar-height: 56px;
+
+// Sidebar
+$sidebar-bg: #1a1d20;
+$sidebar-border-color: #2b3035;
+$sidebar-text-color: #ababab;
+$sidebar-hover-color: #283345;
+$sidebar-active-color: #1e293b;
+$sidebar-width: 260px;
+
+// Cards
+$card-bg: #2b3035;
 $card-border-width: 0;
 
 @import "~bootstrap/scss/bootstrap";
@@ -20,7 +34,7 @@ html {
 }
 
 [id] {
-    scroll-margin-top: 80px;
+    scroll-margin-top: calc($navbar-height + 10px);
 }
 
 .progress-text {
@@ -45,7 +59,7 @@ html {
 }
 
 .navbar {
-    background: #1e293b;
+    background: $navbar-bg;
 }
 
 .scaled-image {
@@ -64,7 +78,7 @@ html {
 
 .app-layout {
     display: flex;
-    min-height: calc(100vh - 56px);
+    min-height: calc(100vh - $navbar-height);
 }
 
 #nav-searchbar {

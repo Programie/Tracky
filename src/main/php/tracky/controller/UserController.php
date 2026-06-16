@@ -23,7 +23,7 @@ class UserController extends AbstractController
     {
     }
 
-    #[Route("/login", name: "loginPage")]
+    #[Route("/login", name: "login_page")]
     public function getLoginPage(AuthenticationUtils $authenticationUtils): Response
     {
         return $this->render("user/login.twig", [
@@ -39,11 +39,11 @@ class UserController extends AbstractController
         throw new Exception("Logout not enabled");
     }
 
-    #[Route("/register", name: "registerPage")]
+    #[Route("/register", name: "register_page")]
     public function getRegisterPage(Request $request, UserPasswordHasherInterface $passwordHasher, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
         if (!$this->enableRegister) {
-            return $this->redirectToRoute("loginPage");
+            return $this->redirectToRoute("login_page");
         }
 
         if ($request->isMethod("POST")) {
@@ -97,7 +97,7 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute("loginPage", ["username" => $username]);
+            return $this->redirectToRoute("login_page", ["username" => $username]);
         }
 
         return $this->render("user/register.twig", [
@@ -106,7 +106,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route("/users/{username}", name: "profilePage")]
+    #[Route("/users/{username}", name: "user_profile_page")]
     public function getProfilePage(User $user, ViewRepository $viewRepository, Scrobbler $scrobbler): Response
     {
         return $this->render("user/profile.twig", [
@@ -117,7 +117,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route("/users/{username}/show-progress", name: "userShowProgressPage")]
+    #[Route("/users/{username}/show-progress", name: "user_profile_show_progress_page")]
     public function getShowProgressForUser(User $user, ShowRepository $showRepository): Response
     {
         return $this->render("user/show-progress.twig", [

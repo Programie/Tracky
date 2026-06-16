@@ -24,7 +24,7 @@ class LibraryManagementController extends AbstractController
     {
     }
 
-    #[Route("/library/add", name: "addItemsPage", methods: ["GET"])]
+    #[Route("/library/add", name: "library_add_page", methods: ["GET"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function getPage(Request $request): Response
     {
@@ -69,7 +69,7 @@ class LibraryManagementController extends AbstractController
         ]);
     }
 
-    #[Route("/library/add", name: "addItem", methods: ["POST"])]
+    #[Route("/library/add", name: "library_add_action", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function addItem(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -105,7 +105,7 @@ class LibraryManagementController extends AbstractController
         }
     }
 
-    #[Route("/library", name: "libraryManagementPage", methods: ["GET"])]
+    #[Route("/library", name: "library_management_page", methods: ["GET"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function libraryManagementPage(): Response
     {

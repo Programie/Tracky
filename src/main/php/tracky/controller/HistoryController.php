@@ -23,7 +23,7 @@ class HistoryController extends AbstractController
     {
     }
 
-    #[Route("/users/{username}/history", name: "userHistoryPage")]
+    #[Route("/users/{username}/history", name: "user_profile_history_page")]
     public function getPage(Request $request, User $user, EntityManagerInterface $entityManager, ViewRepository $viewRepository)
     {
         $page = $request->query->getInt("page", 1);

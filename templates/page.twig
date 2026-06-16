@@ -1,3 +1,16 @@
+{% macro navItem(icon_classes, path, title, route_starts_with = null, parameters = {}) %}
+    {% if route_starts_with != null and app.request.get("_route") starts with route_starts_with %}
+        {% set active = true %}
+    {% elseif app.request.get("_route") == path %}
+        {% set active = true %}
+    {% else %}
+        {% set active = false %}
+    {% endif %}
+    <li class="nav-item">
+        <a class="{{ html_classes("nav-link", {"active": active}) }}" href="{{ path(path, parameters) }}"><i class="{{ icon_classes }}"></i> {{ title }}</a>
+    </li>
+{% endmacro %}
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
     <head>
@@ -25,41 +38,53 @@
             </div>
 
             <div class="d-flex flex-grow-1 justify-content-center">
-                <form action="{{ path("searchPage") }}" method="get" role="search" id="nav-searchbar">
+                <form action="{{ path("search_page") }}" method="get" role="search" id="nav-searchbar">
                     <input class="form-control" type="search" name="query" placeholder="{{ "search.placeholder"|trans }}"/>
                 </form>
             </div>
         </nav>
 
         <div class="app-layout">
-            <div class="sidebar p-3" id="sidebar">
-                <a class="d-flex d-lg-none align-items-center mb-3 mx-auto text-white text-decoration-none gap-2 fs-3" href="/">
-                    <img src="{{ asset("app-icon.svg") }}" height="28" class="d-inline-block align-text-top"/>
-                    <span class="fw-bold">Tracky</span>
-                </a>
+            <div class="sidebar p-3 d-flex flex-column" id="sidebar">
+                <div class="d-lg-none mb-2 px-3">
+                    <a class="text-white text-decoration-none gap-2 fs-3" href="/">
+                        <img src="{{ asset("app-icon.svg") }}" height="28" class="d-inline-block align-text-top"/>
+                        <span class="fw-bold">Tracky</span>
+                    </a>
+                </div>
 
-                <hr class="d-lg-none"/>
+                <div class="flex-grow-1 overflow-y-auto">
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        {{ _self.navItem(icon_classes: "fa-solid fa-tv", path: "shows_page", route_starts_with: "shows_", title: "navbar.shows"|trans) }}
+                        {{ _self.navItem(icon_classes: "fa-solid fa-film", path: "movies_page", route_starts_with: "movies_", title: "navbar.movies"|trans) }}
+                        {% if is_granted("IS_AUTHENTICATED") %}
+                            {{ _self.navItem(icon_classes: "fa-solid fa-wrench", path: "library_management_page", route_starts_with: "library_", title: "library-management.title"|trans) }}
+                        {% endif %}
+                    </ul>
 
-                <ul class="nav nav-pills flex-column mb-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ path("showsPage") }}"><i class="fa-solid fa-tv"></i> {{ "navbar.shows"|trans }}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path("moviesPage") }}"><i class="fa-solid fa-film"></i> {{ "navbar.movies"|trans }}</a></li>
-                    {% if is_granted("IS_AUTHENTICATED") %}
-                        <li class="nav-item"><a class="nav-link" href="{{ path("libraryManagementPage") }}"><i class="fa-solid fa-wrench"></i> {{ "library-management.title"|trans }}</a></li>
-                    {% endif %}
-                </ul>
-
-                <hr/>
-
-                <ul class="nav nav-pills flex-column mb-auto">
                     {% if app.user %}
-                        <li class="nav-item"><a class="nav-link" href="{{ path("profilePage", {"username": app.user.username}) }}"><i class="fa-solid fa-user"></i> {{ "user.profile"|trans }}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ path("userHistoryPage", {"username": app.user.username}) }}"><i class="fa-solid fa-calendar-days"></i> {{ "user.history"|trans }}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ path("userShowProgressPage", {"username": app.user.username}) }}"><i class="fa-solid fa-bars-progress"></i> {{ "user.show-progress"|trans }}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ path("logout") }}"><i class="fa-solid fa-arrow-right-from-bracket"></i> {{ "user.logout"|trans }}</a></li>
-                    {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{{ path("loginPage") }}"><i class="fa-solid fa-arrow-right-to-bracket"></i> {{ "user.login"|trans }}</a></li>
+                        <hr/>
+
+                        {% set profile_page_parameters = {"username": app.user.username} %}
+
+                        <ul class="nav nav-pills flex-column mb-auto">
+                            {{ _self.navItem(icon_classes: "fa-solid fa-user", path: "user_profile_page", parameters: profile_page_parameters, title: "user.profile"|trans) }}
+                            {{ _self.navItem(icon_classes: "fa-solid fa-calendar-days", path: "user_profile_history_page", parameters: profile_page_parameters, title: "user.history"|trans) }}
+                            {{ _self.navItem(icon_classes: "fa-solid fa-bars-progress", path: "user_profile_show_progress_page", parameters: profile_page_parameters, title: "user.show-progress"|trans) }}
+                        </ul>
                     {% endif %}
-                </ul>
+                </div>
+
+                <div class="">
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        {% if app.user %}
+                            <li class="nav-item"><a class="nav-link"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                            {{ _self.navItem(icon_classes: "fa-solid fa-arrow-right-from-bracket", path: "logout", title: "user.logout"|trans) }}
+                        {% else %}
+                            {{ _self.navItem(icon_classes: "fa-solid fa-arrow-right-to-bracket", path: "login_page", title: "user.login"|trans) }}
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
 
             <main class="content w-100">

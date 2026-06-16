@@ -31,7 +31,7 @@ class MovieController extends AbstractController
     {
     }
 
-    #[Route("/movies", name: "moviesPage")]
+    #[Route("/movies", name: "movies_page")]
     public function getMoviesPage(Request $request): Response
     {
         $user = $this->getUser();
@@ -104,7 +104,7 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route("/movies/{movie}.jpg", name: "getMovieImage")]
+    #[Route("/movies/{movie}.jpg", name: "movies_get_image")]
     public function getMovieImage(Movie $movie, ImageFetcher $imageFetcher): Response
     {
         $url = $movie->getPosterImageUrl();
@@ -120,7 +120,7 @@ class MovieController extends AbstractController
         return $this->file($path, null, ResponseHeaderBag::DISPOSITION_INLINE);
     }
 
-    #[Route("/movies/{movie}", name: "moviePage", methods: ["GET"])]
+    #[Route("/movies/{movie}", name: "movies_single_page", methods: ["GET"])]
     public function getMoviePage(Movie $movie): Response
     {
         return $this->render("movie.twig", [
@@ -128,7 +128,7 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route("/movies/{movie}", name: "removeMovie", methods: ["DELETE"])]
+    #[Route("/movies/{movie}", name: "movies_remove_movie_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function removeMovie(Movie $movie, EntityManagerInterface $entityManager): Response
     {
@@ -147,7 +147,7 @@ class MovieController extends AbstractController
         return new Response("Movie removed from database");
     }
 
-    #[Route("/movies/{movie}/views", name: "addMovieView", methods: ["POST"])]
+    #[Route("/movies/{movie}/views", name: "movies_add_view_action", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function addView(Movie $movie, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -168,7 +168,7 @@ class MovieController extends AbstractController
         return new Response("View added to database");
     }
 
-    #[Route("/movies/{movie}/views/all", name: "removeMovieViews", methods: ["DELETE"])]
+    #[Route("/movies/{movie}/views/all", name: "movies_remove_views_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function removeViewsByEpisode(Movie $movie, EntityManagerInterface $entityManager): Response
     {
@@ -183,7 +183,7 @@ class MovieController extends AbstractController
         return new Response("Views removed from database");
     }
 
-    #[Route("/movies/{movie}/views/{entryId}", name: "removeMovieViewById", methods: ["DELETE"])]
+    #[Route("/movies/{movie}/views/{entryId}", name: "movies_remove_view_by_id_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function removeViewById(Movie $movie, int $entryId, EntityManagerInterface $entityManager): Response
     {

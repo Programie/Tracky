@@ -5,7 +5,7 @@
 {% block content %}
     <h1 class="mb-3">{{ "library-management.add-items.page-title"|trans }}</h1>
 
-    <form class="my-3" action="{{ path("addItemsPage") }}">
+    <form class="my-3" action="{{ path("library_add_page") }}">
         <div class="input-group">
             <div class="form-floating">
                 <select class="form-select" id="add-item-type" name="type">
@@ -41,9 +41,9 @@
                                 <div class="text-body-secondary my-2">{{ result.year }}</div>
                                 {% if result.entry %}
                                     {% if result.entry.className == "Movie" %}
-                                        {% set url = path("moviePage", {"movie": result.entry.id}) %}
+                                        {% set url = path("movies_single_page", {"movie": result.entry.id}) %}
                                     {% elseif result.entry.className == "Show" %}
-                                        {% set url = path("showOverviewPage", {"show": result.entry.id}) %}
+                                        {% set url = path("shows_show_page", {"show": result.entry.id}) %}
                                     {% endif %}
                                     <a class="btn btn-success" href="{{ url }}"><i class="fas fa-check"></i> {{ "library-management.add-items.in-library"|trans }}</a>
                                 {% else %}

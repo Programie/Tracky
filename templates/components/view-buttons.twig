@@ -6,6 +6,6 @@
     {% endif %}
     <div class="btn-group">
         <button class="btn btn-primary btn-sm add-view" data-type="{{ type }}" {% for key, value in attributes %} {{ key }}="{{ value }}"{% endfor %} title="{{ "views.add-view"|trans }}"><i class="fa-regular fa-eye"></i></button>
-        <a class="btn btn-secondary btn-sm" href="{{ path("userHistoryPage", {"username": app.user.username, "type": type, "item": item.id}) }}" title="{{ "views.show-all-views"|trans }}"><i class="fa-regular fa-calendar-days"></i></a>
+        <a class="btn btn-secondary btn-sm" href="{{ path("user_profile_history_page", {"username": app.user.username, "type": type, "item": item.id}) }}" title="{{ "views.show-all-views"|trans }}"><i class="fa-regular fa-calendar-days"></i></a>
     </div>
 {% endif %}
