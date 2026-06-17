@@ -2,6 +2,7 @@
 namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
+use tracky\datetime\Date;
 use tracky\ImageFetcher;
 use tracky\model\traits\PosterImage;
 use tracky\orm\SeasonRepository;
@@ -140,7 +141,7 @@ class Season extends BaseEntity
         return $totalRuntime;
     }
 
-    public function getYear(): ?int
+    public function getFirstAired(): ?Date
     {
         foreach ($this->getEpisodes() as $episode) {
             $airDate = $episode->getFirstAired();
@@ -148,9 +149,19 @@ class Season extends BaseEntity
                 continue;
             }
 
-            return (int)$airDate->format("Y");
+            return $airDate;
         }
 
         return null;
+    }
+
+    public function getYear(): ?int
+    {
+        $airDate = $this->getFirstAired();
+        if ($airDate === null) {
+            return null;
+        }
+
+        return (int)$airDate->format("Y");
     }
 }

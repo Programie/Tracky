@@ -184,6 +184,7 @@ class ShowController extends AbstractController
         return $this->render("shows/season.twig", [
             "show" => $show,
             "season" => $season,
+            "seasons" => $show->getSeasons(),
             "pagination" => [
                 "previousSeason" => $season->getPreviousSeason(),
                 "nextSeason" => $season->getNextSeason()

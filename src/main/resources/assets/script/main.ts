@@ -17,4 +17,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".lazy-background").forEach(function (lazyBackground) {
         lazyBackgroundObserver.observe(lazyBackground);
     });
+
+    document.querySelectorAll(".season-dropdown").forEach((dropdown) => {
+        dropdown.addEventListener("shown.bs.dropdown", () => {
+            let menu = dropdown.querySelector(".dropdown-menu");
+            let activeItem = menu?.querySelector(".active");
+
+            activeItem?.scrollIntoView({
+                block: "center",
+                behavior: "instant"
+            });
+        });
+    });
 });

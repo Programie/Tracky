@@ -8,15 +8,15 @@
 
 .sidebar .nav .nav-item {
     a {
-        color: $sidebar-text-color;
+        color: $item-text-color;
     }
 
     :hover {
-        background-color: $sidebar-hover-color;
+        background-color: $item-hover-color;
     }
 
     .active {
-        background-color: $sidebar-active-color;
+        background-color: $item-active-color;
     }
 }
 
