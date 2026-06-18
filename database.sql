@@ -30,7 +30,7 @@ CREATE TABLE `seasons`
     `number`         int(11) NOT NULL,
     `posterImageUrl` varchar(500) DEFAULT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`show`) REFERENCES `shows` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `seasons_show` FOREIGN KEY (`show`) REFERENCES `shows` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -45,7 +45,7 @@ CREATE TABLE `episodes`
     `runtime`        int(11)      DEFAULT NULL,
     `posterImageUrl` varchar(500) DEFAULT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`season`) REFERENCES `seasons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `episodes_season` FOREIGN KEY (`season`) REFERENCES `seasons` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -74,7 +74,7 @@ CREATE TABLE `views`
     `item`     int(11)  NOT NULL,
     `datetime` datetime NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `views_user` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -85,6 +85,6 @@ CREATE TABLE `scrobblequeue`
     `json`     json     NOT NULL,
     `datetime` datetime NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `scrobblequeue_user` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
