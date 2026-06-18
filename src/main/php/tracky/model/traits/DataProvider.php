@@ -7,13 +7,13 @@ trait DataProvider
 {
     use Language;
 
-    #[ORM\Column(name: "tmdbId", type: "integer")]
+    #[ORM\Column(name: "tmdbId", type: "integer", nullable: true)]
     private ?int $tmdbId;
 
-    #[ORM\Column(name: "tvdbId", type: "integer")]
+    #[ORM\Column(name: "tvdbId", type: "integer", nullable: true)]
     private ?int $tvdbId;
 
-    #[ORM\Column(name: "dataProvider", type: "string", columnDefinition: "ENUM('tmdb', 'tvdb')")]
+    #[ORM\Column(name: "dataProvider", type: "string", columnDefinition: "ENUM('tmdb', 'tvdb')", nullable: true)]
     private ?string $dataProvider;
 
     public function getTmdbId(): ?int

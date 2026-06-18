@@ -5,7 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait Runtime
 {
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: "integer", nullable: true)]
     private ?int $runtime;
 
     public function getRuntime(): ?int

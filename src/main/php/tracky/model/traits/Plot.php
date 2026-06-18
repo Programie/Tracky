@@ -5,7 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait Plot
 {
-    #[ORM\Column(type: "text")]
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $plot;
 
     public function getPlot(): ?string

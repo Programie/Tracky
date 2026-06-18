@@ -6,7 +6,7 @@ use tracky\ImageFetcher;
 
 trait PosterImage
 {
-    #[ORM\Column(name: "posterImageUrl", type: "string")]
+    #[ORM\Column(name: "posterImageUrl", type: "string", nullable: true)]
     private ?string $posterImageUrl = null;
 
     public function getPosterImageUrl(): ?string

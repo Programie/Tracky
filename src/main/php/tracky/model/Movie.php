@@ -21,10 +21,10 @@ class Movie extends BaseEntity
     #[ORM\Column(type: "string")]
     private string $title;
 
-    #[ORM\Column(type: "string")]
+    #[ORM\Column(type: "string", nullable: true)]
     private ?string $tagline;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: "integer", nullable: true)]
     private ?int $year;
 
     #[ORM\OneToMany(mappedBy: "item", targetEntity: MovieView::class)]

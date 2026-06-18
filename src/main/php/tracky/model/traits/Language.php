@@ -5,7 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait Language
 {
-    #[ORM\Column(name: "language", type: "string")]
+    #[ORM\Column(name: "language", type: "string", nullable: true)]
     private ?string $language = null;
 
     public function getLanguage(): ?string

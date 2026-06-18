@@ -27,7 +27,7 @@ class Episode extends BaseEntity
     #[ORM\Column(type: "string")]
     private string $title;
 
-    #[ORM\Column(name: "firstAired", type: "date")]
+    #[ORM\Column(name: "firstAired", type: "date", nullable: true)]
     private ?Date $firstAired;
 
     #[ORM\OneToMany(mappedBy: "item", targetEntity: EpisodeView::class)]

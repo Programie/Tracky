@@ -23,10 +23,10 @@ class Show extends BaseEntity
     #[ORM\Column(type: "string")]
     private string $title;
 
-    #[ORM\Column(type: "string", columnDefinition: "ENUM('upcoming', 'continuing', 'ended')")]
+    #[ORM\Column(type: "string", columnDefinition: "ENUM('upcoming', 'continuing', 'ended')", nullable: true)]
     private ?string $status;
 
-    #[ORM\Column(name: "lastUpdate", type: "datetime")]
+    #[ORM\Column(name: "lastUpdate", type: "datetime", nullable: true)]
     private ?DateTime $lastUpdate;
 
     #[ORM\OneToMany(mappedBy: "show", targetEntity: Season::class, cascade: ["persist"])]
