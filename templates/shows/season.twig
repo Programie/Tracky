@@ -2,21 +2,6 @@
 
 {% block title %}{{ show.title }} - {{ "shows.season"|trans({"%number%":season.number}) }}{% endblock %}
 
-{% macro paginationElement(pagination, show) %}
-    <div class="episode-pagination d-flex justify-content-between mt-3 mb-3">
-        <span>
-            {% if pagination.previousSeason is not null %}
-                <a class="page-link" href="{{ path("shows_season_page", {"show": show.id, "number": pagination.previousSeason.number}) }}"><i class="fa-solid fa-arrow-left"></i> {{ "shows.season"|trans({"%number%": pagination.previousSeason.number}) }}</a>
-            {% endif %}
-        </span>
-        <span class="justify-content-end">
-            {% if pagination.nextSeason is not null %}
-                <a class="page-link" href="{{ path("shows_season_page", {"show": show.id, "number": pagination.nextSeason.number}) }}">{{ "shows.season"|trans({"%number%": pagination.nextSeason.number}) }} <i class="fa-solid fa-arrow-right"></i></a>
-            {% endif %}
-        </span>
-    </div>
-{% endmacro %}
-
 {% block content %}
     <h2><a href="{{ path("shows_show_page", {"show": show.id}) }}" class="text-body-secondary text-decoration-none">{{ show.title }}</a></h2>
 
@@ -40,8 +25,6 @@
     <small class="d-block text-body-secondary my-1"> {{ season.year }}</small>
     <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.totalRuntime}) }}</small>
 
-    {{ _self.paginationElement(pagination, show) }}
-
     <h2 class="mb-3">{{ "shows.episodes"|trans }}</h2>
 
     {% if season.episodes %}
@@ -49,6 +32,4 @@
     {% else %}
         <div class="alert alert-warning">{{ "shows.no-episodes-available"|trans }}</div>
     {% endif %}
-
-    {{ _self.paginationElement(pagination, show) }}
 {% endblock %}
