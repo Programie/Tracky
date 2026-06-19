@@ -1,7 +1,7 @@
-<a class="card text-reset text-decoration-none" href="{{ path("movies_single_page", {"movie": movie.id}) }}">
-    <img class="card-img-top" loading="lazy" src="{{ path("movies_get_image", {"movie": movie.id}) }}"/>
+<div class="card">
+    <img class="card-img-top fullscreen-image" loading="lazy" src="{{ path("movies_get_image", {"movie": movie.id}) }}"/>
     <div class="card-body">
-        <h5 class="card-title text-truncate" title="{{ movie.title }}">{{ movie.title }}</h5>
+        <h5 class="card-title text-truncate" title="{{ movie.title }}"><a href="{{ path("movies_single_page", {"movie": movie.id}) }}" class="text-reset text-decoration-none">{{ movie.title }}</a></h5>
 
         {% if movie.runtime is not null %}
             <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
@@ -17,4 +17,4 @@
             {% endif %}
         {% endif %}
     </div>
-</a>
+</div>
