@@ -29,7 +29,7 @@ class UpdateDataCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         /**
-         * @var $show Show
+         * @var Show
          */
         foreach ($this->showRepository->findAll() as $show) {
             if (!$show->needsUpdate($this->showFetchInterval)) {

@@ -74,7 +74,7 @@ class HomeController extends AbstractController
 
         foreach ($latestEpisodes as $item) {
             /**
-             * @var Episode $episode
+             * @var Episode
              */
             $episode = $item[0];
             $nextEpisode = $episode->getNextEpisode();

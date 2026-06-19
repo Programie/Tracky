@@ -25,7 +25,7 @@ class ProcessScrobbleQueue extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         /**
-         * @var $queueItems ScrobbleQueueItem[]
+         * @var ScrobbleQueueItem[]
          */
         $queueItems = $this->scrobbleQueueItemRepository->findAll();
 

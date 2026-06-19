@@ -44,7 +44,7 @@ class FetchDataCommand extends Command
         switch ($type) {
             case Helper::TYPE_SHOW:
                 /**
-                 * @var $show Show
+                 * @var Show
                  */
                 $show = $this->showRepository->findOneBy(["id" => $id]);
                 if ($show === null) {
@@ -70,7 +70,7 @@ class FetchDataCommand extends Command
                 break;
             case Helper::TYPE_MOVIE:
                 /**
-                 * @var $movie Movie
+                 * @var Movie
                  */
                 $movie = $this->movieRepository->findOneBy(["id" => $id]);
                 if ($movie === null) {
