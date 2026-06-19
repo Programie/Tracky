@@ -3,12 +3,13 @@ namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
 use tracky\datetime\DateTime;
+use tracky\ViewType;
 
 #[ORM\Entity]
 #[ORM\Table(name: "views")]
 #[ORM\InheritanceType("SINGLE_TABLE")]
-#[ORM\DiscriminatorColumn(name: "type", type: "string", columnDefinition: "ENUM('episode', 'movie')")]
-#[ORM\DiscriminatorMap(["episode" => EpisodeView::class, "movie" => MovieView::class])]
+#[ORM\DiscriminatorColumn(name: "type", enumType: ViewType::class, type: "string", columnDefinition: "ENUM('episode', 'movie')")]
+#[ORM\DiscriminatorMap([ViewType::EPISODE->value => EpisodeView::class, ViewType::MOVIE->value => MovieView::class])]
 abstract class ViewEntry extends BaseEntity
 {
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -40,5 +41,5 @@ abstract class ViewEntry extends BaseEntity
         return $this;
     }
 
-    abstract public function getType(): string;
+    abstract public function getType(): ViewType;
 }

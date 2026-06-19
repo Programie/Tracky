@@ -14,6 +14,7 @@ use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\orm\UserRepository;
 use tracky\scrobbler\Scrobbler;
+use tracky\ViewType;
 
 class UserController extends AbstractController
 {
@@ -112,8 +113,8 @@ class UserController extends AbstractController
         return $this->render("user/profile.twig", [
             "user" => $user,
             "nowWatching" => $scrobbler->getNowWatching($user),
-            "latestWatchedEpisodes" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: "episode"),
-            "latestWatchedMovies" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: "movie")
+            "latestWatchedEpisodes" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: ViewType::EPISODE),
+            "latestWatchedMovies" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: ViewType::MOVIE)
         ]);
     }
 

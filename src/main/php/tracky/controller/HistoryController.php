@@ -13,6 +13,7 @@ use tracky\model\User;
 use tracky\model\ViewEntry;
 use tracky\orm\ViewRepository;
 use tracky\Pagination;
+use tracky\ViewType;
 
 class HistoryController extends AbstractController
 {
@@ -32,7 +33,7 @@ class HistoryController extends AbstractController
             $page = 1;
         }
 
-        $type = strtolower($request->query->get("type"));
+        $type = ViewType::tryFrom(strtolower($request->query->get("type")));
         $item = $request->query->getInt("item");
 
         if (!$item) {
@@ -44,16 +45,13 @@ class HistoryController extends AbstractController
         $criteria = ["user" => $user->getId()];
 
         switch ($type) {
-            case "episode":
+            case ViewType::EPISODE:
                 $criteria["item"] = $item;
                 $viewRepository = $entityManager->getRepository(EpisodeView::class);
                 break;
-            case "movie":
+            case ViewType::MOVIE:
                 $criteria["item"] = $item;
                 $viewRepository = $entityManager->getRepository(MovieView::class);
-                break;
-            default:
-                $type = null;
                 break;
         }
 
@@ -74,7 +72,7 @@ class HistoryController extends AbstractController
             "user" => $user,
             "dateRange" => $dateRange,
             "filter" => [
-                "type" => $type,
+                "type" => $type?->value,
                 "item" => $item
             ],
             "pagination" => $pagination,

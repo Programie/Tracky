@@ -18,6 +18,7 @@ use tracky\model\Movie;
 use tracky\model\MovieView;
 use tracky\orm\MovieRepository;
 use tracky\orm\ViewRepository;
+use tracky\ViewType;
 
 class MovieController extends AbstractController
 {
@@ -135,7 +136,7 @@ class MovieController extends AbstractController
         $viewRepository = $entityManager->getRepository(MovieView::class);
 
         // Make sure no view exists for this movie
-        if ($viewRepository->count(["item" => $movie->getId()], type: "movie")) {
+        if ($viewRepository->count(["item" => $movie->getId()], type: ViewType::MOVIE)) {
             return $this->json([
                 "error" => "view-exists"
             ], 409);
@@ -187,7 +188,7 @@ class MovieController extends AbstractController
     #[IsGranted("IS_AUTHENTICATED")]
     public function removeViewById(Movie $movie, int $entryId, EntityManagerInterface $entityManager): Response
     {
-        $view = $this->viewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser()], type: "movie");
+        $view = $this->viewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser()], type: ViewType::MOVIE);
         if ($view === null) {
             throw new NotFoundHttpException("View not found");
         }

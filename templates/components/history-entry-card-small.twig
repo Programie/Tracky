@@ -1,13 +1,13 @@
-{% set metadata = {"entry-type": entry.type, "entry-id": entry.id} %}
+{% set metadata = {"entry-type": entry.type.value, "entry-id": entry.id} %}
 
-{% if entry.type == "episode" %}
+{% if entry.type.value == "episode" %}
     {% set episode = entry.episode %}
     {% set season = episode.season %}
     {% set show = season.show %}
     {% set imageUrl = path("shows_episode_image", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) %}
     {% set views = episode.viewsForUser(user) %}
     {% set metadata = metadata|merge({"views": views|length, "show": show.id, "season": season.number, "episode": episode.number}) %}
-{% elseif entry.type == "movie" %}
+{% elseif entry.type.value == "movie" %}
     {% set movie = entry.movie %}
     {% set imageUrl = path("movies_get_image", {"movie": movie.id}) %}
     {% set views = movie.viewsForUser(user) %}
@@ -19,10 +19,10 @@
 <div class="card">
     <img class="card-img-top fullscreen-image" loading="lazy" src="{{ imageUrl }}"/>
     <div class="card-body">
-        {% if entry.type == "episode" %}
+        {% if entry.type.value == "episode" %}
             <h5 class="card-title text-truncate" title="{{ season.number }}x{{ episode.number }} {{ episode.title|default("unknown-title"|trans) }}"><a class="text-reset text-decoration-none" href="{{ path("shows_season_page", {"show": show.id, "number": season.number}) }}#e{{ episode.number }}"><b>{{ season.number }}x{{ episode.number }}</b> {{ episode.title|default("unknown-title"|trans) }}</a></h5>
             <div class="text-truncate" title="{{ show.title }}"><a class="text-reset text-decoration-none" href="{{ path("shows_show_page", {"show": show.id}) }}">{{ show.title }}</a></div>
-        {% elseif entry.type == "movie" %}
+        {% elseif entry.type.value == "movie" %}
             <h5 class="card-title text-truncate" title="{{ movie.title }}"><a class="text-reset text-decoration-none" href="{{ path("movies_single_page", {"movie": movie.id}) }}">{{ movie.title }}</a></h5>
         {% endif %}
         <div class="text-body-secondary">{{ entry.datetime|format_datetime }}</div>

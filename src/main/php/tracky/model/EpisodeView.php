@@ -3,6 +3,7 @@ namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
 use tracky\orm\EpisodeViewRepository;
+use tracky\ViewType;
 
 #[ORM\Entity(repositoryClass: EpisodeViewRepository::class)]
 class EpisodeView extends ViewEntry
@@ -22,8 +23,8 @@ class EpisodeView extends ViewEntry
         return $this;
     }
 
-    public function getType(): string
+    public function getType(): ViewType
     {
-        return "episode";
+        return ViewType::EPISODE;
     }
 }

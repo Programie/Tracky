@@ -11,6 +11,7 @@ use tracky\orm\MovieRepository;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\scrobbler\Scrobbler;
+use tracky\ViewType;
 
 class HomeController extends AbstractController
 {
@@ -33,8 +34,8 @@ class HomeController extends AbstractController
         $user = $this->getUser();
         if ($user !== null) {
             $nowWatching = $scrobbler->getNowWatching($user);
-            $latestWatchedEpisodes = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxEpisodes, type: "episode");
-            $latestWatchedMovies = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxMovies, type: "movie");
+            $latestWatchedEpisodes = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxEpisodes, type: ViewType::EPISODE);
+            $latestWatchedMovies = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxMovies, type: ViewType::MOVIE);
             $nextEpisodes = $this->getNextEpisodes($showRepository, $user);
         }
 

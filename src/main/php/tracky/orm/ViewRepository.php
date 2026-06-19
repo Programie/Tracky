@@ -6,6 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use tracky\datetime\DateRange;
 use tracky\model\ViewEntry;
+use tracky\ViewType;
 
 class ViewRepository extends ServiceEntityRepository
 {
@@ -14,7 +15,7 @@ class ViewRepository extends ServiceEntityRepository
         parent::__construct($registry, $entityClass);
     }
 
-    private function getQueryBuilder(string $select, array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?string $type = null, ?DateRange $dateRange = null): QueryBuilder
+    private function getQueryBuilder(string $select, array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?ViewType $type = null, ?DateRange $dateRange = null): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder("view")->select($select);
 
@@ -38,7 +39,7 @@ class ViewRepository extends ServiceEntityRepository
         if ($type !== null) {
             $queryBuilder
                 ->andWhere("view INSTANCE OF :type")
-                ->setParameter(":type", $type);
+                ->setParameter(":type", $type->value);
         }
 
         if ($orderBy !== null) {
@@ -58,14 +59,14 @@ class ViewRepository extends ServiceEntityRepository
         return $queryBuilder;
     }
 
-    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?string $type = null, ?DateRange $dateRange = null): array
+    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?ViewType $type = null, ?DateRange $dateRange = null): array
     {
         $queryBuilder = $this->getQueryBuilder("view", $criteria, $orderBy, $limit, $offset, $type, $dateRange);
 
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function findOneBy(array $criteria, ?array $orderBy = null, ?string $type = null): ?object
+    public function findOneBy(array $criteria, ?array $orderBy = null, ?ViewType $type = null): ?object
     {
         $items = $this->findBy($criteria, $orderBy, 1, type: $type);
 
@@ -76,14 +77,14 @@ class ViewRepository extends ServiceEntityRepository
         return $items[0];
     }
 
-    public function count(array $criteria = [], ?string $type = null, ?DateRange $dateRange = null): int
+    public function count(array $criteria = [], ?ViewType $type = null, ?DateRange $dateRange = null): int
     {
         $queryBuilder = $this->getQueryBuilder(select: "count(view.id)", criteria: $criteria, type: $type, dateRange: $dateRange);
 
         return $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
-    public function getPaged(array $criteria, int $page, int $perPage, ?string $type = null, ?DateRange $dateRange = null)
+    public function getPaged(array $criteria, int $page, int $perPage, ?ViewType $type = null, ?DateRange $dateRange = null)
     {
         $offset = ($page - 1) * $perPage;
 

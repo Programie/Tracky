@@ -3,6 +3,7 @@ namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
 use tracky\orm\MovieViewRepository;
+use tracky\ViewType;
 
 #[ORM\Entity(repositoryClass: MovieViewRepository::class)]
 class MovieView extends ViewEntry
@@ -22,8 +23,8 @@ class MovieView extends ViewEntry
         return $this;
     }
 
-    public function getType(): string
+    public function getType(): ViewType
     {
-        return "movie";
+        return ViewType::MOVIE;
     }
 }

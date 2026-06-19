@@ -20,6 +20,7 @@ use tracky\model\Season;
 use tracky\model\Show;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
+use tracky\ViewType;
 
 class ShowController extends AbstractController
 {
@@ -87,7 +88,7 @@ class ShowController extends AbstractController
         // Make sure no episode view exists for this show
         foreach ($show->getSeasons() as $season) {
             foreach ($season->getEpisodes() as $episode) {
-                if ($viewRepository->count(["item" => $episode->getId()], type: "episode")) {
+                if ($viewRepository->count(["item" => $episode->getId()], type: ViewType::EPISODE)) {
                     return $this->json([
                         "error" => "view-exists"
                     ], 409);
@@ -258,7 +259,7 @@ class ShowController extends AbstractController
             throw new NotFoundHttpException("Episode not found");
         }
 
-        $view = $this->viewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser()], type: "episode");
+        $view = $this->viewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser()], type: ViewType::EPISODE);
         if ($view === null) {
             throw new NotFoundHttpException("View not found");
         }
