@@ -8,6 +8,9 @@ doctrine:
     server_version: "%env(resolve:DATABASE_SERVER_VERSION)%"
     charset: "utf8mb4"
 
+    mapping_types:
+      enum: string
+
     types:
       date: tracky\orm\types\DateType
       datetime: tracky\orm\types\DateTimeType
