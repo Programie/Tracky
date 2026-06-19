@@ -16,7 +16,7 @@
                         <span class="fw-bold">{{ "shows.season"|trans({"%number%": season_item.number}) }}</span>
                         <small class="badge text-bg-secondary rounded-pill">{{ "shows.count.episodes"|trans({"%count%": season_item.episodes|length}) }}</small>
                     </div>
-                    <small class="text-body-secondary">{{ season_item.firstAired|format_date }}</small>
+                    <small class="text-body-secondary">{{ season_item.episodes|first.firstAired|format_date }} - {{ season_item.episodes|last.firstAired|format_date }}</small>
                 </a>
             {% endfor %}
         </div>
