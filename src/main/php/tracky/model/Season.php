@@ -8,7 +8,15 @@ use tracky\model\traits\PosterImage;
 use tracky\orm\SeasonRepository;
 
 #[ORM\Entity(repositoryClass: SeasonRepository::class)]
-#[ORM\Table(name: "seasons")]
+#[ORM\Table(
+    name: "seasons",
+    uniqueConstraints: [
+        new ORM\UniqueConstraint(
+            name: "uniq_seasons_show_number",
+            columns: ["show", "number"]
+        )
+    ]
+)]
 class Season extends BaseEntity
 {
     use PosterImage;

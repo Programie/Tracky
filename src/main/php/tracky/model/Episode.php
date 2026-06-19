@@ -10,7 +10,15 @@ use tracky\model\traits\Runtime;
 use tracky\orm\EpisodeRepository;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
-#[ORM\Table(name: "episodes")]
+#[ORM\Table(
+    name: "episodes",
+    uniqueConstraints: [
+        new ORM\UniqueConstraint(
+            name: "uniq_episodes_season_number",
+            columns: ["season", "number"]
+        )
+    ]
+)]
 class Episode extends BaseEntity
 {
     use Plot;

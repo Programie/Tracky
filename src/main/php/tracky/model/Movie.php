@@ -10,7 +10,19 @@ use tracky\model\traits\Runtime;
 use tracky\orm\MovieRepository;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
-#[ORM\Table(name: "movies")]
+#[ORM\Table(
+    name: "movies",
+    indexes: [
+        new ORM\Index(
+            name: "idx_movies_tmdbid",
+            columns: ["tmdbId"]
+        ),
+        new ORM\Index(
+            name: "idx_movies_tvdbid",
+            columns: ["tvdbId"]
+        )
+    ]
+)]
 class Movie extends BaseEntity
 {
     use DataProvider;
