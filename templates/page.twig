@@ -1,7 +1,7 @@
 {% macro navItem(icon_classes, path, title, route_starts_with = null, parameters = {}) %}
-    {% if route_starts_with != null and app.request.get("_route") starts with route_starts_with %}
+    {% if route_starts_with != null and app.request.attributes.get("_route") starts with route_starts_with %}
         {% set active = true %}
-    {% elseif app.request.get("_route") == path %}
+    {% elseif app.request.attributes.get("_route") == path %}
         {% set active = true %}
     {% else %}
         {% set active = false %}

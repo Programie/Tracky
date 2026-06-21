@@ -2,7 +2,7 @@
 
 {% macro navItem(path, parameters, title) %}
     <li class="nav-item">
-        <a class="{{ html_classes("nav-link", {"active": app.request.get("_route") == path}) }}" href="{{ path(path, parameters) }}">{{ title }}</a>
+        <a class="{{ html_classes("nav-link", {"active": app.request.attributes.get("_route") == path}) }}" href="{{ path(path, parameters) }}">{{ title }}</a>
     </li>
 {% endmacro %}
 
