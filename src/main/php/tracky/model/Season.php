@@ -3,6 +3,7 @@ namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
 use tracky\datetime\Date;
+use tracky\datetime\DateRange;
 use tracky\ImageFetcher;
 use tracky\model\traits\PosterImage;
 use tracky\orm\SeasonRepository;
@@ -161,6 +162,26 @@ class Season extends BaseEntity
         }
 
         return null;
+    }
+
+    public function getFirstAiredRange(): ?DateRange
+    {
+        $dates = [];
+
+        foreach ($this->getEpisodes() as $episode) {
+            $airDate = $episode->getFirstAired();
+            if ($airDate === null) {
+                continue;
+            }
+
+            $dates[] = $airDate;
+        }
+
+        if (empty($dates)) {
+            return null;
+        }
+
+        return new DateRange(min($dates), max($dates));
     }
 
     public function getYear(): ?int
