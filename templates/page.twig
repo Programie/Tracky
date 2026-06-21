@@ -38,9 +38,7 @@
             </div>
 
             <div class="d-flex flex-grow-1 justify-content-center">
-                <form action="{{ path("search_page") }}" method="get" role="search" id="nav-searchbar">
-                    <input class="form-control" type="search" name="query" placeholder="{{ "search.placeholder"|trans }}"/>
-                </form>
+                {% include "components/search-bar.twig" %}
             </div>
         </nav>
 

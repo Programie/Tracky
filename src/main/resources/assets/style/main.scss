@@ -121,6 +121,18 @@ html {
     max-width: 700px;
 }
 
+#nav-searchbar-type {
+    @media (max-width: 767px) {
+        flex-grow: 0;
+        width: 0;
+    }
+
+    @media (min-width: 768px) {
+        flex-grow: 0;
+        width: auto;
+    }
+}
+
 [data-bs-toggle="collapse"] {
     cursor: pointer;
 }

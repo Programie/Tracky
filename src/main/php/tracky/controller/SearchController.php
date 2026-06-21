@@ -27,11 +27,36 @@ class SearchController extends AbstractController
         $results = null;
 
         if ($query !== "") {
-            $results = [
-                "shows" => $this->showRepository->search($query, false),
-                "episodes" => $this->episodeRepository->search($query),
-                "movies" => $this->movieRepository->search($query)
-            ];
+            switch (trim($request->query->get("type", ""))) {
+                case "shows":
+                    $results = [
+                        "shows" => $this->showRepository->search($query, false)
+                    ];
+                    break;
+                case "episodes":
+                    $results = [
+                        "episodes" => $this->episodeRepository->search($query)
+                    ];
+                    break;
+                case "movies":
+                    $results = [
+                        "movies" => $this->movieRepository->search($query)
+                    ];
+                    break;
+                case "episodes_in_show":
+                    $showId = (int) trim($request->query->get("show_id", ""));
+                    $results = [
+                        "episodes" => $this->episodeRepository->search($query, $showId)
+                    ];
+                    break;
+                default:
+                    $results = [
+                        "shows" => $this->showRepository->search($query, false),
+                        "episodes" => $this->episodeRepository->search($query),
+                        "movies" => $this->movieRepository->search($query)
+                    ];
+                    break;
+            }
 
             if (!array_any($results, fn($value) => !empty($value))) {
                 $results = [];
@@ -39,7 +64,6 @@ class SearchController extends AbstractController
         }
 
         return $this->render("search.twig", [
-            "query" => $query,
             "results" => $results
         ]);
     }

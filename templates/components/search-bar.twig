@@ -1,0 +1,32 @@
+{% if app.request.attributes.get("_route") == "search_page" %}
+    {% set value = app.request.query.get("query") %}
+    {% set selectedType = app.request.query.get("type") %}
+    {% set showId = app.request.query.get("show_id") %}
+{% else %}
+    {% set value = "" %}
+    {% set selectedType = "" %}
+
+    {% if app.request.attributes.get("_route") starts with "shows_" and show|default(null)%}
+        {% set showId = show.id %}
+    {% else %}
+        {% set showId = "" %}
+    {% endif %}
+{% endif %}
+{% set types = ["shows", "episodes", "movies"] %}
+
+<form action="{{ path("search_page") }}" method="get" role="search" id="nav-searchbar">
+    {% if showId %}
+        {% set types = types|merge(["episodes_in_show"]) %}
+        <input type="hidden" name="show_id" value="{{ showId }}"/>
+    {% endif %}
+    <div class="input-group">
+        <input class="form-control" type="search" name="query" placeholder="{{ "search.placeholder"|trans }}" value="{{ value }}"/>
+        <select class="form-select" name="type" id="nav-searchbar-type">
+            <option value="everywhere"{% if selectedType == "everywhere" %} selected{% endif %}>{{ "search.types.everywhere"|trans }}</option>
+            <hr/>
+            {% for type in types %}
+                <option value="{{ type }}"{% if selectedType == type %} selected{% endif %}>{{ ("search.types." ~ type)|trans }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</form>

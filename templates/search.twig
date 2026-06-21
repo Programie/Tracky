@@ -3,10 +3,6 @@
 {% block title %}{{ "search.title"|trans }}{% endblock %}
 
 {% block content %}
-    <form method="get" role="search">
-        <input class="form-control" type="search" name="query" value="{{ query }}" placeholder="{{ "search.placeholder"|trans }}"/>
-    </form>
-
     {% if results is not null %}
         {% if results %}
             {% for type, type_results in results %}
@@ -26,7 +22,7 @@
                 {% endif %}
             {% endfor %}
         {% else %}
-            <div class="alert alert-warning mt-3">{{ "search.no-results"|trans({"%query%": query}) }}</div>
+            <div class="alert alert-warning mt-3">{{ "search.no-results"|trans({"%query%": app.request.query.get("query") }) }}</div>
         {% endif %}
     {% endif %}
 {% endblock %}

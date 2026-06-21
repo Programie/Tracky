@@ -49,8 +49,10 @@ search:
   placeholder: "Search for shows, episodes and movies"
   no-results: "No results for query ''{query}''."
   types:
+    everywhere: "Everywhere"
     shows: "Shows"
     episodes: "Episodes"
+    episodes_in_show: "Episodes in this show"
     movies: "Movies"
 
 navbar:
