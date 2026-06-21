@@ -119,11 +119,11 @@ class UserController extends AbstractController
     }
 
     #[Route("/users/{username}/show-progress", name: "user_profile_show_progress_page")]
-    public function getShowProgressForUser(User $user, ShowRepository $showRepository): Response
+    public function getShowProgressForUser(User $user, ShowRepository $showRepository, ViewRepository $viewRepository): Response
     {
         return $this->render("user/show-progress.twig", [
             "user" => $user,
-            "shows" => $showRepository->findAllWithEpisodesAndViews($user->getId())
+            "shows" => $showRepository->findAllWithEpisodes()
         ]);
     }
 }

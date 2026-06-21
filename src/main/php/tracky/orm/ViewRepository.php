@@ -5,14 +5,16 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use tracky\datetime\DateRange;
-use tracky\model\ViewEntry;
+use tracky\model\User;
+use tracky\model\View;
 use tracky\ViewType;
+use tracky\watchstats\WatchStatsCollection;
 
 class ViewRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry, string $entityClass = ViewEntry::class)
+    public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, $entityClass);
+        parent::__construct($registry, View::class);
     }
 
     private function getQueryBuilder(string $select, array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?ViewType $type = null, ?DateRange $dateRange = null): QueryBuilder
@@ -89,5 +91,24 @@ class ViewRepository extends ServiceEntityRepository
         $offset = ($page - 1) * $perPage;
 
         return $this->findBy($criteria, ["dateTime" => "desc"], $perPage, $offset, $type, $dateRange);
+    }
+
+    public function getWatchStatsForUser(User $user, ViewType $viewType): WatchStatsCollection
+    {
+        $rows = $this->createQueryBuilder("view")
+            ->select("
+                view.item,
+                COUNT(view.id) AS watchCount,
+                MAX(view.dateTime) AS lastWatched
+            ")
+            ->where("view.user = :user")
+            ->andWhere("view.type = :type")
+            ->groupBy("view.item")
+            ->setParameter("user", $user)
+            ->setParameter("type", $viewType->value)
+            ->getQuery()
+            ->getArrayResult();
+
+        return WatchStatsCollection::fromQueryRows($rows);
     }
 }

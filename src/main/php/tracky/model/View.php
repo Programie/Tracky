@@ -3,14 +3,12 @@ namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
 use tracky\datetime\DateTime;
+use tracky\orm\ViewRepository;
 use tracky\ViewType;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ViewRepository::class)]
 #[ORM\Table(name: "views")]
-#[ORM\InheritanceType("SINGLE_TABLE")]
-#[ORM\DiscriminatorColumn(name: "type", enumType: ViewType::class, type: "string", columnDefinition: "ENUM('episode', 'movie')")]
-#[ORM\DiscriminatorMap([ViewType::EPISODE->value => EpisodeView::class, ViewType::MOVIE->value => MovieView::class])]
-abstract class ViewEntry extends BaseEntity
+class View extends BaseEntity
 {
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "user", referencedColumnName: "id")]
@@ -18,6 +16,12 @@ abstract class ViewEntry extends BaseEntity
 
     #[ORM\Column(name: "datetime", type: "datetime")]
     protected DateTime $dateTime;
+
+    #[ORM\Column(name: "item", type: "integer")]
+    protected int $item;
+
+    #[ORM\Column(name: "type", enumType: ViewType::class, type: "string", columnDefinition: "ENUM('episode', 'movie')")]
+    protected ViewType $type;
 
     public function getUser(): User
     {
@@ -41,5 +45,25 @@ abstract class ViewEntry extends BaseEntity
         return $this;
     }
 
-    abstract public function getType(): ViewType;
+    public function getItem(): int
+    {
+        return $this->item;
+    }
+
+    public function setItem(Episode|Movie $item): self
+    {
+        $this->item = $item->getId();
+        return $this;
+    }
+
+    public function getType(): ViewType
+    {
+        return $this->type;
+    }
+
+    public function setType(ViewType $type): self
+    {
+        $this->type = $type;
+        return $this;
+    }
 }

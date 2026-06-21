@@ -15,9 +15,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\datetime\DateTime;
 use tracky\ImageFetcher;
 use tracky\model\Episode;
-use tracky\model\EpisodeView;
 use tracky\model\Season;
 use tracky\model\Show;
+use tracky\model\View;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\ViewType;
@@ -81,10 +81,8 @@ class ShowController extends AbstractController
 
     #[Route("/shows/{show}", name: "shows_show_remove_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function removeShow(Show $show, EntityManagerInterface $entityManager): Response
+    public function removeShow(Show $show, ViewRepository $viewRepository, EntityManagerInterface $entityManager): Response
     {
-        $viewRepository = $entityManager->getRepository(EpisodeView::class);
-
         // Make sure no episode view exists for this show
         foreach ($show->getSeasons() as $season) {
             foreach ($season->getEpisodes() as $episode) {
@@ -209,12 +207,12 @@ class ShowController extends AbstractController
             throw new BadRequestException("Invalid payload");
         }
 
-        $episodeView = new EpisodeView;
-        $episodeView->setEpisode($episode);
-        $episodeView->setUser($this->getUser());
-        $episodeView->setDateTime($dateTime);
+        $view = new View;
+        $view->setItem($episode);
+        $view->setUser($this->getUser());
+        $view->setDateTime($dateTime);
 
-        $entityManager->persist($episodeView);
+        $entityManager->persist($view);
         $entityManager->flush();
 
         return new Response("View added to database");
@@ -222,7 +220,7 @@ class ShowController extends AbstractController
 
     #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views/all", name: "shows_remove_episode_view_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function removeViewsByEpisode(Show $show, int $seasonNumber, int $episodeNumber, EntityManagerInterface $entityManager): Response
+    public function removeViewsByEpisode(Show $show, int $seasonNumber, int $episodeNumber, ViewRepository $viewRepository, EntityManagerInterface $entityManager): Response
     {
         $season = $show->getSeason($seasonNumber);
         if ($season === null) {
@@ -234,7 +232,7 @@ class ShowController extends AbstractController
             throw new NotFoundHttpException("Episode not found");
         }
 
-        $views = $episode->getViewsForUser($this->getUser());
+        $views = $viewRepository->findBy(["item" => $episode->getId(), "user" => $this->getUser(), "type" => ViewType::EPISODE->value]);
 
         foreach ($views as $view) {
             $entityManager->remove($view);
@@ -259,9 +257,13 @@ class ShowController extends AbstractController
             throw new NotFoundHttpException("Episode not found");
         }
 
-        $view = $this->viewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser()], type: ViewType::EPISODE);
+        $view = $this->viewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser(), "type" => ViewType::EPISODE->value]);
         if ($view === null) {
             throw new NotFoundHttpException("View not found");
+        }
+
+        if ($view->getItem() !== $episode->getId()) {
+            throw new NotFoundHttpException("View item does not match episode");
         }
 
         $entityManager->remove($view);

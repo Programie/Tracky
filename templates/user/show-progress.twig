@@ -31,7 +31,7 @@
                                                     {% for season in show.seasons %}
                                                             {% set perEpisodePercentage = 100 / totalEpisodes %}
                                                             {% for episode in season.episodes %}
-                                                                {% set watched = episode.getViewsForUser(user)|length > 0 %}
+                                                                {% set watched = watchStatsProvider.getItemStats(episode)?.count > 0 %}
                                                                 {% if watched %}
                                                                     {% set watchedEpisodes = watchedEpisodes + 1 %}
                                                                 {% endif %}
@@ -59,7 +59,7 @@
                                                             {% set perEpisodePercentage = 100 / totalEpisodes %}
 
                                                             {% for episode in season.episodes %}
-                                                                {% set watched = episode.getViewsForUser(user)|length > 0 %}
+                                                                {% set watched = watchStatsProvider.getItemStats(episode)?.count > 0 %}
                                                                 {% if watched %}
                                                                     {% set watchedEpisodes = watchedEpisodes + 1 %}
                                                                 {% endif %}

@@ -36,7 +36,7 @@ class HomeController extends AbstractController
             $nowWatching = $scrobbler->getNowWatching($user);
             $latestWatchedEpisodes = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxEpisodes, type: ViewType::EPISODE);
             $latestWatchedMovies = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxMovies, type: ViewType::MOVIE);
-            $nextEpisodes = $this->getNextEpisodes($showRepository, $user);
+            $nextEpisodes = $this->getNextEpisodes($showRepository, $viewRepository, $user);
         }
 
         return $this->render("index.twig", [
@@ -49,22 +49,46 @@ class HomeController extends AbstractController
         ]);
     }
 
-    private function getNextEpisodes(ShowRepository $showRepository, User $user)
+    private function getNextEpisodes(ShowRepository $showRepository, ViewRepository $viewRepository, User $user)
     {
         $latestEpisodes = [];
         $nextEpisodes = [];
 
-        foreach ($showRepository->findAllWithEpisodesAndViews($user->getId()) as $show) {
-            $latestWatchedEpisodes = $show->getLatestWatchedEpisodes($user, 1, true);
-            if (!empty($latestWatchedEpisodes)) {
-                $latestEpisodes[] = $latestWatchedEpisodes[0];
+        $watchStats = $viewRepository->getEpisodeWatchStatsForUser($user);
+
+        $latestEpisodes = [];
+
+        foreach ($showRepository->findAllWithEpisodes() as $show) {
+            $mostRecentWatch = null;
+            $mostRecentWatchedEpisode = null;
+
+            foreach ($show->getSeasons() as $season) {
+                foreach ($season->getEpisodes() as $episode) {
+                    $episodeWatchStats = $watchStats[$episode->getId()] ?? null;
+                    if ($episodeWatchStats === null) {
+                        continue;
+                    }
+
+                    if ($mostRecentWatch === null or $episodeWatchStats["lastWatched"] > $mostRecentWatch) {
+                        $mostRecentWatch = $episodeWatchStats["lastWatched"];
+                        $mostRecentWatchedEpisode = $episode;
+                    }
+                }
             }
+
+            if ($mostRecentWatch === null) {
+                continue;
+            }
+
+            $latestEpisodes[] = [
+                "episode" => $mostRecentWatchedEpisode,
+                "lastWatched" => $mostRecentWatch
+            ];
         }
 
         usort($latestEpisodes, function ($item1, $item2) {
-            list(, $item1Timestamp) = $item1;
-            list(, $item2Timestamp) = $item2;
-
+            $item1Timestamp = $item1["lastWatched"];
+            $item2Timestamp = $item2["lastWatched"];
 
             if ($item1Timestamp === $item2Timestamp) {
                 return 0;
@@ -74,10 +98,7 @@ class HomeController extends AbstractController
         });
 
         foreach ($latestEpisodes as $item) {
-            /**
-             * @var Episode
-             */
-            $episode = $item[0];
+            $episode = $item["episode"];
             $nextEpisode = $episode->getNextEpisode();
             if ($nextEpisode !== null) {
                 $nextEpisodes[] = $nextEpisode;

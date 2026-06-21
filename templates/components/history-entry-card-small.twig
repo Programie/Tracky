@@ -6,14 +6,14 @@
     {% set show = season.show %}
     {% set linkUrl = path("shows_season_page", {"show": show.id, "number": season.number}) ~ "#e" ~ episode.number %}
     {% set imageUrl = path("shows_episode_image", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) %}
-    {% set views = episode.viewsForUser(user) %}
-    {% set metadata = metadata|merge({"views": views|length, "show": show.id, "season": season.number, "episode": episode.number}) %}
+    {% set itemWatchStats = watchStatsProvider.getItemStats(episode) %}
+    {% set metadata = metadata|merge({"views": itemWatchStats.count, "show": show.id, "season": season.number, "episode": episode.number}) %}
 {% elseif entry.type.value == "movie" %}
     {% set movie = entry.movie %}
     {% set linkUrl = path("movies_single_page", {"movie": movie.id}) %}
     {% set imageUrl = path("movies_get_image", {"movie": movie.id}) %}
-    {% set views = movie.viewsForUser(user) %}
-    {% set metadata = metadata|merge({"views": views|length, "movie": movie.id}) %}
+    {% set itemWatchStats = watchStatsProvider.getItemStats(movie) %}
+    {% set metadata = metadata|merge({"views": itemWatchStats.count, "movie": movie.id}) %}
 {% endif %}
 
 <div class="d-none" {% for key, value in metadata %} data-{{ key }}="{{ value }}"{% endfor %}></div>
@@ -33,7 +33,7 @@
     </div>
     {% if user == app.user %}
         <div class="card-footer">
-            <button class="btn btn-sm history-edit-button" type="button" title="{{ "views.views"|trans({"%count%": views|length}) }}"><i class="fa-solid fa-check"></i></button>
+            <button class="btn btn-sm history-edit-button" type="button" title="{{ "views.views"|trans({"%count%": itemWatchStats.count}) }}"><i class="fa-solid fa-check"></i></button>
         </div>
     {% endif %}
 </div>

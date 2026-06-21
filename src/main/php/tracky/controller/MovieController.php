@@ -16,6 +16,7 @@ use tracky\datetime\DateTime;
 use tracky\ImageFetcher;
 use tracky\model\Movie;
 use tracky\model\MovieView;
+use tracky\model\View;
 use tracky\orm\MovieRepository;
 use tracky\orm\ViewRepository;
 use tracky\ViewType;
@@ -55,31 +56,31 @@ class MovieController extends AbstractController
             $sortDirection = self::SORT_ASC;
         }
 
+        if ($user !== null) {
+            $watchStats = $this->viewRepository->getWatchStatsForUser($user, ViewType::MOVIE);
+        } else {
+            $watchStats = null;
+        }
+
         // Special sorting for playCount and lastPlayed
         if ($user !== null and ($sortField === "playCount" or $sortField === "lastPlayed")) {
-            $movies = $this->movieRepository->findAllWithViews($user->getId());
-            usort($movies, function (Movie $movie1, Movie $movie2) use ($user, $sortField, $sortDirection) {
-                $views1 = $movie1->getViewsForUser($user);
-                $views2 = $movie2->getViewsForUser($user);
+            $movies = $this->movieRepository->findAll();
+
+            usort($movies, function (Movie $movie1, Movie $movie2) use ($sortField, $sortDirection, $watchStats) {
+                $item1 = $watchStats->getStatsForItem($movie1);
+                $item2 = $watchStats->getStatsForItem($movie2);
+
+                $value1 = 0;
+                $value2 = 0;
 
                 switch ($sortField) {
                     case "playCount":
-                        $value1 = count($views1);
-                        $value2 = count($views2);
+                        $value1 = $item1?->getCount() ?? 0;
+                        $value2 = $item2?->getCount() ?? 0;
                         break;
                     case "lastPlayed":
-                        $lastView1 = $views1->last();
-                        if ($lastView1 === false) {
-                            $lastView1 = null;
-                        }
-
-                        $lastView2 = $views2->last();
-                        if ($lastView2 === false) {
-                            $lastView2 = null;
-                        }
-
-                        $value1 = $lastView1?->getDateTime()?->getTimestamp() ?? 0;
-                        $value2 = $lastView2?->getDateTime()?->getTimestamp() ?? 0;
+                        $value1 = $item1?->getLastWatched()?->getTimestamp() ?? 0;
+                        $value2 = $item2?->getLastWatched()?->getTimestamp() ?? 0;
                         break;
                 }
 
@@ -101,7 +102,8 @@ class MovieController extends AbstractController
                 "field" => $sortField,
                 "direction" => $sortDirection
             ],
-            "movies" => $movies
+            "movies" => $movies,
+            "watchStats" => $watchStats
         ]);
     }
 
@@ -124,17 +126,23 @@ class MovieController extends AbstractController
     #[Route("/movies/{movie}", name: "movies_single_page", methods: ["GET"])]
     public function getMoviePage(Movie $movie): Response
     {
+        $user = $this->getUser();
+        if ($user !== null) {
+            $itemWatchStats = $this->viewRepository->getWatchStatsForUser($user, ViewType::MOVIE)->getStatsForItem($movie);
+        } else {
+            $itemWatchStats = null;
+        }
+
         return $this->render("movie.twig", [
-            "movie" => $movie
+            "movie" => $movie,
+            "itemWatchStats" => $itemWatchStats
         ]);
     }
 
     #[Route("/movies/{movie}", name: "movies_remove_movie_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function removeMovie(Movie $movie, EntityManagerInterface $entityManager): Response
+    public function removeMovie(Movie $movie, ViewRepository $viewRepository, EntityManagerInterface $entityManager): Response
     {
-        $viewRepository = $entityManager->getRepository(MovieView::class);
-
         // Make sure no view exists for this movie
         if ($viewRepository->count(["item" => $movie->getId()], type: ViewType::MOVIE)) {
             return $this->json([
@@ -158,12 +166,12 @@ class MovieController extends AbstractController
             throw new BadRequestException("Invalid payload");
         }
 
-        $movieView = new MovieView;
-        $movieView->setMovie($movie);
-        $movieView->setUser($this->getUser());
-        $movieView->setDateTime($dateTime);
+        $view = new View;
+        $view->setItem($movie);
+        $view->setUser($this->getUser());
+        $view->setDateTime($dateTime);
 
-        $entityManager->persist($movieView);
+        $entityManager->persist($view);
         $entityManager->flush();
 
         return new Response("View added to database");
@@ -171,9 +179,9 @@ class MovieController extends AbstractController
 
     #[Route("/movies/{movie}/views/all", name: "movies_remove_views_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function removeViewsByEpisode(Movie $movie, EntityManagerInterface $entityManager): Response
+    public function removeViewsByMovie(Movie $movie, ViewRepository $viewRepository, EntityManagerInterface $entityManager): Response
     {
-        $views = $movie->getViewsForUser($this->getUser());
+        $views = $viewRepository->findBy(["item" => $movie->getId(), "user" => $this->getUser(), "type" => ViewType::EPISODE->value]);
 
         foreach ($views as $view) {
             $entityManager->remove($view);

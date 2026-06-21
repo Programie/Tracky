@@ -10,7 +10,7 @@ use tracky\datetime\DateRange;
 use tracky\model\EpisodeView;
 use tracky\model\MovieView;
 use tracky\model\User;
-use tracky\model\ViewEntry;
+use tracky\model\View;
 use tracky\orm\ViewRepository;
 use tracky\Pagination;
 use tracky\ViewType;
@@ -82,7 +82,7 @@ class HistoryController extends AbstractController
 
     private function sorted(array $entries): array
     {
-        usort($entries, function (ViewEntry $entry1, ViewEntry $entry2) {
+        usort($entries, function (View $entry1, View $entry2) {
             if ($entry1->getDateTime() < $entry2->getDateTime()) {
                 return 1;
             } elseif ($entry1->getDateTime() > $entry2->getDateTime()) {
