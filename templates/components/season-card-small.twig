@@ -1,8 +1,13 @@
+{% set linkUrl = path("shows_season_page", {"show": season.show.id, "number": season.number}) %}
 <div class="card">
-    <img class="card-img-top fullscreen-image" loading="lazy" src="{{ path("shows_season_image", {"show": season.show.id, "seasonNumber": season.number}) }}"/>
+    <a href="{{ linkUrl }}">
+        <img class="card-img-top" loading="lazy" src="{{ path("shows_season_image", {"show": season.show.id, "seasonNumber": season.number}) }}"/>
+    </a>
     <div class="card-body">
         <div class="card-title">
-            <h5><a href="{{ path("shows_season_page", {"show": season.show.id, "number": season.number}) }}" class="text-reset text-decoration-none">{{ "shows.season"|trans({"%number%": season.number }) }}</a></h5>
+            <h5>
+                <a href="{{ linkUrl }}" class="text-reset text-decoration-none">{{ "shows.season"|trans({"%number%": season.number }) }}</a>
+            </h5>
             <small class="d-block text-body-secondary my-1">{{ season.year }}</small>
         </div>
         <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": season.episodes|length}) }}</small>

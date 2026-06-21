@@ -1,9 +1,14 @@
+{% set linkUrl = path("movies_single_page", {"movie": movie.id}) %}
 <div class="card">
     <div class="row g-0">
-        <div class="col-md-4 scaled-image rounded-bottom-0 fullscreen-image lazy-background" data-image-url="{{ path("movies_get_image", {"movie": movie.id}) }}"></div>
+        <a href="{{ linkUrl }}">
+            <div class="col-md-4 scaled-image rounded-bottom-0 lazy-background" data-image-url="{{ path("movies_get_image", {"movie": movie.id}) }}"></div>
+        </a>
         <div class="col-md-8">
             <div class="card-body">
-                <h5 class="card-title">{{ movie.title }}</h5>
+                <h5 class="card-title">
+                    <a class="text-reset text-decoration-none" href="{{ linkUrl }}">{{ movie.title }}</a>
+                </h5>
                 <div class="card-text mt-3">
                     {% if movie.tagline is not null %}
                         <small class="d-block text-body-secondary fst-italic mb-2">{{ movie.tagline }}</small>
