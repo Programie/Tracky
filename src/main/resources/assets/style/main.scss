@@ -104,6 +104,15 @@ html {
     max-height: 300px;
 }
 
+.show-progress-image {
+    background-size: contain;
+}
+
+.show-progress-seasons {
+    overflow-y: auto;
+    max-height: 250px;
+}
+
 .hoverable-item {
     color: $item-text-color;
 
