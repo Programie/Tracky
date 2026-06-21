@@ -48,6 +48,10 @@ search:
   title: "Search"
   placeholder: "Search for shows, episodes and movies"
   no-results: "No results for query ''{query}''."
+  types:
+    shows: "Shows"
+    episodes: "Episodes"
+    movies: "Movies"
 
 navbar:
   shows: "Shows"

@@ -27,11 +27,15 @@ class SearchController extends AbstractController
         $results = null;
 
         if ($query !== "") {
-            $results = [];
+            $results = [
+                "shows" => $this->showRepository->search($query, false),
+                "episodes" => $this->episodeRepository->search($query),
+                "movies" => $this->movieRepository->search($query)
+            ];
 
-            $results = array_merge($results, $this->showRepository->search($query, false));
-            $results = array_merge($results, $this->episodeRepository->search($query));
-            $results = array_merge($results, $this->movieRepository->search($query));
+            if (!array_any($results, fn($value) => !empty($value))) {
+                $results = [];
+            }
         }
 
         return $this->render("search.twig", [

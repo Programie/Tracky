@@ -89,12 +89,12 @@ html {
     border: 1px solid rgba(255,255,255,0.05);
 }
 
-.dropdown-toggle::after {
+.dropdown-toggle::after, .collapse-icon {
     transition: transform 0.2s ease;
     transform-origin: center;
 }
 
-.dropdown-toggle[aria-expanded="true"]::after {
+.dropdown-toggle[aria-expanded="true"]::after, .collapsed .collapse-icon {
     transform: rotate(180deg);
 }
 
@@ -119,4 +119,8 @@ html {
 #nav-searchbar {
     width: 100%;
     max-width: 700px;
+}
+
+[data-bs-toggle="collapse"] {
+    cursor: pointer;
 }

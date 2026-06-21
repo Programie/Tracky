@@ -48,6 +48,10 @@ search:
   title: "Suche"
   placeholder: "Suche nach Serien, Folgen und Filmen"
   no-results: "Keine Ergebnisse für Suchanfrage ''{query}''."
+  types:
+    shows: "Serien"
+    episodes: "Episoden"
+    movies: "Filme"
 
 navbar:
   shows: "Serien"

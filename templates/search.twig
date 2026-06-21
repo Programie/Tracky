@@ -9,35 +9,22 @@
 
     {% if results is not null %}
         {% if results %}
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4 mt-1">
-                {% for entry in results %}
-                    {% if entry.className == "Episode" %}
-                        {% set linkUrl = path("shows_season_page", {"show": entry.season.show.id, "number": entry.season.number}) ~ "#e" ~ entry.number %}
-                        {% set imageUrl = path("shows_episode_image", {"show": entry.season.show.id, "seasonNumber": entry.season.number, "episodeNumber": entry.number}) %}
-                    {% elseif entry.className == "Movie" %}
-                        {% set linkUrl = path("movies_single_page", {"movie": entry.id}) %}
-                        {% set imageUrl = path("movies_get_image", {"movie": entry.id}) %}
-                    {% elseif entry.className == "Show" %}
-                        {% set linkUrl = path("shows_show_page", {"show": entry.id}) %}
-                        {% set imageUrl = path("shows_show_image", {"show": entry.id}) %}
-                    {% endif %}
-                    <div class="col">
-                        <div class="card">
-                            <a href="{{ linkUrl }}">
-                                <img class="card-img-top" loading="lazy" src="{{ imageUrl }}"/>
-                            </a>
-                            <div class="card-body">
-                                {% if entry.className == "Episode" %}
-                                    <h5 class="card-title text-truncate" title="{{ entry.season.number }}x{{ entry.number }} {{ entry.title }}"><a class="text-reset text-decoration-none" href="{{ linkUrl }}"><b>{{ entry.season.number }}x{{ entry.number }}</b> {{ entry.title }}</a></h5>
-                                    <div class="text-truncate" title="{{ entry.season.show.title }}"><a class="text-reset text-decoration-none" href="{{ path("shows_show_page", {"show": entry.season.show.id}) }}">{{ entry.season.show.title }}</a></div>
-                                {% elseif entry.className == "Movie" or entry.className == "Show" %}
-                                    <h5 class="card-title text-truncate" title="{{ entry.title }}"><a class="text-reset text-decoration-none" href="{{ linkUrl }}">{{ entry.title }}</a></h5>
-                                {% endif %}
-                            </div>
+            {% for type, type_results in results %}
+                {% if type_results %}
+                    <div class="mt-3">
+                        <h3 data-bs-toggle="collapse" data-bs-target="#searchresults-{{ type }}">{{ ("search.types." ~ type)|trans }} ({{ type_results|length }}) <i class="fa-solid fa-chevron-up collapse-icon"></i></h3>
+                        <div class="collapse show mt-3" id="searchresults-{{ type }}">
+                            {% if type == "shows" %}
+                                {% include "components/show-list-small.twig" with {"shows": type_results} %}
+                            {% elseif type == "episodes" %}
+                                {% include "components/episode-list-small.twig" with {"episodes": type_results} only %}
+                            {% elseif type == "movies" %}
+                                {% include "components/movie-list-small.twig" with {"movies": type_results} %}
+                            {% endif %}
                         </div>
                     </div>
-                {% endfor %}
-            </div>
+                {% endif %}
+            {% endfor %}
         {% else %}
             <div class="alert alert-warning mt-3">{{ "search.no-results"|trans({"%query%": query}) }}</div>
         {% endif %}
