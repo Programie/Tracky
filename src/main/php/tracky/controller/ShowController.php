@@ -21,6 +21,7 @@ use tracky\model\View;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\ViewType;
+use tracky\watchstats\WatchStatsProvider;
 
 class ShowController extends AbstractController
 {
@@ -122,53 +123,53 @@ class ShowController extends AbstractController
 
     #[Route("/shows/{show}/latest-watched", name: "shows_latest_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getLatestWatchedEpisodesPage(int $show): Response
+    public function getLatestWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
     {
-        $show = $this->showRepository->findByIdWithEpisodesAndViews($show, $this->getUser()->getId());
+        $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.latest-watched-episodes",
-            "episodes" => $show->getLatestWatchedEpisodes($this->getUser(), $this->maxEpisodes)
+            "episodes" => $show->getLatestWatchedEpisodes($watchStatsProvider, $this->maxEpisodes)
         ]);
     }
 
     #[Route("/shows/{show}/most-watched", name: "shows_most_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getMostWatchedEpisodesPage(int $show): Response
+    public function getMostWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
     {
-        $show = $this->showRepository->findByIdWithEpisodesAndViews($show, $this->getUser()->getId());
+        $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.most-watched-episodes",
-            "episodes" => $show->getMostOrLeastWatchedEpisodes($this->getUser(), $this->maxEpisodes)
+            "episodes" => $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes)
         ]);
     }
 
     #[Route("/shows/{show}/least-watched", name: "shows_least_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getLeastWatchedEpisodesPage(int $show): Response
+    public function getLeastWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
     {
-        $show = $this->showRepository->findByIdWithEpisodesAndViews($show, $this->getUser()->getId());
+        $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.least-watched-episodes",
-            "episodes" => $show->getMostOrLeastWatchedEpisodes($this->getUser(), $this->maxEpisodes, true)
+            "episodes" => $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes, true)
         ]);
     }
 
     #[Route("/shows/{show}/unwatched", name: "shows_unwatched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getUnwatchedEpisodesPage(int $show): Response
+    public function getUnwatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
     {
-        $show = $this->showRepository->findByIdWithEpisodesAndViews($show, $this->getUser()->getId());
+        $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.unwatched-episodes",
-            "episodes" => $show->getUnwatchedEpisodes($this->getUser())
+            "episodes" => $show->getUnwatchedEpisodes($watchStatsProvider)
         ]);
     }
 

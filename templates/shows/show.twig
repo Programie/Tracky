@@ -23,7 +23,7 @@
             {{ _self.navItem("shows_latest_watched_episodes_page", {"show": show.id}, "shows.latest-watched-episodes"|trans) }}
             {{ _self.navItem("shows_most_watched_episodes_page", {"show": show.id}, "shows.most-watched-episodes"|trans) }}
             {{ _self.navItem("shows_least_watched_episodes_page", {"show": show.id}, "shows.least-watched-episodes"|trans) }}
-            {{ _self.navItem("shows_unwatched_episodes_page", {"show": show.id}, "shows.unwatched-episodes"|trans({"%count%": show.getUnwatchedEpisodes(app.user)|length})) }}
+            {{ _self.navItem("shows_unwatched_episodes_page", {"show": show.id}, "shows.unwatched-episodes"|trans({"%count%": show.getUnwatchedEpisodes(watchStatsProvider)|length})) }}
         {% endif %}
     </ul>
 
