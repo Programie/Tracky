@@ -4,37 +4,49 @@ namespace tracky\watchstats;
 use Symfony\Bundle\SecurityBundle\Security;
 use tracky\model\Episode;
 use tracky\model\Movie;
+use tracky\model\User;
 use tracky\orm\ViewRepository;
 use tracky\ViewType;
 
 class WatchStatsProvider
 {
     /**
-     * @var array<value-of<ViewType>, WatchStatsCollection>
+     * @var array<int, array<<value-of<ViewType>, WatchStatsCollection>>
      */
-    private array $collections;
+    private array $perUserCollections;
 
     public function __construct(
         private readonly ViewRepository $viewRepository,
         private readonly Security $security
     ) {}
 
-    public function getStatsForType(ViewType $type): ?WatchStatsCollection
+    public function getStatsForType(ViewType $type, ?User $user = null): ?WatchStatsCollection
     {
-        if ($this->collections[$type->value] ?? null !== null) {
-            return $this->collections[$type->value];
-        }
-
-        $user = $this->security->getUser();
         if ($user === null) {
-            return null;
+            /**
+             * @var User
+             */
+            $user = $this->security->getUser();
+            if ($user === null) {
+                return null;
+            }
         }
 
-        return $this->collections[$type->value] = $this->viewRepository->getWatchStatsForUser($user, $type);
+        $userId = $user->getId();
+
+        if (!isset($this->perUserCollections[$userId])) {
+            $this->perUserCollections[$userId] = [];
+        }
+
+        if (isset($this->perUserCollections[$userId][$type->value])) {
+            return $this->perUserCollections[$userId][$type->value];
+        }
+
+        return $this->perUserCollections[$userId][$type->value] = $this->viewRepository->getWatchStatsForUser($user, $type);
     }
 
-    public function getItemStats(Episode|Movie $item): ?ItemWatchStats
+    public function getItemStats(Episode|Movie $item, ?User $user = null): ?ItemWatchStats
     {
-        return $this->getStatsForType($item->getViewType())?->getStatsForItem($item);
+        return $this->getStatsForType($item->getViewType(), $user)?->getStatsForItem($item);
     }
 }

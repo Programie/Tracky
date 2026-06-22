@@ -15,6 +15,7 @@ use tracky\orm\ViewRepository;
 use tracky\orm\UserRepository;
 use tracky\scrobbler\Scrobbler;
 use tracky\ViewType;
+use tracky\watchstats\WatchStatsProvider;
 
 class UserController extends AbstractController
 {
@@ -119,11 +120,12 @@ class UserController extends AbstractController
     }
 
     #[Route("/users/{username}/show-progress", name: "user_profile_show_progress_page")]
-    public function getShowProgressForUser(User $user, ShowRepository $showRepository, ViewRepository $viewRepository): Response
+    public function getShowProgressForUser(User $user, ShowRepository $showRepository, WatchStatsProvider $watchStatsProvider): Response
     {
         return $this->render("user/show-progress.twig", [
             "user" => $user,
-            "shows" => $showRepository->findAllWithEpisodes()
+            "shows" => $showRepository->findAllWithEpisodes(),
+            "watchStatsCollection" => $watchStatsProvider->getStatsForType(ViewType::EPISODE, $user)
         ]);
     }
 }
