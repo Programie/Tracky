@@ -5,13 +5,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use tracky\model\Episode;
-use tracky\model\User;
+use tracky\model\Movie;
+use tracky\model\View;
 use tracky\orm\EpisodeRepository;
 use tracky\orm\MovieRepository;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\scrobbler\Scrobbler;
 use tracky\ViewType;
+use tracky\watchstats\WatchStatsProvider;
 
 class HomeController extends AbstractController
 {
@@ -24,7 +26,7 @@ class HomeController extends AbstractController
     }
 
     #[Route("/", name: "home_page")]
-    public function home(ShowRepository $showRepository, EpisodeRepository $episodeRepository, MovieRepository $movieRepository, ViewRepository $viewRepository, Scrobbler $scrobbler): Response
+    public function home(ShowRepository $showRepository, EpisodeRepository $episodeRepository, MovieRepository $movieRepository, ViewRepository $viewRepository, WatchStatsProvider $watchStatsProvider, Scrobbler $scrobbler): Response
     {
         $nowWatching = null;
         $latestWatchedEpisodes = null;
@@ -34,9 +36,32 @@ class HomeController extends AbstractController
         $user = $this->getUser();
         if ($user !== null) {
             $nowWatching = $scrobbler->getNowWatching($user);
-            $latestWatchedEpisodes = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxEpisodes, type: ViewType::EPISODE);
-            $latestWatchedMovies = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxMovies, type: ViewType::MOVIE);
-            $nextEpisodes = $this->getNextEpisodes($showRepository, $viewRepository, $user);
+
+            $latestWatchedEpisodes = [];
+            $episodeViews = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxEpisodes, type: ViewType::EPISODE);
+            $episodes = $episodeRepository->findByIds(array_map(fn(View $view) => $view->getItem(), $episodeViews));
+            $episodes = array_combine(array_map(fn(Episode $episode) => $episode->getId(), $episodes), $episodes);
+
+            foreach ($episodeViews as $view) {
+                $latestWatchedEpisodes[] = [
+                    "view" => $view,
+                    "item" => $episodes[$view->getItem()]
+                ];
+            }
+
+            $latestWatchedMovies = [];
+            $movieViews = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxMovies, type: ViewType::MOVIE);
+            $movies = $movieRepository->findByIds(array_map(fn(View $view) => $view->getItem(), $movieViews));
+            $movies = array_combine(array_map(fn(Movie $movie) => $movie->getId(), $movies), $movies);
+
+            foreach ($movieViews as $view) {
+                $latestWatchedMovies[] = [
+                    "view" => $view,
+                    "item" => $movies[$view->getItem()]
+                ];
+            }
+
+            $nextEpisodes = $this->getNextEpisodes($showRepository, $watchStatsProvider);
         }
 
         return $this->render("index.twig", [
@@ -49,62 +74,30 @@ class HomeController extends AbstractController
         ]);
     }
 
-    private function getNextEpisodes(ShowRepository $showRepository, ViewRepository $viewRepository, User $user)
+    private function getNextEpisodes(ShowRepository $showRepository, WatchStatsProvider $watchStatsProvider)
     {
-        $latestEpisodes = [];
-        $nextEpisodes = [];
-
-        $watchStats = $viewRepository->getEpisodeWatchStatsForUser($user);
-
-        $latestEpisodes = [];
+        /**
+         * @var list<array{Episode, DateTime}>
+         */
+        $episodes = [];
 
         foreach ($showRepository->findAllWithEpisodes() as $show) {
-            $mostRecentWatch = null;
-            $mostRecentWatchedEpisode = null;
+            $latestWatchedEpisode = $show->getLatestWatchedEpisodes($watchStatsProvider, 1)[0] ?? null;
 
-            foreach ($show->getSeasons() as $season) {
-                foreach ($season->getEpisodes() as $episode) {
-                    $episodeWatchStats = $watchStats[$episode->getId()] ?? null;
-                    if ($episodeWatchStats === null) {
-                        continue;
-                    }
-
-                    if ($mostRecentWatch === null or $episodeWatchStats["lastWatched"] > $mostRecentWatch) {
-                        $mostRecentWatch = $episodeWatchStats["lastWatched"];
-                        $mostRecentWatchedEpisode = $episode;
-                    }
-                }
-            }
-
-            if ($mostRecentWatch === null) {
+            if ($latestWatchedEpisode === null) {
                 continue;
             }
 
-            $latestEpisodes[] = [
-                "episode" => $mostRecentWatchedEpisode,
-                "lastWatched" => $mostRecentWatch
-            ];
-        }
-
-        usort($latestEpisodes, function ($item1, $item2) {
-            $item1Timestamp = $item1["lastWatched"];
-            $item2Timestamp = $item2["lastWatched"];
-
-            if ($item1Timestamp === $item2Timestamp) {
-                return 0;
+            $nextEpisode = $latestWatchedEpisode[0]->getNextEpisode();
+            if ($nextEpisode === null) {
+                continue;
             }
 
-            return ($item1Timestamp > $item2Timestamp) ? -1 : 1;
-        });
-
-        foreach ($latestEpisodes as $item) {
-            $episode = $item["episode"];
-            $nextEpisode = $episode->getNextEpisode();
-            if ($nextEpisode !== null) {
-                $nextEpisodes[] = $nextEpisode;
-            }
+            $episodes[] = [$nextEpisode, $latestWatchedEpisode[1]->getLastWatched()];
         }
 
-        return array_slice($nextEpisodes, 0, $this->maxNextEpisodeShows);
+        usort($episodes, fn($item1, $item2) => $item2[1] <=> $item1[1]);
+
+        return array_map(fn($item) => $item[0], array_slice($episodes, 0, $this->maxNextEpisodeShows));
     }
 }

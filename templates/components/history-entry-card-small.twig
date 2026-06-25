@@ -1,19 +1,18 @@
-{% set metadata = {"entry-type": entry.type.value, "entry-id": entry.id} %}
+{% set itemWatchStats = watchStatsProvider.getItemStats(entry.item) %}
+{% set metadata = {"entry-type": entry.view.type.value, "entry-id": entry.view.id, "views": itemWatchStats.count} %}
 
-{% if entry.type.value == "episode" %}
-    {% set episode = entry.episode %}
+{% if entry.view.type.value == "episode" %}
+    {% set episode = entry.item %}
     {% set season = episode.season %}
     {% set show = season.show %}
     {% set linkUrl = path("shows_season_page", {"show": show.id, "number": season.number}) ~ "#e" ~ episode.number %}
     {% set imageUrl = path("shows_episode_image", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) %}
-    {% set itemWatchStats = watchStatsProvider.getItemStats(episode) %}
-    {% set metadata = metadata|merge({"views": itemWatchStats.count, "show": show.id, "season": season.number, "episode": episode.number}) %}
-{% elseif entry.type.value == "movie" %}
-    {% set movie = entry.movie %}
+    {% set metadata = metadata|merge({"show": show.id, "season": season.number, "episode": episode.number}) %}
+{% elseif entry.view.type.value == "movie" %}
+    {% set movie = entry.item %}
     {% set linkUrl = path("movies_single_page", {"movie": movie.id}) %}
     {% set imageUrl = path("movies_get_image", {"movie": movie.id}) %}
-    {% set itemWatchStats = watchStatsProvider.getItemStats(movie) %}
-    {% set metadata = metadata|merge({"views": itemWatchStats.count, "movie": movie.id}) %}
+    {% set metadata = metadata|merge({"movie": movie.id}) %}
 {% endif %}
 
 <div class="d-none" {% for key, value in metadata %} data-{{ key }}="{{ value }}"{% endfor %}></div>
@@ -23,13 +22,13 @@
         <img class="card-img-top" loading="lazy" src="{{ imageUrl }}"/>
     </a>
     <div class="card-body">
-        {% if entry.type.value == "episode" %}
+        {% if entry.view.type.value == "episode" %}
             <h5 class="card-title text-truncate" title="{{ season.number }}x{{ episode.number }} {{ episode.title|default("unknown-title"|trans) }}"><a class="text-reset text-decoration-none" href="{{ linkUrl }}"><b>{{ season.number }}x{{ episode.number }}</b> {{ episode.title|default("unknown-title"|trans) }}</a></h5>
             <div class="text-truncate" title="{{ show.title }}"><a class="text-reset text-decoration-none" href="{{ path("shows_show_page", {"show": show.id}) }}">{{ show.title }}</a></div>
-        {% elseif entry.type.value == "movie" %}
+        {% elseif entry.view.type.value == "movie" %}
             <h5 class="card-title text-truncate" title="{{ movie.title }}"><a class="text-reset text-decoration-none" href="{{ linkUrl }}">{{ movie.title }}</a></h5>
         {% endif %}
-        <div class="text-body-secondary">{{ entry.datetime|format_datetime }}</div>
+        <div class="text-body-secondary">{{ entry.view.datetime|format_datetime }}</div>
     </div>
     {% if user == app.user %}
         <div class="card-footer">

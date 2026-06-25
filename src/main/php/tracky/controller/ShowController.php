@@ -130,7 +130,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.latest-watched-episodes",
-            "episodes" => $show->getLatestWatchedEpisodes($watchStatsProvider, $this->maxEpisodes)
+            "episodes" => array_map(fn($item) => $item[0], $show->getLatestWatchedEpisodes($watchStatsProvider, $this->maxEpisodes))
         ]);
     }
 
@@ -143,7 +143,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.most-watched-episodes",
-            "episodes" => $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes)
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes, false))
         ]);
     }
 
@@ -156,7 +156,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.least-watched-episodes",
-            "episodes" => $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes, true)
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes, true))
         ]);
     }
 

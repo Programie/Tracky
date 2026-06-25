@@ -177,26 +177,29 @@ class Show extends BaseEntity
         return $randomEpisodes;
     }
 
+    /**
+     * @return list<array{Episode, ItemWatchStats}>
+     */
     public function getLatestWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $includeWatchStats = false): array
     {
         $episodes = $this->getWatchedEpisodesSortedByLastWatched($watchStatsProvider);
 
-        if (!$includeWatchStats) {
-            foreach ($episodes as &$item) {
-                $item = $item[0];
-            }
-        }
-
         return array_slice($episodes, 0, $count);
     }
 
-    public function getMostOrLeastWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $leastWatched = false): array
+    /**
+     * @return list<array{Episode, ItemWatchStats}>
+     */
+    public function getMostOrLeastWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $leastWatched): array
     {
-        $episodes = $this->getWatchedEpisodesSortedByLastWatched($watchStatsProvider);
+        $episodes = $this->getWatchedEpisodes($watchStatsProvider);
 
-        foreach ($episodes as &$item) {
-            $item = $item[0];
-        }
+        usort($episodes, function($item1, $item2) {
+            $item1WatchStats = $item1[1];
+            $item2WatchStats = $item2[1];
+
+            return $item2WatchStats->getCount() <=> $item1WatchStats->getCount();
+        });
 
         if ($leastWatched) {
             $episodes = array_reverse($episodes);
@@ -216,14 +219,7 @@ class Show extends BaseEntity
             $item1WatchStats = $item1[1];
             $item2WatchStats = $item2[1];
 
-            $item1LastWatched = $item1WatchStats->getLastWatched();
-            $item2LastWatched = $item2WatchStats->getLastWatched();
-
-            if ($item1LastWatched === $item2LastWatched) {
-                return 0;
-            }
-
-            return ($item1LastWatched > $item2LastWatched) ? -1 : 1;
+            return $item2WatchStats->getLastWatched() <=> $item1WatchStats->getLastWatched();
         });
 
         return $episodes;
@@ -250,6 +246,9 @@ class Show extends BaseEntity
         return $allEpisodes;
     }
 
+    /**
+     * @return Episode[]
+     */
     public function getUnwatchedEpisodes(WatchStatsProvider $watchStatsProvider): array
     {
         $unwatchedEpisodes = [];

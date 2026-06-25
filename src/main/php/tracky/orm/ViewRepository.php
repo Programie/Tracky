@@ -40,7 +40,7 @@ class ViewRepository extends ServiceEntityRepository
 
         if ($type !== null) {
             $queryBuilder
-                ->andWhere("view INSTANCE OF :type")
+                ->andWhere("view.type = :type")
                 ->setParameter(":type", $type->value);
         }
 
@@ -61,6 +61,9 @@ class ViewRepository extends ServiceEntityRepository
         return $queryBuilder;
     }
 
+    /**
+     * @return View[]
+     */
     public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?ViewType $type = null, ?DateRange $dateRange = null): array
     {
         $queryBuilder = $this->getQueryBuilder("view", $criteria, $orderBy, $limit, $offset, $type, $dateRange);
@@ -68,7 +71,7 @@ class ViewRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function findOneBy(array $criteria, ?array $orderBy = null, ?ViewType $type = null): ?object
+    public function findOneBy(array $criteria, ?array $orderBy = null, ?ViewType $type = null): ?View
     {
         $items = $this->findBy($criteria, $orderBy, 1, type: $type);
 
@@ -77,6 +80,22 @@ class ViewRepository extends ServiceEntityRepository
         }
 
         return $items[0];
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getItemIdsBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?ViewType $type = null, ?DateRange $dateRange = null): array
+    {
+        $queryBuilder = $this->getQueryBuilder("view", $criteria, $orderBy, $limit, $offset, $type, $dateRange);
+
+        $ids = [];
+
+        foreach ($queryBuilder->getQuery()->getResult() as $view) {
+            $ids[] = $view->getItem();
+        }
+
+        return $ids;
     }
 
     public function count(array $criteria = [], ?ViewType $type = null, ?DateRange $dateRange = null): int
