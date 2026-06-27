@@ -3,21 +3,12 @@ import "./history";
 import "./library-management";
 import "./view";
 
+// @ts-ignore
+import missingImagePoster from "../images/missing-image-poster.svg";
+// @ts-ignore
+import missingImageWide from "../images/missing-image-wide.svg";
+
 document.addEventListener("DOMContentLoaded", () => {
-    let lazyBackgroundObserver = new IntersectionObserver((entries) => {
-        entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-                let element = entry.target as HTMLElement;
-                element.style.backgroundImage = `url(${element.dataset.imageUrl})`;
-                lazyBackgroundObserver.unobserve(element);
-            }
-        });
-    });
-
-    document.querySelectorAll(".lazy-background").forEach(function (lazyBackground) {
-        lazyBackgroundObserver.observe(lazyBackground);
-    });
-
     document.querySelectorAll(".season-dropdown").forEach((dropdown) => {
         dropdown.addEventListener("shown.bs.dropdown", () => {
             let menu = dropdown.querySelector(".dropdown-menu");
@@ -27,6 +18,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 block: "center",
                 behavior: "instant"
             });
+        });
+    });
+
+    document.querySelectorAll("img.image-poster").forEach((element) => {
+        element.addEventListener("error", () => {
+            (element as HTMLImageElement).src = missingImagePoster;
+        });
+    });
+
+    document.querySelectorAll("img.image-wide").forEach((element) => {
+        element.addEventListener("error", () => {
+            (element as HTMLImageElement).src = missingImageWide;
         });
     });
 });

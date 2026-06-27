@@ -7,11 +7,13 @@
     {% set show = season.show %}
     {% set linkUrl = path("shows_season_page", {"show": show.id, "number": season.number}) ~ "#e" ~ episode.number %}
     {% set imageUrl = path("shows_episode_image", {"show": show.id, "seasonNumber": season.number, "episodeNumber": episode.number}) %}
+    {% set imageType = "wide" %}
     {% set metadata = metadata|merge({"show": show.id, "season": season.number, "episode": episode.number}) %}
 {% elseif entry.view.type.value == "movie" %}
     {% set movie = entry.item %}
     {% set linkUrl = path("movies_single_page", {"movie": movie.id}) %}
     {% set imageUrl = path("movies_get_image", {"movie": movie.id}) %}
+    {% set imageType = "poster" %}
     {% set metadata = metadata|merge({"movie": movie.id}) %}
 {% endif %}
 
@@ -19,7 +21,7 @@
 
 <div class="card">
     <a href="{{ linkUrl }}">
-        <img class="card-img-top" loading="lazy" src="{{ imageUrl }}"/>
+        <img class="card-img-top rounded-top image-{{ imageType }}" loading="lazy" src="{{ imageUrl }}"/>
     </a>
     <div class="card-body">
         {% if entry.view.type.value == "episode" %}

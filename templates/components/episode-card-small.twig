@@ -1,7 +1,7 @@
 {% set linkUrl = path("shows_season_page", {"show": episode.season.show.id, "number": episode.season.number}) ~ "#e" ~ episode.number %}
 <div class="card">
     <a href="{{ linkUrl }}">
-        <img class="card-img-top" loading="lazy" src="{{ path("shows_episode_image", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"/>
+        <img class="card-img-top rounded-top image-wide" loading="lazy" src="{{ path("shows_episode_image", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"/>
     </a>
     <div class="card-body">
         <h5 class="card-title text-truncate" title="{{ episode.season.number }}x{{ episode.number }} {{ episode.title|default("unknown-title"|trans) }}">

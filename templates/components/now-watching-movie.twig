@@ -2,7 +2,9 @@
 <div class="card">
     <div class="row g-0">
         <a href="{{ linkUrl }}">
-            <div class="col-md-4 scaled-image rounded-bottom-0 lazy-background" data-image-url="{{ path("movies_get_image", {"movie": movie.id}) }}"></div>
+            <div class="col-md-4">
+                <img class="rounded-start img-fluid h-100 object-fit-none image-poster" loading="lazy" src="{{ path("movies_get_image", {"movie": movie.id}) }}"/>
+            </div>
         </a>
         <div class="col-md-8">
             <div class="card-body">
