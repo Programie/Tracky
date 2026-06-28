@@ -41,7 +41,7 @@
     </div>
 
     {% if movies %}
-        {% include "components/movie-list-small.twig" with {"movies": movies} %}
+        {% include "components/movie-list-small.twig" with {"movies": movies, "watchStats": watchStats} only %}
     {% else %}
         <div class="alert alert-warning">{{ "movies.no-movies-available"|trans }}</div>
     {% endif %}

@@ -9,12 +9,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use tracky\HistoryEntry;
 use tracky\model\User;
+use tracky\orm\EpisodeRepository;
+use tracky\orm\MovieRepository;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\orm\UserRepository;
 use tracky\scrobbler\Scrobbler;
 use tracky\ViewType;
+use tracky\watchstats\WatchStatsProvider;
 
 class UserController extends AbstractController
 {
@@ -108,22 +112,27 @@ class UserController extends AbstractController
     }
 
     #[Route("/users/{username}", name: "user_profile_page")]
-    public function getProfilePage(User $user, ViewRepository $viewRepository, Scrobbler $scrobbler): Response
+    public function getProfilePage(User $user, ViewRepository $viewRepository, EpisodeRepository $episodeRepository, MovieRepository $movieRepository, Scrobbler $scrobbler): Response
     {
+        $watchStatsProvider = new WatchStatsProvider($viewRepository, $user);
+        $episodeViews = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: ViewType::EPISODE);
+        $movieViews = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: ViewType::MOVIE);
+
         return $this->render("user/profile.twig", [
             "user" => $user,
             "nowWatching" => $scrobbler->getNowWatching($user),
-            "latestWatchedEpisodes" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: ViewType::EPISODE),
-            "latestWatchedMovies" => $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], 10, type: ViewType::MOVIE)
+            "latestWatchedEpisodes" => HistoryEntry::getFromViews($episodeViews, $episodeRepository, $movieRepository, $watchStatsProvider),
+            "latestWatchedMovies" => HistoryEntry::getFromViews($movieViews, $episodeRepository, $movieRepository, $watchStatsProvider),
         ]);
     }
 
     #[Route("/users/{username}/show-progress", name: "user_profile_show_progress_page")]
-    public function getShowProgressForUser(User $user, ShowRepository $showRepository): Response
+    public function getShowProgressForUser(User $user, ShowRepository $showRepository, ViewRepository $viewRepository): Response
     {
         return $this->render("user/show-progress.twig", [
             "user" => $user,
-            "shows" => $showRepository->findAllWithEpisodesAndViews($user->getId())
+            "shows" => $showRepository->findAllWithEpisodes(),
+            "watchStatsCollection" => (new WatchStatsProvider($viewRepository, $user))->getStatsForType(ViewType::EPISODE)
         ]);
     }
 }

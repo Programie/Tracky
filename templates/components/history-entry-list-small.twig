@@ -1,7 +1,7 @@
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
     {% for entry in entries %}
         <div class="col">
-            {% include "components/history-entry-card-small.twig" with {"entry": entry} %}
+            {% include "components/history-entry-card-small.twig" with {"entry": entry} only %}
         </div>
     {% endfor %}
 </div>

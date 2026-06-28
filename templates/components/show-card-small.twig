@@ -1,7 +1,7 @@
 {% set linkUrl = path("shows_show_page", {"show": show.id}) %}
 <div class="card">
     <a href="{{ linkUrl }}">
-        <img class="card-img-top" loading="lazy" src="{{ path("shows_show_image", {"show": show.id}) }}"/>
+        <img class="card-img-top rounded-top image-poster" loading="lazy" src="{{ path("shows_show_image", {"show": show.id}) }}"/>
     </a>
     <div class="card-body">
         <h5 class="card-title text-truncate" title="{{ show.title }}">

@@ -34,4 +34,20 @@ class EpisodeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @return Episode[]
+     */
+    public function findByIds(array $ids): array
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $queryBuilder = $this->createQueryBuilder("episode");
+
+        $queryBuilder->where($queryBuilder->expr()->in("episode.id", $ids));
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

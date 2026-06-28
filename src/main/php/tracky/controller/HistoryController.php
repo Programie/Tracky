@@ -1,19 +1,19 @@
 <?php
 namespace tracky\controller;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use tracky\datetime\Date;
 use tracky\datetime\DateRange;
-use tracky\model\EpisodeView;
-use tracky\model\MovieView;
+use tracky\HistoryEntry;
 use tracky\model\User;
-use tracky\model\ViewEntry;
+use tracky\orm\EpisodeRepository;
+use tracky\orm\MovieRepository;
 use tracky\orm\ViewRepository;
 use tracky\Pagination;
 use tracky\ViewType;
+use tracky\watchstats\WatchStatsProvider;
 
 class HistoryController extends AbstractController
 {
@@ -25,7 +25,7 @@ class HistoryController extends AbstractController
     }
 
     #[Route("/users/{username}/history", name: "user_profile_history_page")]
-    public function getPage(Request $request, User $user, EntityManagerInterface $entityManager, ViewRepository $viewRepository)
+    public function getPage(Request $request, User $user, ViewRepository $viewRepository, EpisodeRepository $episodeRepository, MovieRepository $movieRepository)
     {
         $page = $request->query->getInt("page", 1);
 
@@ -47,11 +47,9 @@ class HistoryController extends AbstractController
         switch ($type) {
             case ViewType::EPISODE:
                 $criteria["item"] = $item;
-                $viewRepository = $entityManager->getRepository(EpisodeView::class);
                 break;
             case ViewType::MOVIE:
                 $criteria["item"] = $item;
-                $viewRepository = $entityManager->getRepository(MovieView::class);
                 break;
         }
 
@@ -60,13 +58,15 @@ class HistoryController extends AbstractController
         $pagination = new Pagination($page, $count, $this->itemsPerPage, $this->maxPreviousNextPages);
 
         if ($dateRange === null) {
-            $firstPage = $this->sorted($viewRepository->getPaged($criteria, 1, $this->itemsPerPage, $type, $dateRange));
-            $lastPage = $this->sorted($viewRepository->getPaged($criteria, $pagination->getLastPage(), $this->itemsPerPage, $type, $dateRange));
+            $firstPage = $viewRepository->getPaged($criteria, 1, $this->itemsPerPage, $type, $dateRange);
+            $lastPage = $viewRepository->getPaged($criteria, $pagination->getLastPage(), $this->itemsPerPage, $type, $dateRange);
 
             if (!empty($firstPage) and !empty($lastPage)) {
                 $dateRange = new DateRange($lastPage[count($lastPage) - 1]->getDateTime()->toDate(), $firstPage[0]->getDateTime()->toDate());
             }
         }
+
+        $views = $viewRepository->getPaged($criteria, $page, $this->itemsPerPage, $type, $dateRange);
 
         return $this->render("user/history.twig", [
             "user" => $user,
@@ -76,22 +76,7 @@ class HistoryController extends AbstractController
                 "item" => $item
             ],
             "pagination" => $pagination,
-            "entries" => $this->sorted($viewRepository->getPaged($criteria, $page, $this->itemsPerPage, $type, $dateRange))
+            "entries" => HistoryEntry::getFromViews($views, $episodeRepository, $movieRepository, new WatchStatsProvider($viewRepository, $user))
         ]);
-    }
-
-    private function sorted(array $entries): array
-    {
-        usort($entries, function (ViewEntry $entry1, ViewEntry $entry2) {
-            if ($entry1->getDateTime() < $entry2->getDateTime()) {
-                return 1;
-            } elseif ($entry1->getDateTime() > $entry2->getDateTime()) {
-                return -1;
-            } else {
-                return 0;
-            }
-        });
-
-        return $entries;
     }
 }

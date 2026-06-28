@@ -15,12 +15,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\datetime\DateTime;
 use tracky\ImageFetcher;
 use tracky\model\Episode;
-use tracky\model\EpisodeView;
 use tracky\model\Season;
 use tracky\model\Show;
+use tracky\model\View;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\ViewType;
+use tracky\watchstats\WatchStatsProvider;
 
 class ShowController extends AbstractController
 {
@@ -81,10 +82,8 @@ class ShowController extends AbstractController
 
     #[Route("/shows/{show}", name: "shows_show_remove_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function removeShow(Show $show, EntityManagerInterface $entityManager): Response
+    public function removeShow(Show $show, ViewRepository $viewRepository, EntityManagerInterface $entityManager): Response
     {
-        $viewRepository = $entityManager->getRepository(EpisodeView::class);
-
         // Make sure no episode view exists for this show
         foreach ($show->getSeasons() as $season) {
             foreach ($season->getEpisodes() as $episode) {
@@ -124,53 +123,53 @@ class ShowController extends AbstractController
 
     #[Route("/shows/{show}/latest-watched", name: "shows_latest_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getLatestWatchedEpisodesPage(int $show): Response
+    public function getLatestWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
     {
-        $show = $this->showRepository->findByIdWithEpisodesAndViews($show, $this->getUser()->getId());
+        $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.latest-watched-episodes",
-            "episodes" => $show->getLatestWatchedEpisodes($this->getUser(), $this->maxEpisodes)
+            "episodes" => array_map(fn($item) => $item[0], $show->getLatestWatchedEpisodes($watchStatsProvider, $this->maxEpisodes))
         ]);
     }
 
     #[Route("/shows/{show}/most-watched", name: "shows_most_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getMostWatchedEpisodesPage(int $show): Response
+    public function getMostWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
     {
-        $show = $this->showRepository->findByIdWithEpisodesAndViews($show, $this->getUser()->getId());
+        $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.most-watched-episodes",
-            "episodes" => $show->getMostOrLeastWatchedEpisodes($this->getUser(), $this->maxEpisodes)
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes, false))
         ]);
     }
 
     #[Route("/shows/{show}/least-watched", name: "shows_least_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getLeastWatchedEpisodesPage(int $show): Response
+    public function getLeastWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
     {
-        $show = $this->showRepository->findByIdWithEpisodesAndViews($show, $this->getUser()->getId());
+        $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.least-watched-episodes",
-            "episodes" => $show->getMostOrLeastWatchedEpisodes($this->getUser(), $this->maxEpisodes, true)
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes, true))
         ]);
     }
 
     #[Route("/shows/{show}/unwatched", name: "shows_unwatched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getUnwatchedEpisodesPage(int $show): Response
+    public function getUnwatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
     {
-        $show = $this->showRepository->findByIdWithEpisodesAndViews($show, $this->getUser()->getId());
+        $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.unwatched-episodes",
-            "episodes" => $show->getUnwatchedEpisodes($this->getUser())
+            "episodes" => $show->getUnwatchedEpisodes($watchStatsProvider)
         ]);
     }
 
@@ -209,12 +208,12 @@ class ShowController extends AbstractController
             throw new BadRequestException("Invalid payload");
         }
 
-        $episodeView = new EpisodeView;
-        $episodeView->setEpisode($episode);
-        $episodeView->setUser($this->getUser());
-        $episodeView->setDateTime($dateTime);
+        $view = new View;
+        $view->setItem($episode);
+        $view->setUser($this->getUser());
+        $view->setDateTime($dateTime);
 
-        $entityManager->persist($episodeView);
+        $entityManager->persist($view);
         $entityManager->flush();
 
         return new Response("View added to database");
@@ -222,7 +221,7 @@ class ShowController extends AbstractController
 
     #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views/all", name: "shows_remove_episode_view_action", methods: ["DELETE"])]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function removeViewsByEpisode(Show $show, int $seasonNumber, int $episodeNumber, EntityManagerInterface $entityManager): Response
+    public function removeViewsByEpisode(Show $show, int $seasonNumber, int $episodeNumber, ViewRepository $viewRepository, EntityManagerInterface $entityManager): Response
     {
         $season = $show->getSeason($seasonNumber);
         if ($season === null) {
@@ -234,7 +233,7 @@ class ShowController extends AbstractController
             throw new NotFoundHttpException("Episode not found");
         }
 
-        $views = $episode->getViewsForUser($this->getUser());
+        $views = $viewRepository->findBy(["item" => $episode->getId(), "user" => $this->getUser(), "type" => ViewType::EPISODE->value]);
 
         foreach ($views as $view) {
             $entityManager->remove($view);
@@ -259,9 +258,13 @@ class ShowController extends AbstractController
             throw new NotFoundHttpException("Episode not found");
         }
 
-        $view = $this->viewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser()], type: ViewType::EPISODE);
+        $view = $this->viewRepository->findOneBy(["id" => $entryId, "user" => $this->getUser(), "type" => ViewType::EPISODE->value]);
         if ($view === null) {
             throw new NotFoundHttpException("View not found");
+        }
+
+        if ($view->getItem() !== $episode->getId()) {
+            throw new NotFoundHttpException("View item does not match episode");
         }
 
         $entityManager->remove($view);

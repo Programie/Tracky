@@ -1,13 +1,13 @@
 <?php
 namespace tracky\model;
 
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use tracky\datetime\Date;
 use tracky\model\traits\Plot;
 use tracky\model\traits\PosterImage;
 use tracky\model\traits\Runtime;
 use tracky\orm\EpisodeRepository;
+use tracky\ViewType;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
 #[ORM\Table(
@@ -37,10 +37,6 @@ class Episode extends BaseEntity
 
     #[ORM\Column(name: "firstAired", type: "date", nullable: true)]
     private ?Date $firstAired;
-
-    #[ORM\OneToMany(mappedBy: "item", targetEntity: EpisodeView::class)]
-    #[ORM\OrderBy(["dateTime" => "ASC"])]
-    private mixed $views;
 
     public function getSeason(): Season
     {
@@ -86,14 +82,6 @@ class Episode extends BaseEntity
         return $this;
     }
 
-    public function getViewsForUser(User $user)
-    {
-        $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq("user", $user));
-
-        return $this->views->matching($criteria);
-    }
-
     public function getPreviousEpisode(): ?Episode
     {
         $season = $this->getSeason();
@@ -126,6 +114,11 @@ class Episode extends BaseEntity
         }
 
         return null;
+    }
+
+    public function getViewType(): ViewType
+    {
+        return ViewType::EPISODE;
     }
 
     public function __toString(): string

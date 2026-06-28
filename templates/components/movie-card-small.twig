@@ -1,7 +1,7 @@
 {% set linkUrl = path("movies_single_page", {"movie": movie.id}) %}
 <div class="card">
     <a href="{{ linkUrl }}">
-        <img class="card-img-top" loading="lazy" src="{{ path("movies_get_image", {"movie": movie.id}) }}"/>
+        <img class="card-img-top rounded-top image-poster" loading="lazy" src="{{ path("movies_get_image", {"movie": movie.id}) }}"/>
     </a>
     <div class="card-body">
         <h5 class="card-title text-truncate" title="{{ movie.title }}">
@@ -14,12 +14,10 @@
 
         <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ movie.year }}</small>
 
-        {% if is_granted("IS_AUTHENTICATED") %}
-            {% set viewsForUser = movie.getViewsForUser(app.user) %}
-            {% if viewsForUser|length %}
-                <small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ "views.views"|trans({"%count%": viewsForUser|length}) }}</small>
-                <small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ viewsForUser.last.dateTime|format_datetime }}</small>
-            {% endif %}
+        {% set itemWatchStats = watchStatsProvider.getItemStats(movie) %}
+        {% if itemWatchStats %}
+            <small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ "views.views"|trans({"%count%": itemWatchStats.count}) }}</small>
+            <small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ itemWatchStats.lastWatched|format_datetime }}</small>
         {% endif %}
     </div>
 </div>

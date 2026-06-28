@@ -8,6 +8,7 @@ use tracky\ImageFetcher;
 use tracky\model\traits\PosterImage;
 use tracky\model\traits\DataProvider;
 use tracky\orm\ShowRepository;
+use tracky\watchstats\WatchStatsProvider;
 
 #[ORM\Entity(repositoryClass: ShowRepository::class)]
 #[ORM\Table(name: "shows")]
@@ -176,101 +177,93 @@ class Show extends BaseEntity
         return $randomEpisodes;
     }
 
-    public function getLatestWatchedEpisodes(User $user, int $count, bool $includeTimestamp = false): array
+    /**
+     * @return list<array{Episode, ItemWatchStats}>
+     */
+    public function getLatestWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $includeWatchStats = false): array
     {
-        $allEpisodes = [];
+        $episodes = $this->getWatchedEpisodesSortedByLastWatched($watchStatsProvider);
 
-        foreach ($this->getSeasons() as $season) {
-            foreach ($season->getEpisodes() as $episode) {
-                $views = $episode->getViewsForUser($user);
-                $viewCount = count($views);
-                if (!$viewCount) {
-                    continue;
-                }
-
-                $allEpisodes[] = [$episode, $views->last()->getDateTime()->getTimestamp()];
-            }
-        }
-
-        usort($allEpisodes, function ($item1, $item2) {
-            list(, $item1Timestamp) = $item1;
-            list(, $item2Timestamp) = $item2;
-
-
-            if ($item1Timestamp === $item2Timestamp) {
-                return 0;
-            }
-
-            return ($item1Timestamp > $item2Timestamp) ? -1 : 1;
-        });
-
-        if (!$includeTimestamp) {
-            foreach ($allEpisodes as &$item) {
-                $item = $item[0];
-            }
-        }
-
-        return array_slice($allEpisodes, 0, $count);
+        return array_slice($episodes, 0, $count);
     }
 
-    public function getMostOrLeastWatchedEpisodes(User $user, int $count, bool $leastWatched = false): array
+    /**
+     * @return list<array{Episode, ItemWatchStats}>
+     */
+    public function getMostOrLeastWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $leastWatched): array
     {
-        $allEpisodes = [];
+        $episodes = $this->getWatchedEpisodes($watchStatsProvider);
 
-        foreach ($this->getSeasons() as $season) {
-            foreach ($season->getEpisodes() as $episode) {
-                $views = $episode->getViewsForUser($user);
-                $viewCount = count($views);
-                if (!$viewCount) {
-                    continue;
-                }
+        usort($episodes, function($item1, $item2) {
+            $item1WatchStats = $item1[1];
+            $item2WatchStats = $item2[1];
 
-                $allEpisodes[] = [$episode, $viewCount, $views->last()->getDateTime()->getTimestamp()];
-            }
-        }
-
-        usort($allEpisodes, function ($item1, $item2) {
-            list(, $item1Count, $item1Timestamp) = $item1;
-            list(, $item2Count, $item2Timestamp) = $item2;
-
-
-            if ($item1Count === $item2Count) {
-                if ($item1Timestamp === $item2Timestamp) {
-                    return 0;
-                }
-
-                return ($item1Timestamp > $item2Timestamp) ? -1 : 1;
-            }
-
-            return ($item1Count > $item2Count) ? -1 : 1;
+            return $item2WatchStats->getCount() <=> $item1WatchStats->getCount();
         });
-
-        foreach ($allEpisodes as &$item) {
-            $item = $item[0];
-        }
 
         if ($leastWatched) {
-            $allEpisodes = array_reverse($allEpisodes);
+            $episodes = array_reverse($episodes);
         }
 
-        return array_slice($allEpisodes, 0, $count);
+        return array_slice($episodes, 0, $count);
     }
 
-    public function getUnwatchedEpisodes(User $user): array
+    /**
+     * @return list<array{Episode, ItemWatchStats}>
+     */
+    public function getWatchedEpisodesSortedByLastWatched(WatchStatsProvider $watchStatsProvider): array
     {
-        $episodes = [];
+        $episodes = $this->getWatchedEpisodes($watchStatsProvider);
+
+        usort($episodes, function ($item1, $item2) {
+            $item1WatchStats = $item1[1];
+            $item2WatchStats = $item2[1];
+
+            return $item2WatchStats->getLastWatched() <=> $item1WatchStats->getLastWatched();
+        });
+
+        return $episodes;
+    }
+
+    /**
+     * @return list<array{Episode, ItemWatchStats}>
+     */
+    public function getWatchedEpisodes(WatchStatsProvider $watchStatsProvider): array
+    {
+        $allEpisodes = [];
 
         foreach ($this->getSeasons() as $season) {
             foreach ($season->getEpisodes() as $episode) {
-                $views = $episode->getViewsForUser($user);
-                if (count($views)) {
+                $itemWatchStats = $watchStatsProvider->getItemStats($episode);
+                if ($itemWatchStats === null or !$itemWatchStats->getCount()) {
                     continue;
                 }
 
-                $episodes[] = $episode;
+                $allEpisodes[] = [$episode, $itemWatchStats];
             }
         }
 
-        return $episodes;
+        return $allEpisodes;
+    }
+
+    /**
+     * @return Episode[]
+     */
+    public function getUnwatchedEpisodes(WatchStatsProvider $watchStatsProvider): array
+    {
+        $unwatchedEpisodes = [];
+
+        foreach ($this->getSeasons() as $season) {
+            foreach ($season->getEpisodes() as $episode) {
+                $itemWatchStats = $watchStatsProvider->getItemStats($episode);
+                if ($itemWatchStats !== null and $itemWatchStats->getCount()) {
+                    continue;
+                }
+
+                $unwatchedEpisodes[] = $episode;
+            }
+        }
+
+        return $unwatchedEpisodes;
     }
 }

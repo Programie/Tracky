@@ -17,18 +17,16 @@ class MovieRepository extends ServiceEntityRepository
     /**
      * @return Movie[]
      */
-    public function findAllWithViews(int $userId): array
+    public function findByIds(array $ids): array
     {
-        $query = $this->getEntityManager()->createQuery("
-            SELECT movie, view
-            FROM tracky\model\Movie movie
-            LEFT JOIN movie.views view
-            LEFT JOIN view.user user
-            WHERE user.id IS NULL OR user.id = :userId
-        ");
+        if (empty($ids)) {
+            return [];
+        }
 
-        $query->setParameter("userId", $userId);
+        $queryBuilder = $this->createQueryBuilder("movie");
 
-        return $query->getResult();
+        $queryBuilder->where($queryBuilder->expr()->in("movie.id", $ids));
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

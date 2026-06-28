@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img">
+
+    <!-- background -->
+    <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0f172a"/>
+            <stop offset="100%" stop-color="#111827"/>
+        </linearGradient>
+    </defs>
+
+    <rect width="1280" height="720" fill="url(#bg)"/>
+
+    <!-- soft shapes -->
+    <circle cx="200" cy="160" r="120" fill="#1f2937" opacity="0.4"/>
+    <circle cx="1100" cy="180" r="160" fill="#1f2937" opacity="0.35"/>
+
+    <path d="M0 600 Q320 520 640 600 T1280 600 L1280 720 L0 720 Z"
+          fill="#0b1220"
+          opacity="0.9"/>
+
+    <!-- center icon -->
+    <g transform="translate(640 340)">
+        <rect x="-90" y="-70" width="180" height="140" rx="18"
+              fill="#1f2937" opacity="0.9"/>
+
+        <!-- play icon -->
+        <path d="M-20 -25 L45 0 L-20 25 Z"
+              fill="#94a3b8"/>
+    </g>
+
+    <!-- text -->
+    <text x="630" y="600"
+          text-anchor="middle"
+          font-family="system-ui, -apple-system, Segoe UI, Roboto"
+          font-size="28"
+          fill="#94a3b8"
+          letter-spacing="2">
+        NO IMAGE
+    </text>
+
+    <text x="630" y="640"
+          text-anchor="middle"
+          font-family="system-ui, -apple-system, Segoe UI, Roboto"
+          font-size="24"
+          fill="#64748b"
+          letter-spacing="3">
+        AVAILABLE
+    </text>
+
+</svg>

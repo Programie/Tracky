@@ -64,17 +64,13 @@ html {
     background: $navbar-bg;
 }
 
-.scaled-image {
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: var(--bs-border-radius) 0 0 var(--bs-border-radius);
+.image-poster, .image-wide {
+    transition: all 0.3s ease;
 }
 
-@media (max-width: 767px) {
-    .scaled-image {
-        height: 300px;
-        border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
-    }
+.image-poster:hover, .image-wide:hover {
+    transform: scale(1.05);
+    border-radius: var(--bs-border-radius);
 }
 
 .app-layout {
@@ -105,7 +101,36 @@ html {
 }
 
 .show-progress-image {
-    background-size: contain;
+    display: block;
+}
+
+.show-progress-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (min-width: 768px) {
+    .show-progress-image {
+        aspect-ratio: 2 / 3;
+    }
+
+    .show-progress-image img {
+        border-top-left-radius: var(--bs-border-radius);
+        border-bottom-left-radius: var(--bs-border-radius);
+    }
+}
+
+@media (max-width: 767px) {
+    .show-progress-image {
+        aspect-ratio: auto;
+    }
+
+    .show-progress-image img {
+        border-top-left-radius: var(--bs-border-radius);
+        border-top-right-radius: var(--bs-border-radius);
+    }
 }
 
 .show-progress-seasons {
