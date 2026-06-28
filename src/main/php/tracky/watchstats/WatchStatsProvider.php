@@ -2,51 +2,56 @@
 namespace tracky\watchstats;
 
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use tracky\model\Episode;
 use tracky\model\Movie;
 use tracky\model\User;
+use tracky\model\View;
 use tracky\orm\ViewRepository;
 use tracky\ViewType;
 
 class WatchStatsProvider
 {
+    private ?User $user;
     /**
-     * @var array<int, array<<value-of<ViewType>, WatchStatsCollection>>
+     * @var array<value-of<ViewType>, WatchStatsCollection>
      */
-    private array $perUserCollections;
+    private array $perTypeCollection;
 
     public function __construct(
         private readonly ViewRepository $viewRepository,
-        private readonly Security $security
-    ) {}
 
-    public function getStatsForType(ViewType $type, ?User $user = null): ?WatchStatsCollection
+        #[Autowire(service: "Symfony\\Bundle\\SecurityBundle\\Security")]
+        User|Security $userOrSecurity
+    )
     {
-        if ($user === null) {
-            /**
-             * @var User
-             */
-            $user = $this->security->getUser();
-            if ($user === null) {
-                return null;
-            }
+        if ($userOrSecurity instanceof Security) {
+            $this->user = $userOrSecurity->getUser();
+        } else {
+            $this->user = $userOrSecurity;
         }
-
-        $userId = $user->getId();
-
-        if (!isset($this->perUserCollections[$userId])) {
-            $this->perUserCollections[$userId] = [];
-        }
-
-        if (isset($this->perUserCollections[$userId][$type->value])) {
-            return $this->perUserCollections[$userId][$type->value];
-        }
-
-        return $this->perUserCollections[$userId][$type->value] = $this->viewRepository->getWatchStatsForUser($user, $type);
     }
 
-    public function getItemStats(Episode|Movie $item, ?User $user = null): ?ItemWatchStats
+    public function getStatsForType(ViewType $type): ?WatchStatsCollection
     {
-        return $this->getStatsForType($item->getViewType(), $user)?->getStatsForItem($item);
+        if ($this->user === null) {
+            return null;
+        }
+
+        if (!isset($this->perTypeCollection[$type->value])) {
+            $this->perTypeCollection[$type->value] = $this->viewRepository->getWatchStatsForUser($this->user, $type);
+        }
+
+        return $this->perTypeCollection[$type->value];
+    }
+
+    public function getItemStats(Episode|Movie|int $item): ?ItemWatchStats
+    {
+        return $this->getStatsForType($item->getViewType())?->getStatsForItem($item);
+    }
+
+    public function getItemStatsByView(View $view): ?ItemWatchStats
+    {
+        return $this->getStatsForType($view->getType())?->getStatsForItem($view->getItem());
     }
 }

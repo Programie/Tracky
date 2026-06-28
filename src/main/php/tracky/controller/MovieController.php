@@ -15,7 +15,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\datetime\DateTime;
 use tracky\ImageFetcher;
 use tracky\model\Movie;
-use tracky\model\MovieView;
 use tracky\model\View;
 use tracky\orm\MovieRepository;
 use tracky\orm\ViewRepository;

@@ -1,5 +1,5 @@
-{% set itemWatchStats = watchStatsProvider.getItemStats(entry.item) %}
-{% set metadata = {"entry-type": entry.view.type.value, "entry-id": entry.view.id, "views": itemWatchStats.count} %}
+{# Note: entry is of type HistoryEntry #}
+{% set metadata = {"entry-type": entry.view.type.value, "entry-id": entry.view.id, "views": entry.viewCount} %}
 
 {% if entry.view.type.value == "episode" %}
     {% set episode = entry.item %}
@@ -32,9 +32,9 @@
         {% endif %}
         <div class="text-body-secondary">{{ entry.view.datetime|format_datetime }}</div>
     </div>
-    {% if user == app.user %}
+    {% if entry.view.user == app.user %}
         <div class="card-footer">
-            <button class="btn btn-sm history-edit-button" type="button" title="{{ "views.views"|trans({"%count%": itemWatchStats.count}) }}"><i class="fa-solid fa-check"></i></button>
+            <button class="btn btn-sm history-edit-button" type="button" title="{{ "views.views"|trans({"%count%": entry.viewCount}) }}"><i class="fa-solid fa-check"></i></button>
         </div>
     {% endif %}
 </div>

@@ -2,6 +2,7 @@
 namespace tracky\watchstats;
 
 use tracky\datetime\DateTime;
+use tracky\model\BaseEntity;
 use tracky\model\Episode;
 use tracky\model\Movie;
 
@@ -28,8 +29,14 @@ class WatchStatsCollection
         return new static($data);
     }
 
-    public function getStatsForItem(Episode|Movie $item): ?ItemWatchStats
+    public function getStatsForItem(Episode|Movie|int $item): ?ItemWatchStats
     {
-        return $this->data[$item->getId()] ?? null;
+        if ($item instanceof BaseEntity) {
+            $id = $item->getId();
+        } else {
+            $id = $item;
+        }
+
+        return $this->data[$id] ?? null;
     }
 }

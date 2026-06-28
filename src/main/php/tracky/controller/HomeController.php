@@ -4,9 +4,7 @@ namespace tracky\controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use tracky\model\Episode;
-use tracky\model\Movie;
-use tracky\model\View;
+use tracky\HistoryEntry;
 use tracky\orm\EpisodeRepository;
 use tracky\orm\MovieRepository;
 use tracky\orm\ShowRepository;
@@ -37,29 +35,11 @@ class HomeController extends AbstractController
         if ($user !== null) {
             $nowWatching = $scrobbler->getNowWatching($user);
 
-            $latestWatchedEpisodes = [];
             $episodeViews = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxEpisodes, type: ViewType::EPISODE);
-            $episodes = $episodeRepository->findByIds(array_map(fn(View $view) => $view->getItem(), $episodeViews));
-            $episodes = array_combine(array_map(fn(Episode $episode) => $episode->getId(), $episodes), $episodes);
-
-            foreach ($episodeViews as $view) {
-                $latestWatchedEpisodes[] = [
-                    "view" => $view,
-                    "item" => $episodes[$view->getItem()]
-                ];
-            }
-
-            $latestWatchedMovies = [];
             $movieViews = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $this->maxMovies, type: ViewType::MOVIE);
-            $movies = $movieRepository->findByIds(array_map(fn(View $view) => $view->getItem(), $movieViews));
-            $movies = array_combine(array_map(fn(Movie $movie) => $movie->getId(), $movies), $movies);
 
-            foreach ($movieViews as $view) {
-                $latestWatchedMovies[] = [
-                    "view" => $view,
-                    "item" => $movies[$view->getItem()]
-                ];
-            }
+            $latestWatchedEpisodes = HistoryEntry::getFromViews($episodeViews, $episodeRepository, $movieRepository, $watchStatsProvider);
+            $latestWatchedMovies = HistoryEntry::getFromViews($movieViews, $episodeRepository, $movieRepository, $watchStatsProvider);
 
             $nextEpisodes = $this->getNextEpisodes($showRepository, $watchStatsProvider);
         }

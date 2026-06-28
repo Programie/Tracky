@@ -5,12 +5,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use tracky\dataprovider\Helper;
 use tracky\datetime\DateTime;
 use tracky\model\Episode;
-use tracky\model\EpisodeView;
 use tracky\model\Movie;
-use tracky\model\MovieView;
 use tracky\model\ScrobbleQueueItem;
 use tracky\model\Show;
 use tracky\model\User;
+use tracky\model\View;
 use tracky\orm\MovieRepository;
 use tracky\orm\ShowRepository;
 use UnexpectedValueException;
@@ -132,12 +131,12 @@ class Scrobbler
     {
         $episode = $this->getEpisode($json);
 
-        $episodeView = new EpisodeView;
-        $episodeView->setEpisode($episode);
-        $episodeView->setUser($user);
-        $episodeView->setDateTime($dateTime);
+        $view = new View;
+        $view->setItem($episode);
+        $view->setUser($user);
+        $view->setDateTime($dateTime);
 
-        $this->entityManager->persist($episodeView);
+        $this->entityManager->persist($view);
         $this->entityManager->flush();
     }
 
@@ -145,12 +144,12 @@ class Scrobbler
     {
         $movie = $this->getMovie($json);
 
-        $movieView = new MovieView;
-        $movieView->setMovie($movie);
-        $movieView->setUser($user);
-        $movieView->setDateTime($dateTime);
+        $view = new View;
+        $view->setItem($movie);
+        $view->setUser($user);
+        $view->setDateTime($dateTime);
 
-        $this->entityManager->persist($movieView);
+        $this->entityManager->persist($view);
         $this->entityManager->flush();
     }
 
