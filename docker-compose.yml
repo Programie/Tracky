@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   app:
+    image: ghcr.io/programie/tracky
     build: .
     ports:
       - 8080:80
@@ -19,8 +20,6 @@ services:
 
   mysql:
     image: mariadb
-    volumes:
-      - ./database.sql:/docker-entrypoint-initdb.d/10-db.sql:ro
     environment:
       TZ: Europe/Berlin
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"

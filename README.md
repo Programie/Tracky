@@ -34,7 +34,14 @@ Create a `config.yaml` file in the `config` folder (next to the [defaults.yaml](
 
 ## Database
 
-Create a database on your MySQL server and import the [database.sql](database.sql) file into it.
+Create a database on your MySQL server.
+
+The Docker image will automatically create the required tables and migrate tables between versions of Tracky.
+
+In case you are installing Tracky using the manual way, you have to manually execute the following command on the initial setup as well as after each update:
+```bash
+bin/console doctrine:migrations:migrate --allow-no-migration
+```
 
 ## Cronjobs
 

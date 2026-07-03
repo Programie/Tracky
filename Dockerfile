@@ -36,6 +36,7 @@ COPY --from=composer /app/vendor /app/vendor
 COPY --from=webpack /app/public/assets /app/public/assets
 COPY --from=webpack /app/webpack.assets.json /app/webpack.assets.json
 
+COPY docker-startup.sh /docker-entrypoint.d/startup.sh
 COPY bin /app/bin
 COPY config /app/config
 COPY public /app/public
