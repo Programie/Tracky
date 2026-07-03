@@ -20,7 +20,7 @@ class View extends BaseEntity
     #[ORM\Column(name: "item", type: "integer")]
     protected int $item;
 
-    #[ORM\Column(name: "type", enumType: ViewType::class, type: "string", columnDefinition: "ENUM('episode', 'movie')")]
+    #[ORM\Column(name: "type", enumType: ViewType::class, type: "string", columnDefinition: "ENUM('episode', 'movie') NOT NULL")]
     protected ViewType $type;
 
     public function getUser(): User
