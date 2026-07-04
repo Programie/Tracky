@@ -8,9 +8,9 @@ To scrobble watched movies and episodes from Kodi, you might want to check out [
 
 ## Requirements
 
-* Webserver with PHP 8.2 or newer
-* MySQL/MariaDB server (tested with MariaDB 11)
-* API key/token for [TheMovieDB](https://www.themoviedb.org/settings/api) and/or [TheTVDB](https://thetvdb.com/dashboard/account/apikey)
+- Webserver with PHP 8.2 or newer
+- MySQL/MariaDB server (tested with MariaDB 11)
+- API key/token for [TheMovieDB](https://www.themoviedb.org/settings/api) and/or [TheTVDB](https://thetvdb.com/dashboard/account/apikey)
 
 ## Installation
 
@@ -49,8 +49,8 @@ This application requires an external tool to execute scripts in a regular inter
 
 The following commands should be executed:
 
-* `bin/console update-data`: Fetches new seasons and episodes (also required to execute after adding a new TV show)
-* `bin/console process-scrobble-queue`: Adds all items from the scrobble queue to the database (only required if scrobble queue is used)
+- `bin/console update-data`: Fetches new seasons and episodes (also required to execute after adding a new TV show)
+- `bin/console process-scrobble-queue`: Adds all items from the scrobble queue to the database (only required if scrobble queue is used)
 
 ## Getting started
 
