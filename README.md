@@ -36,7 +36,7 @@ Create a `config.yaml` file in the `config` folder (next to the [defaults.yaml](
 
 Create a database on your MySQL server.
 
-The Docker image will automatically create the required tables and migrate tables between versions of Tracky.
+The Docker image will automatically create the required tables and migrate tables between versions of Tracky. This can be disabled by setting the environment variable `APP_RUN_MIGRATIONS=false`.
 
 In case you are installing Tracky using the manual way, you have to manually execute the following command on the initial setup as well as after each update:
 ```bash
