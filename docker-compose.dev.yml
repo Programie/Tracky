@@ -7,6 +7,7 @@ services:
       - var:/app/var
     environment:
       APP_ENV: dev
+      APP_RUN_MIGRATIONS: "false"
 
       # Do not use this secret in production, only for testing!
       APP_SECRET: fd7061a91fb9b2754eb89c641203d138

@@ -9,5 +9,11 @@ done
 
 echo "Database is ready."
 
-echo "Running migrations..."
-php /app/bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+if [[ ${APP_RUN_MIGRATIONS:-true} == "true" ]]; then
+    echo "Running migrations..."
+    php /app/bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+else
+    echo "Skip running migrations due to APP_RUN_MIGRATIONS = ${APP_RUN_MIGRATIONS}"
+    echo "If needed, manually run the migrations using this command:"
+    echo "  php /app/bin/console doctrine:migrations:migrate --allow-no-migration"
+fi
