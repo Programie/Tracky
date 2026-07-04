@@ -3,5 +3,5 @@
 {% block showContent %}
     <h2 class="mb-3">{{ title|trans({count: episodes|length}) }}</h2>
 
-    {% include "components/episode-list-wide.twig" with {"episodes": episodes} only %}
+    {% include "components/episode-list-wide.twig" %}
 {% endblock %}

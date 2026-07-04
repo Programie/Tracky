@@ -9,6 +9,9 @@
                     <div>
                         <h5 class="card-title fw-bold"><a class="text-reset text-decoration-none" href="{{ path("shows_season_page", {"show": episode.season.show.id, "number": episode.season.number}) }}#e{{ episode.number }}">{{ episode.title|default("unknown-title"|trans) }}</a></h5>
                         <small class="card-subtitle text-body-secondary">
+                            {% if displaySeason|default(false) %}
+                                {{ "shows.season"|trans({"%number%": episode.season.number}) }}
+                            {% endif %}
                             {{ "shows.episode"|trans({"%number%": episode.number}) }}
                             {% if episode.firstAired is not null %}
                                 • <span>{{ episode.firstAired|format_date }}</span>

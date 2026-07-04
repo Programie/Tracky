@@ -117,7 +117,8 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.random-episodes",
-            "episodes" => $show->getRandomEpisodes($this->maxEpisodes)
+            "episodes" => $show->getRandomEpisodes($this->maxEpisodes),
+            "displaySeason" => true
         ]);
     }
 
@@ -130,7 +131,8 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.latest-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getLatestWatchedEpisodes($watchStatsProvider, $this->maxEpisodes))
+            "episodes" => array_map(fn($item) => $item[0], $show->getLatestWatchedEpisodes($watchStatsProvider, $this->maxEpisodes)),
+            "displaySeason" => true
         ]);
     }
 
@@ -143,7 +145,8 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.most-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes, false))
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes, false)),
+            "displaySeason" => true
         ]);
     }
 
@@ -156,7 +159,8 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.least-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes, true))
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->maxEpisodes, true)),
+            "displaySeason" => true
         ]);
     }
 
@@ -169,7 +173,8 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.unwatched-episodes",
-            "episodes" => $show->getUnwatchedEpisodes($watchStatsProvider)
+            "episodes" => $show->getUnwatchedEpisodes($watchStatsProvider),
+            "displaySeason" => true
         ]);
     }
 
