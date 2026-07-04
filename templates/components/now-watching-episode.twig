@@ -2,7 +2,7 @@
 <div class="card">
     <div class="row g-0">
         <a class="col-md-4" href="{{ linkUrl }}">
-            <img class="rounded-start img-fluid h-100 object-fit-none image-wide" loading="lazy" src="{{ path("shows_episode_image", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"/>
+            <img class="rounded-start img-fluid h-100 object-fit-cover image-wide" loading="lazy" src="{{ path("shows_episode_image", {"show": episode.season.show.id, "seasonNumber": episode.season.number, "episodeNumber": episode.number}) }}"/>
         </a>
         <div class="col-md-8">
             <div class="card-body">
