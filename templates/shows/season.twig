@@ -34,9 +34,19 @@
 
     <h2 class="my-3">{{ "shows.episodes"|trans }}</h2>
 
+    {% set previousSeason = season.previousSeason %}
+    {% if previousSeason %}
+        <a class="d-block my-3 text-body-secondary text-decoration-none text-center" href="{{ path("shows_season_page", {"show": show.id, "number": previousSeason.number}) }}"><i class="fa-solid fa-angles-up"></i> {{ "shows.season"|trans({"%number%": previousSeason.number }) }} <i class="fa-solid fa-angles-up"></i></a>
+    {% endif %}
+
     {% if season.episodes %}
         {% include "components/episode-list-wide.twig" with {"episodes": season.episodes} %}
     {% else %}
         <div class="alert alert-warning">{{ "shows.no-episodes-available"|trans }}</div>
+    {% endif %}
+
+    {% set nextSeason = season.nextSeason %}
+    {% if nextSeason %}
+        <a class="d-block my-3 text-body-secondary text-decoration-none text-center" href="{{ path("shows_season_page", {"show": show.id, "number": nextSeason.number}) }}"><i class="fa-solid fa-angles-down"></i> {{ "shows.season"|trans({"%number%": nextSeason.number }) }} <i class="fa-solid fa-angles-down"></i></a>
     {% endif %}
 {% endblock %}
