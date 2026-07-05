@@ -39,6 +39,7 @@ COPY --from=webpack /app/webpack.assets.json /app/webpack.assets.json
 COPY docker-startup.sh /docker-entrypoint.d/startup.sh
 COPY bin /app/bin
 COPY config /app/config
+COPY migrations /app/migrations
 COPY public /app/public
 COPY src /app/src
 COPY templates /app/templates
