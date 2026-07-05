@@ -23,7 +23,7 @@ class WatchStatsCollection
         $data = [];
 
         foreach ($rows as $row) {
-            $data[(int) $row["item"]] = new ItemWatchStats(count: (int) $row["watchCount"], lastWatched: new DateTime($row["lastWatched"]));
+            $data[(int) $row["item"]] = new ItemWatchStats(count: (int) $row["watchCount"], lastWatched: DateTime::fromUtc($row["lastWatched"]));
         }
 
         return new static($data);
