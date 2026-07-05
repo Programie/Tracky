@@ -200,6 +200,7 @@ class TVDB implements Provider
         }
 
         $show->setTitle($data["name"]);
+        $show->setPlot($data["overview"] ?? null);
         $show->setPosterImageUrl($this->getImageUrl($data["image"]));
         $show->setStatus($this->mapShowStatus($data["status"]["name"] ?? ""));
 
@@ -213,6 +214,7 @@ class TVDB implements Provider
         $translationData = $this->getJson(sprintf("series/%d/translations/%s", $tvdbId, $this->getShowLanguage($show)));
         if ($translationData !== null) {
             $show->setTitle($translationData["name"]);
+            $show->setPlot($translationData["overview"] ?? null);
         }
 
         if ($createSeasonsAndEpisodes) {

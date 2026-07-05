@@ -5,6 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 use tracky\datetime\Date;
 use tracky\datetime\DateRange;
 use tracky\ImageFetcher;
+use tracky\model\traits\Plot;
 use tracky\model\traits\PosterImage;
 use tracky\orm\SeasonRepository;
 
@@ -21,6 +22,7 @@ use tracky\orm\SeasonRepository;
 class Season extends BaseEntity
 {
     use PosterImage;
+    use Plot;
 
     #[ORM\ManyToOne(targetEntity: Show::class)]
     #[ORM\JoinColumn(name: "`show`", referencedColumnName: "id")]

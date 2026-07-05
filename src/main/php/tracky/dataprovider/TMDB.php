@@ -147,6 +147,7 @@ class TMDB implements Provider
         $showData = $this->getShowJson($show);
 
         $show->setTitle($showData["name"] ?? "");
+        $show->setPlot($showData["overview"] ?? null);
         $show->setPosterImageUrl($this->getImageUrl($showData["poster_path"] ?? null));
         $show->setStatus($this->mapShowStatus($showData["status"] ?? ""));
 
@@ -180,6 +181,7 @@ class TMDB implements Provider
 
         $seasonData = $this->getShowJson($show, sprintf("season/%d", $season->getNumber()));
 
+        $season->setPlot($seasonData["overview"] ?? null);
         $season->setPosterImageUrl($this->getImageUrl($seasonData["poster_path"] ?? null));
 
         if ($createEpisodes) {

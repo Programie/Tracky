@@ -7,6 +7,7 @@ use tracky\datetime\DateTime;
 use tracky\ImageFetcher;
 use tracky\model\traits\PosterImage;
 use tracky\model\traits\DataProvider;
+use tracky\model\traits\Plot;
 use tracky\orm\ShowRepository;
 use tracky\watchstats\WatchStatsProvider;
 
@@ -20,6 +21,7 @@ class Show extends BaseEntity
 
     use DataProvider;
     use PosterImage;
+    use Plot;
 
     #[ORM\Column(type: "string")]
     private string $title;

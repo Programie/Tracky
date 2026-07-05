@@ -28,7 +28,11 @@
     <small class="d-block text-body-secondary my-1"> {{ season.year }}</small>
     <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.totalRuntime}) }}</small>
 
-    <h2 class="mb-3">{{ "shows.episodes"|trans }}</h2>
+    {% if season.plot %}
+        <span class="d-block my-3">{{ season.plot }}</span>
+    {% endif %}
+
+    <h2 class="my-3">{{ "shows.episodes"|trans }}</h2>
 
     {% if season.episodes %}
         {% include "components/episode-list-wide.twig" with {"episodes": season.episodes} %}

@@ -16,6 +16,10 @@
     <small class="d-block">{{ "shows.count.seasons"|trans({"%count%": show.seasons|length}) }}</small>
     <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": show.totalEpisodes}) }}</small>
 
+    {% if show.plot %}
+        <span class="d-block my-3">{{ show.plot }}</span>
+    {% endif %}
+
     <ul class="nav nav-underline flex-column flex-sm-row mb-3">
         {{ _self.navItem("shows_seasons_page", {"show": show.id}, "shows.seasons"|trans) }}
         {{ _self.navItem("shows_random_episodes_page", {"show": show.id}, "shows.random-episodes"|trans) }}
