@@ -8,6 +8,7 @@ use tracky\ImageFetcher;
 use tracky\model\traits\Plot;
 use tracky\model\traits\PosterImage;
 use tracky\orm\SeasonRepository;
+use tracky\watchstats\WatchStatsProvider;
 
 #[ORM\Entity(repositoryClass: SeasonRepository::class)]
 #[ORM\Table(
@@ -194,5 +195,23 @@ class Season extends BaseEntity
         }
 
         return (int)$airDate->format("Y");
+    }
+
+    public function getWatchProgress(WatchStatsProvider $watchStatsProvider): int
+    {
+        $totalEpisodes = count($this->getEpisodes());
+        $watchedEpisode = 0;
+
+        if (!$totalEpisodes) {
+            return 0;
+        }
+
+        foreach ($this->getEpisodes() as $episode) {
+            if ($episode->isMarkedAsWatched($watchStatsProvider)) {
+                $watchedEpisode++;
+            }
+        }
+
+        return (int)round(($watchedEpisode / $totalEpisodes) * 100);
     }
 }

@@ -105,6 +105,11 @@ html {
     overflow-y: auto;
 }
 
+.show-card-progress, .season-card-progress {
+    background-color: inherit;
+    height: 5px;
+}
+
 .show-progress-image {
     display: block;
 }

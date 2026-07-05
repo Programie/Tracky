@@ -8,6 +8,7 @@ use tracky\model\traits\PosterImage;
 use tracky\model\traits\Runtime;
 use tracky\orm\EpisodeRepository;
 use tracky\ViewType;
+use tracky\watchstats\WatchStatsProvider;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
 #[ORM\Table(
@@ -119,6 +120,13 @@ class Episode extends BaseEntity
     public function getViewType(): ViewType
     {
         return ViewType::EPISODE;
+    }
+
+    public function isMarkedAsWatched(WatchStatsProvider $watchStatsProvider): bool
+    {
+        $watchStats = $watchStatsProvider->getItemStats($this);
+
+        return $watchStats !== null and $watchStats->getCount();
     }
 
     public function __toString(): string

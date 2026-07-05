@@ -278,4 +278,23 @@ class Show extends BaseEntity
 
         return $unwatchedEpisodes;
     }
+
+    public function getWatchProgress(WatchStatsProvider $watchStatsProvider): int
+    {
+        $allEpisodes = $this->getAllEpisodes();
+        $totalEpisodes = count($allEpisodes);
+        $watchedEpisode = 0;
+
+        if (!$totalEpisodes) {
+            return 0;
+        }
+
+        foreach ($allEpisodes as $episode) {
+            if ($episode->isMarkedAsWatched($watchStatsProvider)) {
+                $watchedEpisode++;
+            }
+        }
+
+        return (int)round(($watchedEpisode / $totalEpisodes) * 100);
+    }
 }

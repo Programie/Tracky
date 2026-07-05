@@ -11,4 +11,11 @@
         <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": show.totalEpisodes}) }}</small>
         {% include "components/show-status-badge.twig" with {"status": show.status} only %}
     </div>
+
+    {% if app.user %}
+        {% set watchProgress = show.getWatchProgress(watchStatsProvider) %}
+        <div class="progress rounded-top-0 show-card-progress" title="{{ watchProgress }}%">
+            <div class="progress-bar bg-success" style="width: {{ watchProgress }}%;"></div>
+        </div>
+    {% endif %}
 </div>

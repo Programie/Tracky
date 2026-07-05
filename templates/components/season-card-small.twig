@@ -13,4 +13,11 @@
         <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": season.episodes|length}) }}</small>
         <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.totalRuntime}) }}</small>
     </div>
+
+    {% if app.user %}
+        {% set watchProgress = season.getWatchProgress(watchStatsProvider) %}
+        <div class="progress rounded-top-0 season-card-progress" title="{{ watchProgress }}%">
+            <div class="progress-bar bg-success" style="width: {{ watchProgress }}%;"></div>
+        </div>
+    {% endif %}
 </div>
