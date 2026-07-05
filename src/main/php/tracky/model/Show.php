@@ -150,15 +150,25 @@ class Show extends BaseEntity
         }
     }
 
-    public function getTotalEpisodes(): int
+    /**
+     * @return Episode[]
+     */
+    public function getAllEpisodes(): array
     {
-        $totalEpisodes = 0;
+        $allEpisodes = [];
 
         foreach ($this->getSeasons() as $season) {
-            $totalEpisodes += count($season->getEpisodes());
+            foreach ($season->getEpisodes() as $episode) {
+                $allEpisodes[] = $episode;
+            }
         }
 
-        return $totalEpisodes;
+        return $allEpisodes;
+    }
+
+    public function getTotalEpisodes(): int
+    {
+        return count($this->getAllEpisodes());
     }
 
     public function getRandomEpisodes(int $count): array
