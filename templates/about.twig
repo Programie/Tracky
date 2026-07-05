@@ -1,0 +1,41 @@
+{% extends "page.twig" %}
+
+{% block title %}{{ "about.title"|trans }}{% endblock %}
+
+{% block content %}
+    <h1 class="mb-5">{{ "about.title"|trans }}</h1>
+
+    <div class="d-flex align-items-start my-4">
+        <i class="about-icon flex-shrink-0 me-3 fa-solid fa-circle-info"></i>
+        <div>
+            <h3 class="fs-4">{{ "about.description.title"|trans }}</h3>
+
+            <p>{{ "about.description.text"|trans|nl2br }}</p>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-start my-4">
+        <i class="about-icon flex-shrink-0 me-3 fa-solid fa-arrow-up-right-from-square"></i>
+        <div>
+            <h3 class="fs-4">{{ "about.links.title"|trans }}</h3>
+
+            <ul>
+                <li><a href="https://github.com/Programie/Tracky" target="_blank"><i class="fa-brands fa-github"></i> {{ "about.links.source-code"|trans }}</a></li>
+                <li><a href="https://github.com/Programie/Tracky/issues" target="_blank"><i class="fa-solid fa-bug"></i> {{ "about.links.bug-reports"|trans }}</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-start my-4">
+        <i class="about-icon flex-shrink-0 me-3 fa-solid fa-file-lines"></i>
+        <div>
+            <h3 class="fs-4">{{ "about.license.title"|trans }}</h3>
+
+            <p>{{ "about.license.text"|trans|nl2br }}</p>
+        </div>
+    </div>
+
+    <hr/>
+
+    <small class="text-body-secondary">Version: {{ version }}</small>
+{% endblock %}

@@ -2,6 +2,27 @@ unknown-title: "Unbekannt"
 runtime: "{runtime} min"
 sort-by: "Sortieren nach"
 now-watching: "Sieht gerade"
+about:
+  navbar-text: "Über"
+  title: "Über Tracky"
+  description:
+    title: "Beschreibung"
+    text: |
+      Tracky ist eine selbstgehostete Webanwendung zum Verwalten und Nachverfolgen von Serien und Filmen.
+
+      Sie hilft dir dabei, deinen Fortschritt über Staffeln und Episoden hinweg im Blick zu behalten.
+  links:
+    title: "Links"
+    source-code: "Quellcode"
+    bug-reports: "Issue Tracker"
+  license:
+    title: "Lizenz"
+    text: |
+      Tracky steht unter der MIT-Lizenz.
+
+      Du darfst diese Software frei verwenden, kopieren, verändern und weiterverbreiten,
+      auch für kommerzielle Zwecke, solange der ursprüngliche Lizenz- und Copyright-Hinweis
+      beibehalten wird.
 
 error-page:
   400:

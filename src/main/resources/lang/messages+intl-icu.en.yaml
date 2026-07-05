@@ -2,6 +2,27 @@ unknown-title: "Unknown"
 runtime: "{runtime} min"
 sort-by: "Sort by"
 now-watching: "Now watching"
+about:
+  navbar-text: "About"
+  title: "About Tracky"
+  description:
+    title: "Description"
+    text: |
+      Tracky is a self-hosted application for tracking TV shows and movies.
+
+      It helps you keep track of your watch progress, including individual episodes and season-level progress.
+  links:
+    title: "Links"
+    source-code: "Source code"
+    bug-reports: "Bug reports"
+  license:
+    title: "License"
+    text: |
+      Tracky is licensed under the MIT License.
+
+      You are free to use, copy, modify and distribute this software,
+      even for commercial purposes, provided that the original license
+      and copyright notice are included.
 
 error-page:
   400:
