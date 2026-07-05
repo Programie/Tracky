@@ -56,7 +56,7 @@ The following commands should be executed:
 
 ## Getting started
 
-After setting everything up, open the address of your webserver in your web browser and create a new account in the top right corner.
+After setting everything up, open the address of your webserver in your web browser and create a new account in the bottom left corner.
 
 Now, you are ready to go and start tracking your watched TV show episodes and movies.
 
