@@ -5,6 +5,7 @@
 - Use Doctrine to handle database migrations - importing database.sql and manually updating database no longer required
 - Improve and modernize frontend making it looking less like a basic Bootstrap page
 - Improve page load times (e.g. startpage with user logged in and TV show progress)
+- Use TMDB as data provider for shows by default
 
 ## [1.6.0] - 2026-06-10
 
