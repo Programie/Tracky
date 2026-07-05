@@ -33,17 +33,8 @@ class AboutController extends AbstractController
             }
         }
 
-        $version = $versionInfo["version"] ?? null;
-        $gitCommit = $versionInfo["git_commit"] ?? null;
-
-        if ($version === null) {
-            $versionString = "N/A";
-        } else {
-            $versionString = sprintf("%s (%s)", $version, $gitCommit);
-        }
-
         return $this->render("about.twig", [
-            "version" => $versionString
+            "versionInfo" => $versionInfo
         ]);
     }
 }

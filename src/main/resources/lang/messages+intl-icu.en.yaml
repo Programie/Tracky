@@ -23,6 +23,8 @@ about:
       You are free to use, copy, modify and distribute this software,
       even for commercial purposes, provided that the original license
       and copyright notice are included.
+  version:
+    title: "Version"
 
 error-page:
   400:

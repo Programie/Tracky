@@ -35,7 +35,17 @@
         </div>
     </div>
 
-    <hr/>
+    <div class="d-flex align-items-start my-4">
+        <i class="about-icon flex-shrink-0 me-3 fa-solid fa-code"></i>
+        <div>
+            <h3 class="fs-4">{{ "about.version.title"|trans }}</h3>
 
-    <small class="text-body-secondary">Version: {{ version }}</small>
+            <div>
+                {{ "about.version.title"|trans }}: {{ versionInfo.version|default("N/A") }}<br/>
+                {% if versionInfo.git_commit %}
+                    Commit: <a href="https://github.com/Programie/Tracky/commit/{{ versionInfo.git_commit }}" target="_blank"><code>{{ versionInfo.git_commit|slice(0, 7) }}</code></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
