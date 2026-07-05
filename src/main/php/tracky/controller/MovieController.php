@@ -180,7 +180,7 @@ class MovieController extends AbstractController
     #[IsGranted("IS_AUTHENTICATED")]
     public function removeViewsByMovie(Movie $movie, ViewRepository $viewRepository, EntityManagerInterface $entityManager): Response
     {
-        $views = $viewRepository->findBy(["item" => $movie->getId(), "user" => $this->getUser(), "type" => ViewType::EPISODE->value]);
+        $views = $viewRepository->findBy(["item" => $movie->getId(), "user" => $this->getUser(), "type" => ViewType::MOVIE->value]);
 
         foreach ($views as $view) {
             $entityManager->remove($view);
