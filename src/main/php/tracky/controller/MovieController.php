@@ -169,6 +169,7 @@ class MovieController extends AbstractController
         $view->setItem($movie);
         $view->setUser($this->getUser());
         $view->setDateTime($dateTime);
+        $view->setType(ViewType::MOVIE);
 
         $entityManager->persist($view);
         $entityManager->flush();
