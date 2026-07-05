@@ -25,7 +25,7 @@
                     {% include "components/view-buttons.twig" with {"type": "episode", "item": episode} only %}
                 </div>
 
-                <div class="card-text mt-3">{{ episode.plot }}</div>
+                <div class="card-text mt-3 card-plot">{{ episode.plot }}</div>
 
                 <div class="card-text mt-3">
                     {% include "components/view-last-watched.twig" with {"type": "episode", "item": episode} only %}
