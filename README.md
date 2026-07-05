@@ -6,6 +6,8 @@ Open Source, your data, do whatever you want with it.
 
 To scrobble watched movies and episodes from Kodi, you might want to check out [HTTP Scrobbler for Kodi](https://github.com/Programie/KodiAddon-HttpScrobbler) which is a compatible scrobble client for Tracky.
 
+Some parts of the frontend are inspired from [Yamtrack](https://github.com/FuzzyGrim/Yamtrack).
+
 ## Requirements
 
 - Webserver with PHP 8.2 or newer
