@@ -22,17 +22,12 @@ RUN composer install --no-dev --ignore-platform-reqs && \
 
 FROM ghcr.io/programie/php-docker
 
-ARG APP_VERSION
-ARG APP_GIT_COMMIT
-
 ENV WEB_ROOT=/app/public
 
 RUN install-php 8.2 curl dom intl pdo-mysql && \
     a2enmod rewrite && \
     mkdir -p /app/var && \
-    chown www-data: /app/var && \
-    echo "version=${APP_VERSION}" > /app/version && \
-    echo "git_commit=${APP_GIT_COMMIT}" >> /app/version
+    chown www-data: /app/var
 
 ENV PATH="${PATH}:/app/bin"
 WORKDIR /app
@@ -48,3 +43,9 @@ COPY public /app/public
 COPY src /app/src
 COPY templates /app/templates
 COPY .env /app
+
+ARG APP_VERSION
+ARG APP_GIT_COMMIT
+
+RUN echo "APP_VERSION=${APP_VERSION}" >> /app/.env && \
+    echo "APP_GIT_COMMIT=${APP_GIT_COMMIT}" >> /app/.env

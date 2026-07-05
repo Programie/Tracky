@@ -41,11 +41,10 @@
             <h3 class="fs-4">{{ "about.version.title"|trans }}</h3>
 
             <p>
-                {% set version = versionInfo.version|default(null) %}
                 {% if version %}
                     {{ version }}
-                    {% if versionInfo.git_commit|default(null) %}
-                        • <a href="https://github.com/Programie/Tracky/commit/{{ versionInfo.git_commit }}" target="_blank">{{ versionInfo.git_commit|slice(0, 7) }}</a>
+                    {% if commit %}
+                        • <a href="https://github.com/Programie/Tracky/commit/{{ commit }}" target="_blank">{{ commit|slice(0, 7) }}</a>
                     {% endif %}
                 {% else %}
                     N/A
