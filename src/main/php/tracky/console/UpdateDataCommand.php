@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use tracky\dataprovider\Helper;
 use tracky\ImageFetcher;
@@ -26,13 +27,18 @@ class UpdateDataCommand extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this->addOption("force", "f", InputOption::VALUE_NONE, "Update all shows even if they don't need an update");
+    }
+
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         /**
          * @var Show
          */
         foreach ($this->showRepository->findAll() as $show) {
-            if (!$show->needsUpdate($this->showFetchInterval)) {
+            if (!$input->getOption("force") and !$show->needsUpdate($this->showFetchInterval)) {
                 continue;
             }
 
