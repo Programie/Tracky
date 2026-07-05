@@ -217,6 +217,7 @@ class ShowController extends AbstractController
         $view->setItem($episode);
         $view->setUser($this->getUser());
         $view->setDateTime($dateTime);
+        $view->setType(ViewType::EPISODE);
 
         $entityManager->persist($view);
         $entityManager->flush();
