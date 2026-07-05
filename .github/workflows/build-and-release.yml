@@ -20,5 +20,5 @@ jobs:
     with:
       path: /app
       zip_name: Tracky
-      additional_files: .env.sample database.sql
+      additional_files: .env.sample
     secrets: inherit
