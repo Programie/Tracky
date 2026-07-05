@@ -3,34 +3,42 @@
 {% block title %}{{ show.title }} - {{ "shows.season"|trans({"%number%":season.number}) }}{% endblock %}
 
 {% block content %}
-    <h2><a href="{{ path("shows_show_page", {"show": show.id}) }}" class="text-body-secondary text-decoration-none">{{ show.title }}</a></h2>
+    <div class="row">
+        <div class="col-lg-3 col-12 text-center">
+            <img class="img-fluid rounded fullscreen-image image-poster" loading="lazy" src="{{ path("shows_season_image", {"show": season.show.id, "seasonNumber": season.number}) }}"/>
+        </div>
 
-    {% include "components/show-badges.twig" with {"show": show} only %}
+        <div class="col-lg-9 col-12">
+            <h2><a href="{{ path("shows_show_page", {"show": show.id}) }}" class="text-body-secondary text-decoration-none">{{ show.title }}</a></h2>
 
-    <div class="dropdown season-dropdown">
-        <h1 class="dropdown-toggle d-inline" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ "shows.season"|trans({"%number%": season.number}) }}</h1>
-        <div class="dropdown-menu">
-            {% for season_item in seasons %}
-                {% set firstAiredRange = season_item.getFirstAiredRange() %}
-                <a class="{{ html_classes("dropdown-item hoverable-item p-3", {"active": season_item.number == season.number}) }}" href="{{ path("shows_season_page", {"show": show.id, "number": season_item.number}) }}">
-                    <div class="d-flex w-100 justify-content-between">
-                        <span class="fw-bold">{{ "shows.season"|trans({"%number%": season_item.number}) }}</span>
-                        <small class="badge text-bg-secondary rounded-pill">{{ "shows.count.episodes"|trans({"%count%": season_item.episodes|length}) }}</small>
-                    </div>
-                    {% if firstAiredRange %}
-                        <small class="text-body-secondary">{{ firstAiredRange.startDate|format_date }} - {{ firstAiredRange.endDate|format_date }}</small>
-                    {% endif %}
-                </a>
-            {% endfor %}
+            {% include "components/show-badges.twig" with {"show": show} only %}
+
+            <div class="dropdown season-dropdown">
+                <h1 class="dropdown-toggle d-inline" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ "shows.season"|trans({"%number%": season.number}) }}</h1>
+                <div class="dropdown-menu">
+                    {% for season_item in seasons %}
+                        {% set firstAiredRange = season_item.getFirstAiredRange() %}
+                        <a class="{{ html_classes("dropdown-item hoverable-item p-3", {"active": season_item.number == season.number}) }}" href="{{ path("shows_season_page", {"show": show.id, "number": season_item.number}) }}">
+                            <div class="d-flex w-100 justify-content-between">
+                                <span class="fw-bold">{{ "shows.season"|trans({"%number%": season_item.number}) }}</span>
+                                <small class="badge text-bg-secondary rounded-pill">{{ "shows.count.episodes"|trans({"%count%": season_item.episodes|length}) }}</small>
+                            </div>
+                            {% if firstAiredRange %}
+                                <small class="text-body-secondary">{{ firstAiredRange.startDate|format_date }} - {{ firstAiredRange.endDate|format_date }}</small>
+                            {% endif %}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <small class="d-block text-body-secondary my-1"> {{ season.year }}</small>
+            <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.totalRuntime}) }}</small>
+
+            {% if season.plot %}
+                <span class="d-block my-3">{{ season.plot }}</span>
+            {% endif %}
         </div>
     </div>
-
-    <small class="d-block text-body-secondary my-1"> {{ season.year }}</small>
-    <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.totalRuntime}) }}</small>
-
-    {% if season.plot %}
-        <span class="d-block my-3">{{ season.plot }}</span>
-    {% endif %}
 
     <h2 class="my-3">{{ "shows.episodes"|trans }}</h2>
 
