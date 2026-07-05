@@ -17,3 +17,5 @@ else
     echo "If needed, manually run the migrations using this command:"
     echo "  php /app/bin/console doctrine:migrations:migrate --allow-no-migration"
 fi
+
+chown -R www-data: /app/var
