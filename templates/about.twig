@@ -42,7 +42,7 @@
 
             <div>
                 {{ "about.version.title"|trans }}: {{ versionInfo.version|default("N/A") }}<br/>
-                {% if versionInfo.git_commit %}
+                {% if versionInfo.git_commit|default(null) %}
                     Commit: <a href="https://github.com/Programie/Tracky/commit/{{ versionInfo.git_commit }}" target="_blank"><code>{{ versionInfo.git_commit|slice(0, 7) }}</code></a>
                 {% endif %}
             </div>
