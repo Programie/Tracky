@@ -141,10 +141,13 @@ movies:
 views:
   views: "{count} mal gesehen"
   add-view: "Als gesehen markieren"
+  add-season-view: "Alle Folgen der Staffel als gesehen markieren"
+  remove-season-view: "Gesehen-Status aller Folgen der Staffel zurücksetzen"
   show-all-views: "Gesamten Verlauf anzeigen"
   last-watched: "Zuletzt gesehen"
   remove:
     header: "Verlauf entfernen?"
+    season-views: "Alle Ansichten dieser Staffel entfernen?"
     this-view: "Diesen Eintrag"
     all-views: "Alle Einträge"
     cancel: "Abbrechen"

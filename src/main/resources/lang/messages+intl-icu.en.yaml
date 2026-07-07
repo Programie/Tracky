@@ -145,10 +145,13 @@ views:
       other {# views}
     }
   add-view: "Add view"
+  add-season-view: "Mark all episodes of season as watched"
+  remove-season-view: "Remove watched status of all episodes in the season"
   show-all-views: "Show all views"
   last-watched: "Last watched"
   remove:
     header: "Remove history entries?"
+    season-views: "Remove all views of this season?"
     this-view: "This view"
     all-views: "All views"
     cancel: "Cancel"

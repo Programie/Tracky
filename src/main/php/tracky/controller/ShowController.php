@@ -1,6 +1,7 @@
 <?php
 namespace tracky\controller;
 
+use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use RuntimeException;
@@ -191,6 +192,62 @@ class ShowController extends AbstractController
             "season" => $season,
             "seasons" => $show->getSeasons()
         ]);
+    }
+
+    #[Route("/shows/{show}/seasons/{seasonNumber}/views", name: "shows_add_season_view_action", methods: ["POST"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function addSeasonView(Show $show, int $seasonNumber, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $season = $show->getSeason($seasonNumber);
+        if ($season === null) {
+            throw new NotFoundHttpException("Season not found");
+        }
+
+        try {
+            $dateTime = new DateTime($request->getPayload()->get("timestamp"));
+        } catch (Exception) {
+            throw new BadRequestException("Invalid payload");
+        }
+
+        $episodes = $season->getEpisodes();
+        if (!is_array($episodes)) {
+            $episodes = iterator_to_array($episodes);
+        }
+
+        foreach (array_reverse($episodes) as $episode) {
+            $view = new View;
+            $view->setItem($episode);
+            $view->setUser($this->getUser());
+            $view->setDateTime(clone $dateTime);
+            $view->setType(ViewType::EPISODE);
+
+            $entityManager->persist($view);
+
+            $runtime = $episode->getRuntime();
+            if ($runtime !== null && $runtime > 0) {
+                $dateTime->sub(new DateInterval(sprintf("PT%dM", $runtime)));
+            }
+        }
+
+        $entityManager->flush();
+
+        return new Response("Season views added to database");
+    }
+
+    #[Route("/shows/{show}/seasons/{seasonNumber}/views/all", name: "shows_remove_season_view_action", methods: ["DELETE"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function removeViewsBySeason(Show $show, int $seasonNumber, ViewRepository $viewRepository, EntityManagerInterface $entityManager): Response
+    {
+        $season = $show->getSeason($seasonNumber);
+        if ($season === null) {
+            throw new NotFoundHttpException("Season not found");
+        }
+
+        foreach ($season->getEpisodes() as $episode) {
+            $this->removeViewsByEpisode($show, $seasonNumber, $episode->getNumber(), $viewRepository, $entityManager);
+        }
+
+        return new Response("Season views removed from database");
     }
 
     #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views", name: "shows_add_episode_view_action", methods: ["POST"])]
