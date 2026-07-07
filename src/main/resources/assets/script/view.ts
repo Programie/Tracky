@@ -9,7 +9,7 @@ function useNow() {
 }
 
 function addView(url: string, date: Date) {
-    fetch(url, {
+    return fetch(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -17,8 +17,34 @@ function addView(url: string, date: Date) {
         body: JSON.stringify({
             "timestamp": date.toISOString()
         })
-    }).then(() => {
-        document.location.reload();
+    });
+}
+
+function addEpisodeView(url: string, date: Date, entry: DOMStringMap): void {
+    addView(url, date)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Unable to add episode view");
+            }
+
+            return response.text();
+        })
+        .then((html) => {
+            let lastWatchedElement = document.querySelector(
+                `.view-last-watched[data-type="episode"][data-show-id="${entry.showId}"][data-season="${entry.season}"][data-episode="${entry.episode}"]`
+            );
+
+            if (lastWatchedElement !== null) {
+                lastWatchedElement.innerHTML = html;
+            }
+        });
+}
+
+function addViewAndReload(url: string, date: Date): void {
+    addView(url, date).then((response) => {
+        if (response.ok) {
+            document.location.reload();
+        }
     });
 }
 
@@ -72,17 +98,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
         switch (activeAddViewEntry.type) {
             case "episode":
-                addView(`/shows/${activeAddViewEntry.showId}/seasons/${activeAddViewEntry.season}/episodes/${activeAddViewEntry.episode}/views`, dateTime);
+                addEpisodeView(`/shows/${activeAddViewEntry.showId}/seasons/${activeAddViewEntry.season}/episodes/${activeAddViewEntry.episode}/views`, dateTime, activeAddViewEntry);
                 break;
 
             case "season":
-                addView(`/shows/${activeAddViewEntry.showId}/seasons/${activeAddViewEntry.season}/views`, dateTime);
+                addViewAndReload(`/shows/${activeAddViewEntry.showId}/seasons/${activeAddViewEntry.season}/views`, dateTime);
                 break;
 
             case "movie":
-                addView(`/movies/${activeAddViewEntry.movieId}/views`, dateTime);
+                addViewAndReload(`/movies/${activeAddViewEntry.movieId}/views`, dateTime);
                 break;
         }
+
+        // Hide the modal
+        addViewTooltipElement.style.display = "none";
+        activeAddViewEntry = null;
     });
 
     document.querySelector("#season-remove-view-tooltip-confirm")?.addEventListener("click", () => {
