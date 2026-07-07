@@ -54,6 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 addView(`/shows/${activeEntry.showId}/seasons/${activeEntry.season}/episodes/${activeEntry.episode}/views`, dateTime);
                 break;
 
+            case "season":
+                addView(`/shows/${activeEntry.showId}/seasons/${activeEntry.season}/views`, dateTime);
+                break;
+
             case "movie":
                 addView(`/movies/${activeEntry.movieId}/views`, dateTime);
                 break;

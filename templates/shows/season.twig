@@ -40,7 +40,20 @@
         </div>
     </div>
 
-    <h2 class="my-3">{{ "shows.episodes"|trans }}</h2>
+    <div class="my-3 gap-2 d-flex">
+        <h2 class="my-0">{{ "shows.episodes"|trans }}</h2>
+        {% if is_granted("IS_AUTHENTICATED") %}
+            <button
+                    class="btn btn-success btn-sm add-view ms-2"
+                    data-type="season"
+                    data-show-id="{{ show.id }}"
+                    data-season="{{ season.number }}"
+                    title="{{ "views.add-season-view"|trans }}"
+            >
+                <i class="fa fa-check"></i>
+            </button>
+        {% endif %}
+    </div>
 
     {% set previousSeason = season.previousSeason %}
     {% if previousSeason %}

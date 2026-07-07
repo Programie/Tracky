@@ -193,6 +193,36 @@ class ShowController extends AbstractController
         ]);
     }
 
+    #[Route("/shows/{show}/seasons/{seasonNumber}/views", name: "shows_add_season_view_action", methods: ["POST"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function addSeasonView(Show $show, int $seasonNumber, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $season = $show->getSeason($seasonNumber);
+        if ($season === null) {
+            throw new NotFoundHttpException("Season not found");
+        }
+
+        try {
+            $dateTime = new DateTime($request->getPayload()->get("timestamp"));
+        } catch (Exception) {
+            throw new BadRequestException("Invalid payload");
+        }
+
+        foreach ($season->getEpisodes() as $episode) {
+            $view = new View;
+            $view->setItem($episode);
+            $view->setUser($this->getUser());
+            $view->setDateTime($dateTime);
+            $view->setType(ViewType::EPISODE);
+
+            $entityManager->persist($view);
+        }
+
+        $entityManager->flush();
+
+        return new Response("Season views added to database");
+    }
+
     #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views", name: "shows_add_episode_view_action", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function addView(Show $show, int $seasonNumber, int $episodeNumber, Request $request, EntityManagerInterface $entityManager): Response

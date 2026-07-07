@@ -145,6 +145,7 @@ views:
       other {# views}
     }
   add-view: "Add view"
+  add-season-view: "Mark all episodes of season as watched"
   show-all-views: "Show all views"
   last-watched: "Last watched"
   remove:
