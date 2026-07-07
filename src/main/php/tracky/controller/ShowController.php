@@ -1,6 +1,7 @@
 <?php
 namespace tracky\controller;
 
+use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use RuntimeException;
@@ -208,14 +209,24 @@ class ShowController extends AbstractController
             throw new BadRequestException("Invalid payload");
         }
 
-        foreach ($season->getEpisodes() as $episode) {
+        $episodes = $season->getEpisodes();
+        if (!is_array($episodes)) {
+            $episodes = iterator_to_array($episodes);
+        }
+
+        foreach (array_reverse($episodes) as $episode) {
             $view = new View;
             $view->setItem($episode);
             $view->setUser($this->getUser());
-            $view->setDateTime($dateTime);
+            $view->setDateTime(clone $dateTime);
             $view->setType(ViewType::EPISODE);
 
             $entityManager->persist($view);
+
+            $runtime = $episode->getRuntime();
+            if ($runtime !== null && $runtime > 0) {
+                $dateTime->sub(new DateInterval(sprintf("PT%dM", $runtime)));
+            }
         }
 
         $entityManager->flush();
