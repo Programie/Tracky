@@ -22,46 +22,84 @@ function addView(url: string, date: Date) {
     });
 }
 
+function removeViews(url: string) {
+    fetch(url, {
+        method: "DELETE"
+    }).then(() => {
+        document.location.reload();
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-    let tooltipElement: HTMLElement = document.querySelector("#add-view-tooltip");
-    let activeEntry: DOMStringMap = null;
+    let addViewTooltipElement: HTMLElement = document.querySelector("#add-view-tooltip");
+    let removeSeasonViewTooltipElement: HTMLElement = document.querySelector("#season-remove-view-tooltip");
+    let activeAddViewEntry: DOMStringMap = null;
+    let activeRemoveSeasonViewEntry: DOMStringMap = null;
 
     document.querySelectorAll(".add-view").forEach((buttonElement: HTMLElement) => {
         buttonElement.addEventListener("click", () => {
-            createPopper(buttonElement, tooltipElement, {
+            createPopper(buttonElement, addViewTooltipElement, {
                 placement: "bottom"
             });
 
-            tooltipElement.style.display = "block";
-            activeEntry = buttonElement.dataset;
+            addViewTooltipElement.style.display = "block";
+            activeAddViewEntry = buttonElement.dataset;
 
             useNow();
+        });
+    });
+
+    document.querySelectorAll(".remove-view").forEach((buttonElement: HTMLElement) => {
+        buttonElement.addEventListener("click", () => {
+            createPopper(buttonElement, removeSeasonViewTooltipElement, {
+                placement: "bottom"
+            });
+
+            removeSeasonViewTooltipElement.style.display = "block";
+            activeRemoveSeasonViewEntry = buttonElement.dataset;
         });
     });
 
     document.querySelector("#add-view-tooltip-form")?.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        if (activeEntry === null) {
+        if (activeAddViewEntry === null) {
             return;
         }
 
         let dateTimeElement = document.querySelector("#add-view-tooltip-datetime") as HTMLInputElement;
         let dateTime = new Date(Date.parse(dateTimeElement.value));
 
-        switch (activeEntry.type) {
+        switch (activeAddViewEntry.type) {
             case "episode":
-                addView(`/shows/${activeEntry.showId}/seasons/${activeEntry.season}/episodes/${activeEntry.episode}/views`, dateTime);
+                addView(`/shows/${activeAddViewEntry.showId}/seasons/${activeAddViewEntry.season}/episodes/${activeAddViewEntry.episode}/views`, dateTime);
                 break;
 
             case "season":
-                addView(`/shows/${activeEntry.showId}/seasons/${activeEntry.season}/views`, dateTime);
+                addView(`/shows/${activeAddViewEntry.showId}/seasons/${activeAddViewEntry.season}/views`, dateTime);
                 break;
 
             case "movie":
-                addView(`/movies/${activeEntry.movieId}/views`, dateTime);
+                addView(`/movies/${activeAddViewEntry.movieId}/views`, dateTime);
                 break;
         }
+    });
+
+    document.querySelector("#season-remove-view-tooltip-confirm")?.addEventListener("click", () => {
+        if (activeRemoveSeasonViewEntry === null) {
+            return;
+        }
+
+        switch (activeRemoveSeasonViewEntry.type) {
+            case "season":
+                removeViews(`/shows/${activeRemoveSeasonViewEntry.showId}/seasons/${activeRemoveSeasonViewEntry.season}/views/all`);
+                break;
+        }
+    });
+
+    document.querySelector("#season-remove-view-tooltip-cancel")?.addEventListener("click", () => {
+        removeSeasonViewTooltipElement.style.display = "none";
+        activeRemoveSeasonViewEntry = null;
     });
 
     document.querySelector("#add-view-tooltip-now")?.addEventListener("click", () => {
@@ -69,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.querySelector("#add-view-tooltip-cancel")?.addEventListener("click", () => {
-        tooltipElement.style.display = "none";
-        activeEntry = null;
+        addViewTooltipElement.style.display = "none";
+        activeAddViewEntry = null;
     });
 });

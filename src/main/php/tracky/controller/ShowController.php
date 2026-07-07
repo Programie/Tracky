@@ -223,6 +223,22 @@ class ShowController extends AbstractController
         return new Response("Season views added to database");
     }
 
+    #[Route("/shows/{show}/seasons/{seasonNumber}/views/all", name: "shows_remove_season_view_action", methods: ["DELETE"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function removeViewsBySeason(Show $show, int $seasonNumber, ViewRepository $viewRepository, EntityManagerInterface $entityManager): Response
+    {
+        $season = $show->getSeason($seasonNumber);
+        if ($season === null) {
+            throw new NotFoundHttpException("Season not found");
+        }
+
+        foreach ($season->getEpisodes() as $episode) {
+            $this->removeViewsByEpisode($show, $seasonNumber, $episode->getNumber(), $viewRepository, $entityManager);
+        }
+
+        return new Response("Season views removed from database");
+    }
+
     #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views", name: "shows_add_episode_view_action", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
     public function addView(Show $show, int $seasonNumber, int $episodeNumber, Request $request, EntityManagerInterface $entityManager): Response

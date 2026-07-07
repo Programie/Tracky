@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <div class="my-3 gap-2 d-flex">
+    <div class="my-3 gap-2 d-flex align-items-center">
         <h2 class="my-0">{{ "shows.episodes"|trans }}</h2>
         {% if is_granted("IS_AUTHENTICATED") %}
             <button
@@ -51,6 +51,15 @@
                     title="{{ "views.add-season-view"|trans }}"
             >
                 <i class="fa fa-check"></i>
+            </button>
+            <button
+                    class="btn btn-danger btn-sm remove-view"
+                    data-type="season"
+                    data-show-id="{{ show.id }}"
+                    data-season="{{ season.number }}"
+                    title="{{ "views.remove-season-view"|trans }}"
+            >
+                <i class="fa fa-trash"></i>
             </button>
         {% endif %}
     </div>
