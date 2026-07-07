@@ -27,7 +27,12 @@
 
                 <div class="card-text mt-3 card-plot">{{ episode.plot }}</div>
 
-                <div class="card-text mt-3">
+                <div class="card-text mt-3 view-last-watched"
+                     data-type="episode"
+                     data-show-id="{{ episode.season.show.id }}"
+                     data-season="{{ episode.season.number }}"
+                     data-episode="{{ episode.number }}"
+                >
                     {% include "components/view-last-watched.twig" with {"type": "episode", "item": episode} only %}
                 </div>
             </div>

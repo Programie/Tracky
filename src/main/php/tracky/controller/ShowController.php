@@ -252,7 +252,14 @@ class ShowController extends AbstractController
 
     #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views", name: "shows_add_episode_view_action", methods: ["POST"])]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function addView(Show $show, int $seasonNumber, int $episodeNumber, Request $request, EntityManagerInterface $entityManager): Response
+    public function addView(
+        Show $show,
+        int $seasonNumber,
+        int $episodeNumber,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        WatchStatsProvider $watchStatsProvider
+    ): Response
     {
         $season = $show->getSeason($seasonNumber);
         if ($season === null) {
@@ -279,7 +286,11 @@ class ShowController extends AbstractController
         $entityManager->persist($view);
         $entityManager->flush();
 
-        return new Response("View added to database");
+        return $this->render("components/view-last-watched.twig", [
+            "type" => "episode",
+            "item" => $episode,
+            "watchStatsProvider" => $watchStatsProvider,
+        ]);
     }
 
     #[Route("/shows/{show}/seasons/{seasonNumber}/episodes/{episodeNumber}/views/all", name: "shows_remove_episode_view_action", methods: ["DELETE"])]
