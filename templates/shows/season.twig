@@ -42,7 +42,7 @@
 
     <div class="my-3 gap-2 d-flex align-items-center">
         <h2 class="my-0">{{ "shows.episodes"|trans }}</h2>
-        {% if is_granted("IS_AUTHENTICATED") %}
+        {% if is_granted("IS_AUTHENTICATED") and season.episodes|length > 0 %}
             <button
                     class="btn btn-success btn-sm add-view ms-2"
                     data-type="season"
@@ -69,7 +69,7 @@
         <a class="d-block my-3 text-body-secondary text-decoration-none text-center" href="{{ path("shows_season_page", {"show": show.id, "number": previousSeason.number}) }}"><i class="fa-solid fa-angles-up"></i> {{ "shows.season"|trans({"%number%": previousSeason.number }) }} <i class="fa-solid fa-angles-up"></i></a>
     {% endif %}
 
-    {% if season.episodes %}
+    {% if season.episodes|length > 0 %}
         {% include "components/episode-list-wide.twig" with {"episodes": season.episodes} %}
     {% else %}
         <div class="alert alert-warning">{{ "shows.no-episodes-available"|trans }}</div>
