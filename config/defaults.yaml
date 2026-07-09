@@ -15,8 +15,5 @@ parameters:
   history.items-per-page: 100
   history.max-previous-next-pages: 3
   shows.max-episodes: 10
-  overview.max-episodes: 5
-  overview.max-movies: 5
-  overview.max-next-episode-shows: 5
   now-watching.storage-path: "%kernel.cache_dir%/now-watching"
   now-watching.max-age: 300

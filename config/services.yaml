@@ -29,11 +29,6 @@ services:
     arguments:
       $itemsPerPage: "%history.items-per-page%"
       $maxPreviousNextPages: "%history.max-previous-next-pages%"
-  tracky\controller\HomeController:
-    arguments:
-      $maxEpisodes: "%overview.max-episodes%"
-      $maxMovies: "%overview.max-movies%"
-      $maxNextEpisodeShows: "%overview.max-next-episode-shows%"
   tracky\controller\ShowController:
     arguments:
       $maxEpisodes: "%shows.max-episodes%"
