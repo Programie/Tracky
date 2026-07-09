@@ -41,6 +41,13 @@ class SettingsController extends AbstractController
             "type" => "section",
             "label" => "settings.section.shows.label",
         ],
+        "showsMaxEpisodes" => [
+            "label"   => "settings.shows.max-episodes.label",
+            "type"    => "number",
+            "default" => 10,
+            "min"     => 5,
+            "max"     => 60,
+        ],
         "hideShows" => [
             "label"   => "settings.shows.hide-shows.label",
             "type"    => "checkbox",

@@ -212,6 +212,8 @@ settings:
     max-next-episode-shows:
       label: "Maximum number of upcoming episodes to show"
   shows:
+    max-episodes:
+      label: "Maximum number of episodes on show subpages (except seasons and unwatched episodes)"
     hide-shows:
       label: "Hide shows"
       option:

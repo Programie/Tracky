@@ -208,6 +208,8 @@ settings:
     max-next-episode-shows:
       label: "Maximale Anzahl nächster Folgen"
   shows:
+    max-episodes:
+      label: "Maximale Anzahl von Folgen auf Serien-Unterseiten (außer Staffeln und ungesehene Folgen)"
     hide-shows:
       label: "Serien ausblenden"
       option:
