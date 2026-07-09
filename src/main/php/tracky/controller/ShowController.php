@@ -75,7 +75,7 @@ class ShowController extends AbstractController
 
         return $this->render("shows/shows.twig", [
             "shows" => $this->showRepository->findAllWithEpisodes(),
-            "hideShows" => $settings['hideShows'],
+            "hideShows" => $settings["hideShows"],
         ]);
     }
 
@@ -123,7 +123,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.random-episodes",
-            "episodes" => $show->getRandomEpisodes($settings['showsMaxEpisodes']),
+            "episodes" => $show->getRandomEpisodes($settings["showsMaxEpisodes"]),
             "displaySeason" => true
         ]);
     }
@@ -138,7 +138,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.latest-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getLatestWatchedEpisodes($watchStatsProvider, $settings['showsMaxEpisodes'])),
+            "episodes" => array_map(fn($item) => $item[0], $show->getLatestWatchedEpisodes($watchStatsProvider, $settings["showsMaxEpisodes"])),
             "displaySeason" => true
         ]);
     }
@@ -153,7 +153,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.most-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $settings['showsMaxEpisodes'], false)),
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $settings["showsMaxEpisodes"], false)),
             "displaySeason" => true
         ]);
     }
@@ -168,7 +168,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.least-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $settings['showsMaxEpisodes'], true)),
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $settings["showsMaxEpisodes"], true)),
             "displaySeason" => true
         ]);
     }
@@ -379,21 +379,21 @@ class ShowController extends AbstractController
         $defaults = $this->settingsController->getSettingDefaults();
 
         $settings = [
-            'showsMaxEpisodes' => (int)($defaults['showsMaxEpisodes']['default'] ?? 10),
-            'hideShows' => null,
+            "showsMaxEpisodes" => (int)($defaults["showsMaxEpisodes"]["default"] ?? 10),
+            "hideShows" => null,
         ];
 
         $user = $this->getUser();
         if ($user !== null) {
-            $savedSettings = $entityManager->getRepository(Settings::class)->findBy(['user' => $user]);
+            $savedSettings = $entityManager->getRepository(Settings::class)->findBy(["user" => $user]);
 
             foreach ($savedSettings as $setting) {
                 switch ($setting->getSetting()) {
-                    case 'showsMaxEpisodes':
-                        $settings['showsMaxEpisodes'] = (int)$setting->getValue();
+                    case "showsMaxEpisodes":
+                        $settings["showsMaxEpisodes"] = (int)$setting->getValue();
                         break;
-                    case 'hideShows':
-                        $settings['hideShows'] = $setting->getValue() ?: null;
+                    case "hideShows":
+                        $settings["hideShows"] = $setting->getValue() ?: null;
                         break;
                 }
             }
