@@ -3,9 +3,7 @@ import "./history";
 import "./library-management";
 import "./view";
 
-// @ts-ignore
 import missingImagePoster from "../images/missing-image-poster.svg";
-// @ts-ignore
 import missingImageWide from "../images/missing-image-wide.svg";
 
 document.addEventListener("DOMContentLoaded", () => {
