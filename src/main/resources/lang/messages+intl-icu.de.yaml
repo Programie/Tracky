@@ -114,6 +114,7 @@ shows:
   no-shows-available: "Keine Serien verfügbar."
   no-seasons-available: "Keine Staffeln verfügbar."
   no-episodes-available: "Keine Folgen verfügbar."
+  some-shows-hidden: "Filter-Einstellungen sind aktiv. Einige Serien könnten ausgeblendet sein."
   add-new: "Serie hinzufügen"
   status:
     upcoming: "Geplant"
@@ -195,6 +196,8 @@ settings:
   section:
     overview:
       label: "Übersicht"
+    shows:
+      label: "Serien"
   flash:
     saved: "Einstellungen erfolgreich gespeichert."
     error: "Beim Speichern der Einstellungen ist ein Fehler aufgetreten."
@@ -205,6 +208,15 @@ settings:
       label: "Maximale Anzahl anzuzeigender Filme"
     max-next-episode-shows:
       label: "Maximale Anzahl nächster Folgen"
+  shows:
+    max-episodes:
+      label: "Maximale Anzahl von Folgen auf Serien-Unterseiten (außer Staffeln und ungesehene Folgen)"
+    hide-shows:
+      label: "Serien ausblenden"
+      option:
+        ended: "Beendete Serien"
+        finished: "Vollständig angesehene Serien"
+        unwatched: "Nicht angefangene Serien"
   items:
     label: "Einträge"
   save:

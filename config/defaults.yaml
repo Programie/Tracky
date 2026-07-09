@@ -14,6 +14,5 @@ parameters:
   user.enable-register: true
   history.items-per-page: 100
   history.max-previous-next-pages: 3
-  shows.max-episodes: 10
   now-watching.storage-path: "%kernel.cache_dir%/now-watching"
   now-watching.max-age: 300

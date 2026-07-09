@@ -1,7 +1,15 @@
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
     {% for show in shows %}
-        <div class="col">
-            {% include "components/show-card-small.twig" with {"show": show} %}
-        </div>
+        {% set hideOptions = hideShows|default("")|split(",") %}
+
+        {% if not (
+            ("ended" in hideOptions and show.status == "ended") or
+            ("finished" in hideOptions and show.getWatchProgress(watchStatsProvider) == 100) or
+            ("unwatched" in hideOptions and show.getWatchProgress(watchStatsProvider) == 0)
+        ) %}
+            <div class="col">
+                {% include "components/show-card-small.twig" with {"show": show} %}
+            </div>
+        {% endif %}
     {% endfor %}
 </div>

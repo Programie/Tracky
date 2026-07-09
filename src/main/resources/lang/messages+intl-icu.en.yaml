@@ -114,6 +114,7 @@ shows:
   no-shows-available: "No shows available."
   no-seasons-available: "No seasons available."
   no-episodes-available: "No episodes available."
+  some-shows-hidden: "Filter settings are active. Some shows might be hidden."
   add-new: "Add show"
   status:
     upcoming: "Upcoming"
@@ -199,6 +200,8 @@ settings:
   section:
     overview:
       label: "Overview"
+    shows:
+      label: "Shows"
   flash:
     saved: "Settings saved successfully."
     error: "An error occurred while saving settings."
@@ -209,6 +212,15 @@ settings:
       label: "Maximum number of movies to show"
     max-next-episode-shows:
       label: "Maximum number of upcoming episodes to show"
+  shows:
+    max-episodes:
+      label: "Maximum number of episodes on show subpages (except seasons and unwatched episodes)"
+    hide-shows:
+      label: "Hide shows"
+      option:
+        ended: "Ended shows"
+        finished: "Fully watched shows"
+        unwatched: "Not yet started shows"
   items:
     label: "items"
   save:
