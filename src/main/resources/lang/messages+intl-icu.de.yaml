@@ -190,6 +190,26 @@ library-management:
   errors:
     view-exists: "Es gibt bereits einen Verlauf von diesem Eintrag. Bitte vorher entfernen."
 
+settings:
+  title: "Einstellungen"
+  section:
+    overview:
+      label: "Übersicht"
+  flash:
+    saved: "Einstellungen erfolgreich gespeichert."
+    error: "Beim Speichern der Einstellungen ist ein Fehler aufgetreten."
+  overview:
+    max-episodes:
+      label: "Maximale Anzahl anzuzeigender Folgen"
+    max-movies:
+      label: "Maximale Anzahl anzuzeigender Filme"
+    max-next-episode-shows:
+      label: "Maximale Anzahl nächster Folgen"
+  items:
+    label: "Einträge"
+  save:
+    button: "Einstellungen speichern"
+
 date-ranges:
   last-7-days: "Letzte 7 Tage"
   last-30-days: "Letzte 30 Tage"

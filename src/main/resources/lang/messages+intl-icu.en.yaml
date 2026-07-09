@@ -194,6 +194,26 @@ library-management:
   errors:
     view-exists: "At least one view of this item exists. Remove all views of it and try again."
 
+settings:
+  title: "Settings"
+  section:
+    overview:
+      label: "Overview"
+  flash:
+    saved: "Settings saved successfully."
+    error: "An error occurred while saving settings."
+  overview:
+    max-episodes:
+      label: "Maximum number of episodes to show"
+    max-movies:
+      label: "Maximum number of movies to show"
+    max-next-episode-shows:
+      label: "Maximum number of upcoming episodes to show"
+  items:
+    label: "items"
+  save:
+    button: "Save settings"
+
 date-ranges:
   last-7-days: "Last 7 Days"
   last-30-days: "Last 30 Days"

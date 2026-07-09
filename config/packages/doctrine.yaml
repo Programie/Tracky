@@ -25,6 +25,11 @@ doctrine:
         dir: '%kernel.project_dir%/src/main/php/tracky/model'
         prefix: 'tracky\model'
         alias: tracky
+      orm:
+        is_bundle: false
+        dir: '%kernel.project_dir%/src/main/php/tracky/orm'
+        prefix: 'tracky\orm'
+        alias: orm
 
 when@test:
   doctrine:

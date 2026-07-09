@@ -76,7 +76,7 @@
                 <div>
                     <ul class="nav nav-pills flex-column mb-auto">
                         {% if app.user %}
-                            <li class="nav-item"><a class="nav-link"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                            {{ _self.navItem(icon_classes: "fa-solid fa-gear", path: "settings_page", title: "settings.title"|trans) }}
                             {{ _self.navItem(icon_classes: "fa-solid fa-arrow-right-from-bracket", path: "logout", title: "user.logout"|trans) }}
                         {% else %}
                             {{ _self.navItem(icon_classes: "fa-solid fa-arrow-right-to-bracket", path: "login_page", title: "user.login"|trans) }}
