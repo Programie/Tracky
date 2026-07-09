@@ -19,6 +19,7 @@ use tracky\model\Episode;
 use tracky\model\Season;
 use tracky\model\Show;
 use tracky\model\View;
+use tracky\orm\Settings;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\ViewType;
@@ -29,6 +30,7 @@ class ShowController extends AbstractController
     public function __construct(
         private readonly ShowRepository $showRepository,
         private readonly ViewRepository $viewRepository,
+        private readonly SettingsController $settingsController,
         private readonly int $maxEpisodes,
     )
     {
@@ -68,10 +70,20 @@ class ShowController extends AbstractController
     }
 
     #[Route("/shows", name: "shows_page")]
-    public function getShowsPage(): Response
+    public function getShowsPage(EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        if ($user !== null) {
+            $savedSettings = $entityManager->getRepository(Settings::class)->findBy(['user' => $user]);
+            foreach ($savedSettings as $setting) {
+                if ($setting->getSetting() === 'hideShows') {
+                    $hideShows = (string)$setting->getValue();
+                }
+            }
+        }
         return $this->render("shows/shows.twig", [
-            "shows" => $this->showRepository->findAllWithEpisodes()
+            "shows" => $this->showRepository->findAllWithEpisodes(),
+            "hideShows" => $hideShows ?? null,
         ]);
     }
 

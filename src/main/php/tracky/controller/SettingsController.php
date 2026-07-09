@@ -37,6 +37,19 @@ class SettingsController extends AbstractController
             "min"     => 4,
             "max"     => 16,
         ],
+        "shows" => [
+            "type" => "section",
+            "label" => "settings.section.shows.label",
+        ],
+        "hideShows" => [
+            "label"   => "settings.shows.hide-shows.label",
+            "type"    => "checkbox",
+            "options" => [
+                "ended"    => "settings.shows.hide-shows.option.ended",
+                "finished" => "settings.shows.hide-shows.option.finished",
+            ],
+            "default" => "",
+        ],
         /*
         "exampleSelect" => [
             "label"   => "settings.example-select.label",
@@ -50,16 +63,6 @@ class SettingsController extends AbstractController
             "placeholder" => "settings.example-text.placeholder",
             "regex"       => "^[a-zA-Z0-9\-_]{3,20}$",
             "default"     => "anonymous",
-        ],
-        "exampleCheckbox" => [
-            "label"   => "settings.example-checkbox.label",
-            "type"    => "checkbox",
-            "options" => [
-                "foo" => "Foo",
-                "bar" => "Bar",
-                "baz" => "Baz"
-            ],
-            "default" => "foo",
         ],
         "exampleRadio" => [
             "label"       => "settings.example-radio.label",

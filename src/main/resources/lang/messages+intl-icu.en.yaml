@@ -199,6 +199,8 @@ settings:
   section:
     overview:
       label: "Overview"
+    shows:
+      label: "Shows"
   flash:
     saved: "Settings saved successfully."
     error: "An error occurred while saving settings."
@@ -209,6 +211,12 @@ settings:
       label: "Maximum number of movies to show"
     max-next-episode-shows:
       label: "Maximum number of upcoming episodes to show"
+  shows:
+    hide-shows:
+      label: "Hide shows"
+      option:
+        ended: "Ended shows"
+        finished: "Fully watched shows"
   items:
     label: "items"
   save:

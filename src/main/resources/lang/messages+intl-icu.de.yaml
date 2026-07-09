@@ -195,6 +195,8 @@ settings:
   section:
     overview:
       label: "Übersicht"
+    shows:
+      label: "Serien"
   flash:
     saved: "Einstellungen erfolgreich gespeichert."
     error: "Beim Speichern der Einstellungen ist ein Fehler aufgetreten."
@@ -205,6 +207,12 @@ settings:
       label: "Maximale Anzahl anzuzeigender Filme"
     max-next-episode-shows:
       label: "Maximale Anzahl nächster Folgen"
+  shows:
+    hide-shows:
+      label: "Serien ausblenden"
+      option:
+        ended: "Beendete Serien"
+        finished: "Vollständig angesehene Serien"
   items:
     label: "Einträge"
   save:
