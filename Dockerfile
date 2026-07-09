@@ -1,4 +1,4 @@
-FROM node:18 AS webpack
+FROM node:24-slim AS webpack
 
 WORKDIR /app
 

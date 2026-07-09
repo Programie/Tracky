@@ -1,7 +1,7 @@
 const path = require("path");
 const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WebpackAssetsManifest = require("webpack-assets-manifest");
+const {WebpackAssetsManifest} = require("webpack-assets-manifest");
 const scriptRoot = "./src/main/resources/assets/script";
 
 module.exports = {

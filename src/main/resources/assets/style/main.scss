@@ -1,3 +1,7 @@
+@use "@fortawesome/fontawesome-free/scss/variables" with (
+    $font-path: "@fortawesome/fontawesome-free/webfonts"
+);
+
 $primary: #2563eb;
 $secondary: #475569;
 
@@ -19,13 +23,12 @@ $item-active-color: #1e293b;
 $card-bg: #2b3035;
 $card-border-width: 0;
 
-@import "~bootstrap/scss/bootstrap";
+@import "bootstrap/scss/bootstrap";
 
-$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-@import "~@fortawesome/fontawesome-free/scss/fontawesome";
-@import "~@fortawesome/fontawesome-free/scss/regular";
-@import "~@fortawesome/fontawesome-free/scss/solid";
-@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "@fortawesome/fontawesome-free/scss/fontawesome";
+@import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/regular";
+@import "@fortawesome/fontawesome-free/scss/brands";
 
 @import "history";
 @import "login";
