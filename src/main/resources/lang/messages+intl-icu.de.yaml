@@ -114,6 +114,7 @@ shows:
   no-shows-available: "Keine Serien verfügbar."
   no-seasons-available: "Keine Staffeln verfügbar."
   no-episodes-available: "Keine Folgen verfügbar."
+  some-shows-hidden: "Filter-Einstellungen sind aktiv. Einige Serien könnten ausgeblendet sein."
   add-new: "Serie hinzufügen"
   status:
     upcoming: "Geplant"
