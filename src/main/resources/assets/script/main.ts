@@ -19,15 +19,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    document.querySelectorAll("img.image-poster").forEach((element) => {
+    document.querySelectorAll<HTMLImageElement>("img.image-poster").forEach((element) => {
         element.addEventListener("error", () => {
-            (element as HTMLImageElement).src = missingImagePoster;
+            element.src = missingImagePoster;
         });
     });
 
-    document.querySelectorAll("img.image-wide").forEach((element) => {
+    document.querySelectorAll<HTMLImageElement>("img.image-wide").forEach((element) => {
         element.addEventListener("error", () => {
-            (element as HTMLImageElement).src = missingImageWide;
+            element.src = missingImageWide;
         });
     });
 });

@@ -17,10 +17,10 @@ function deleteItem(url: string) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    let deleteItemTooltipElement: HTMLElement = document.querySelector("#library-management-delete-item");
-    let activeDeleteItem: DOMStringMap = null;
+    let deleteItemTooltipElement = document.querySelector<HTMLElement>("#library-management-delete-item")!;
+    let activeDeleteItem: DOMStringMap | null = null;
 
-    document.querySelectorAll(".add-item-to-library").forEach((element: HTMLButtonElement) => {
+    document.querySelectorAll<HTMLButtonElement>(".add-item-to-library").forEach((element) => {
         element.addEventListener("click", () => {
             element.disabled = true;
 

@@ -1,7 +1,7 @@
 import {Toast} from "bootstrap";
 
-export function createToast(title: string, body: string, color: string = null) {
-    let containerElement = document.querySelector("#toast-container");
+export function createToast(title: string, body: string, color: string | null = null) {
+    let containerElement = document.querySelector("#toast-container")!;
 
     let toastElement = document.createElement("div");
     toastElement.className = "toast";

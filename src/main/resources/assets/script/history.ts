@@ -1,8 +1,10 @@
 import {createPopper} from "@popperjs/core";
-import * as DateRangePicker from "daterangepicker";
+import DateRangePicker from "daterangepicker";
 import { DateOrString } from "daterangepicker";
-import * as moment from "moment";
+import moment from "moment";
 import { tr } from "./utils";
+
+type DateRange = [DateOrString | null, DateOrString | null];
 
 function configureDateRangePicker() {
     let dateRangeContainer = document.querySelector("#history-date-selection") as HTMLElement;
@@ -10,7 +12,7 @@ function configureDateRangePicker() {
         return;
     }
 
-    let rangesMap: { [name: string]: [DateOrString, DateOrString] } = {
+    let rangesMap: { [name: string]: DateRange } = {
         "date-ranges.last-7-days": [moment().subtract(6, "days"), moment()],
         "date-ranges.last-30-days": [moment().subtract(29, "days"), moment()],
         "date-ranges.this-month": [moment().startOf("month"), moment().endOf("month")],
@@ -20,9 +22,9 @@ function configureDateRangePicker() {
         "date-ranges.all": [null, null]
     };
 
-    let ranges: { [name: string]: [DateOrString, DateOrString] } = {};
+    let ranges: { [name: string]: DateRange } = {};
 
-    Object.entries(rangesMap).forEach(([key, range]: [string, [DateOrString, DateOrString]]) => {
+    Object.entries(rangesMap).forEach(([key, range]: [string, DateRange]) => {
         ranges[tr(key)] = range;
     });
 
@@ -30,6 +32,7 @@ function configureDateRangePicker() {
         startDate: moment(dateRangeContainer.dataset.startdate),
         endDate: moment(dateRangeContainer.dataset.enddate),
         opens: "right",
+        // @ts-ignore: TypeScript declaration only allows DateOrString for ranges property but null is also allowed
         ranges: ranges,
         alwaysShowCalendars: true,
         cancelButtonClasses: "btn btn-sm btn-secondary",
@@ -56,19 +59,19 @@ function configureDateRangePicker() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    let tooltipElement: HTMLElement = document.querySelector("#history-edit-tooltip");
-    let activeHistoryEntry: DOMStringMap = null;
+    let tooltipElement = document.querySelector<HTMLElement>("#history-edit-tooltip")!;
+    let activeHistoryEntry: DOMStringMap | null = null;
 
     configureDateRangePicker();
 
-    document.querySelectorAll(".history-edit-button").forEach((buttonElement: HTMLElement) => {
+    document.querySelectorAll<HTMLElement>(".history-edit-button").forEach((buttonElement) => {
         buttonElement.addEventListener("click", () => {
             createPopper(buttonElement, tooltipElement, {
                 placement: "bottom"
             });
 
             tooltipElement.style.display = "block";
-            activeHistoryEntry = (buttonElement.closest(".col")?.querySelector("[data-entry-id]") as HTMLElement)?.dataset;
+            activeHistoryEntry = buttonElement.closest(".col")?.querySelector<HTMLElement>("[data-entry-id]")?.dataset ?? null;
         });
     });
 

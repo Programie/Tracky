@@ -57,12 +57,12 @@ function removeViews(url: string) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    let addViewTooltipElement: HTMLElement = document.querySelector("#add-view-tooltip");
-    let removeSeasonViewTooltipElement: HTMLElement = document.querySelector("#season-remove-view-tooltip");
-    let activeAddViewEntry: DOMStringMap = null;
-    let activeRemoveSeasonViewEntry: DOMStringMap = null;
+    let addViewTooltipElement = document.querySelector<HTMLElement>("#add-view-tooltip")!;
+    let removeSeasonViewTooltipElement = document.querySelector<HTMLElement>("#season-remove-view-tooltip")!;
+    let activeAddViewEntry: DOMStringMap | null = null;
+    let activeRemoveSeasonViewEntry: DOMStringMap | null = null;
 
-    document.querySelectorAll(".add-view").forEach((buttonElement: HTMLElement) => {
+    document.querySelectorAll<HTMLElement>(".add-view").forEach((buttonElement) => {
         buttonElement.addEventListener("click", () => {
             createPopper(buttonElement, addViewTooltipElement, {
                 placement: "bottom"
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    document.querySelectorAll(".remove-view").forEach((buttonElement: HTMLElement) => {
+    document.querySelectorAll<HTMLElement>(".remove-view").forEach((buttonElement) => {
         buttonElement.addEventListener("click", () => {
             createPopper(buttonElement, removeSeasonViewTooltipElement, {
                 placement: "bottom"

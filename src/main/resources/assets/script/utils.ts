@@ -1,9 +1,3 @@
 export function tr(key: string): string {
-    let element = document.querySelector(`#translations > option[value="${key}"]`) as HTMLOptionElement;
-
-    if (element === null) {
-        return key;
-    }
-
-    return element.text;
+    return document.querySelector<HTMLOptionElement>(`#translations > option[value="${key}"]`)?.text ?? key;
 }

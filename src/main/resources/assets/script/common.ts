@@ -17,36 +17,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    document.querySelectorAll(".fullscreen-image").forEach((element: HTMLElement) => {
+    document.querySelectorAll<HTMLImageElement>(".fullscreen-image").forEach((element) => {
         element.addEventListener("click", () => {
-            let imageUrl;
-
-            if (element instanceof HTMLImageElement) {
-                imageUrl = element.src;
-            } else if (element.dataset.image) {
-                imageUrl = element.dataset.image;
-            } else {
-                imageUrl = element.style.backgroundImage.match(/url\(["']?([^"']*)["']?\)/)[1];
-            }
-
-            if (imageUrl === null || imageUrl === undefined || imageUrl === "") {
-                return;
-            }
-
             let imageModal = document.querySelector("#image-modal") as HTMLElement;
             let imageElement = imageModal.querySelector(".image-modal-img") as HTMLElement;
 
             imageModal.classList.add("show");
-            imageElement.style.backgroundImage = `url(${imageUrl})`;
+            imageElement.style.backgroundImage = `url(${element.src})`;
 
             document.body.style.overflow = "hidden";
         });
     });
 
-    document.querySelectorAll(".image-modal").forEach((element: HTMLElement) => {
+    document.querySelectorAll<HTMLElement>(".image-modal").forEach((element) => {
         element.addEventListener("click", () => {
             (element.closest(".image-modal") as HTMLElement).classList.remove("show");
-            document.body.style.overflow = null;
+            document.body.style.overflow = "";
         });
     });
 });
