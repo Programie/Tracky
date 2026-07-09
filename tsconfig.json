@@ -1,10 +1,14 @@
 {
   "compilerOptions": {
-    "noImplicitAny": true,
-    "module": "es2022",
-    "target": "es2022",
-    "jsx": "react",
-    "allowJs": true,
-    "moduleResolution": "bundler"
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "strict": true,
+    "isolatedModules": true,
+    "noEmit": true
   }
 }
