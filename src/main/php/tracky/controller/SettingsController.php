@@ -12,63 +12,63 @@ use tracky\orm\Settings;
 class SettingsController extends AbstractController
 {
     private array $settingsDefinitions = [
-        'overview' => [
-            'type' => 'section',
-            'label' => 'settings.section.overview.label',
+        "overview" => [
+            "type" => "section",
+            "label" => "settings.section.overview.label",
         ],
-        'overviewMaxEpisodes' => [
-            'label'   => 'settings.overview.max-episodes.label',
-            'type'    => 'number',
-            'default' => 8,
-            'min'     => 4,
-            'max'     => 16,
+        "overviewMaxEpisodes" => [
+            "label"   => "settings.overview.max-episodes.label",
+            "type"    => "number",
+            "default" => 8,
+            "min"     => 4,
+            "max"     => 16,
         ],
-        'overviewMaxMovies' => [
-            'label'   => 'settings.overview.max-movies.label',
-            'type'    => 'number',
-            'default' => 8,
-            'min'     => 4,
-            'max'     => 16,
+        "overviewMaxMovies" => [
+            "label"   => "settings.overview.max-movies.label",
+            "type"    => "number",
+            "default" => 8,
+            "min"     => 4,
+            "max"     => 16,
         ],
-        'overviewMaxNextEpisodeShows' => [
-            'label'   => 'settings.overview.max-next-episode-shows.label',
-            'type'    => 'number',
-            'default' => 8,
-            'min'     => 4,
-            'max'     => 16,
+        "overviewMaxNextEpisodeShows" => [
+            "label"   => "settings.overview.max-next-episode-shows.label",
+            "type"    => "number",
+            "default" => 8,
+            "min"     => 4,
+            "max"     => 16,
         ],
         /*
-        'exampleSelect' => [
-            'label'   => 'settings.example-select.label',
-            'type'    => 'select',
-            'options' => ['foo' => 'Foo', 'bar' => 'Bar', 'baz' => 'Baz'],
-            'default' => 'foo',
+        "exampleSelect" => [
+            "label"   => "settings.example-select.label",
+            "type"    => "select",
+            "options" => ["foo" => "Foo", "bar" => "Bar", "baz" => "Baz"],
+            "default" => "foo",
         ],
-        'exampleText' => [
-            'label'       => 'settings.example-text.label',
-            'type'        => 'text',
-            'placeholder' => 'settings.example-text.placeholder',
-            'regex'       => '^[a-zA-Z0-9\-_]{3,20}$',
-            'default'     => 'anonymous',
+        "exampleText" => [
+            "label"       => "settings.example-text.label",
+            "type"        => "text",
+            "placeholder" => "settings.example-text.placeholder",
+            "regex"       => "^[a-zA-Z0-9\-_]{3,20}$",
+            "default"     => "anonymous",
         ],
-        'exampleCheckbox' => [
-            'label'   => 'settings.example-checkbox.label',
-            'type'    => 'checkbox',
-            'options' => [
-                'foo' => 'Foo',
-                'bar' => 'Bar',
-                'baz' => 'Baz'
+        "exampleCheckbox" => [
+            "label"   => "settings.example-checkbox.label",
+            "type"    => "checkbox",
+            "options" => [
+                "foo" => "Foo",
+                "bar" => "Bar",
+                "baz" => "Baz"
             ],
-            'default' => 'foo',
+            "default" => "foo",
         ],
-        'exampleRadio' => [
-            'label'       => 'settings.example-radio.label',
-            'type'        => 'radio',
-            'options'     => [
-                'foo' => 'Foo',
-                'bar' => 'Bar'
+        "exampleRadio" => [
+            "label"       => "settings.example-radio.label",
+            "type"        => "radio",
+            "options"     => [
+                "foo" => "Foo",
+                "bar" => "Bar"
             ],
-            'default'     => 'foo',
+            "default"     => "foo",
         ],
         */
     ];
@@ -85,7 +85,7 @@ class SettingsController extends AbstractController
         $currentValues = [];
 
         if ($user) {
-            $savedSettings = $entityManager->getRepository(Settings::class)->findBy(['user' => $user]);
+            $savedSettings = $entityManager->getRepository(Settings::class)->findBy(["user" => $user]);
             foreach ($savedSettings as $setting) {
                 $currentValues[$setting->getSetting()] = $setting->getValue();
             }
@@ -93,26 +93,26 @@ class SettingsController extends AbstractController
 
         $viewSettings = [];
         foreach ($this->settingsDefinitions as $key => $def) {
-            if ($def['type'] === 'section') {
+            if ($def["type"] === "section") {
                 $value = null;
             } else {
-                $value = $currentValues[$key] ?? $def['default'];
+                $value = $currentValues[$key] ?? $def["default"];
             }
 
             $viewSettings[] = [
-                'key'        => $key,
-                'label'      => $def['label'],
-                'type'       => $def['type'],
-                'options'    => $def['options'] ?? [],
-                'value'      => $value,
-                'placeholder'=> $def['placeholder'] ?? null,
-                'min'=> $def['min'] ?? 0,
-                'max'=> $def['max'] ?? 999,
+                "key"        => $key,
+                "label"      => $def["label"],
+                "type"       => $def["type"],
+                "options"    => $def["options"] ?? [],
+                "value"      => $value,
+                "placeholder"=> $def["placeholder"] ?? null,
+                "min"=> $def["min"] ?? 0,
+                "max"=> $def["max"] ?? 999,
             ];
         }
 
         return $this->render("settings.twig", [
-            'settings' => $viewSettings,
+            "settings" => $viewSettings,
         ]);
     }
 
@@ -127,51 +127,51 @@ class SettingsController extends AbstractController
         }
 
         foreach ($this->settingsDefinitions as $key => $def) {
-            $finalValue = '';
+            $finalValue = "";
 
-            if ($def['type'] === 'section') {
+            if ($def["type"] === "section") {
                 continue;
             }
 
-            if ($def['type'] === 'checkbox') {
+            if ($def["type"] === "checkbox") {
                 $inputValues = $request->request->all()[$key] ?? [];
 
                 foreach ($inputValues as $val) {
-                    if (!array_key_exists($val, $def['options'] ?? [])) {
+                    if (!array_key_exists($val, $def["options"] ?? [])) {
                         $hasError = true;
                         break;
                     }
                 }
-                $finalValue = implode(',', $inputValues);
+                $finalValue = implode(",", $inputValues);
             } else {
-                $inputValue = trim($request->request->getString($key, ''));
-                $finalValue = $inputValue !== '' ? $inputValue : $def['default'];
+                $inputValue = trim($request->request->getString($key, ""));
+                $finalValue = $inputValue !== "" ? $inputValue : $def["default"];
 
-                if ($def['type'] === 'select') {
-                    if (!array_key_exists($finalValue, $def['options'] ?? [])) {
+                if ($def["type"] === "select") {
+                    if (!array_key_exists($finalValue, $def["options"] ?? [])) {
                         $hasError = true;
                         continue;
                     }
-                } elseif ($def['type'] === 'radio') {
-                    if (!in_array($finalValue, array_keys($def['options'] ?? []), true)) {
+                } elseif ($def["type"] === "radio") {
+                    if (!in_array($finalValue, array_keys($def["options"] ?? []), true)) {
                         $hasError = true;
                         continue;
                     }
-                } elseif ($def['type'] === 'text') {
-                    if (isset($def['regex']) && !preg_match('/' . $def['regex'] . '/', $finalValue)) {
+                } elseif ($def["type"] === "text") {
+                    if (isset($def["regex"]) && !preg_match("/" . $def["regex"] . "/", $finalValue)) {
                         $hasError = true;
                         continue;
                     }
-                } elseif ($def['type'] === 'number') {
+                } elseif ($def["type"] === "number") {
                     $numVal = (int)$finalValue;
-                    if ((string)$numVal !== $finalValue || $numVal < ($def['min'] ?? 0) || $numVal > ($def['max'] ?? PHP_INT_MAX)) {
+                    if ((string)$numVal !== $finalValue || $numVal < ($def["min"] ?? 0) || $numVal > ($def["max"] ?? PHP_INT_MAX)) {
                         $hasError = true;
                         continue;
                     }
                 }
             }
 
-            $settingsEntity = $entityManager->getRepository(Settings::class)->findOneBy(['user' => $user, 'setting' => $key]);
+            $settingsEntity = $entityManager->getRepository(Settings::class)->findOneBy(["user" => $user, "setting" => $key]);
 
             if (!$settingsEntity) {
                 $settingsEntity = new Settings();

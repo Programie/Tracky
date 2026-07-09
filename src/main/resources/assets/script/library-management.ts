@@ -1,4 +1,4 @@
-import {createPopper} from '@popperjs/core';
+import {createPopper} from "@popperjs/core";
 import {createToast} from "./toast";
 import {tr} from "./utils";
 

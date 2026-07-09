@@ -41,19 +41,19 @@ class HomeController extends AbstractController
 
         // Initialize fallback values from settings schema defaults
         $defaults = $this->settingsController->getSettingDefaults();
-        $maxEpisodes = (int)($defaults['overviewMaxEpisodes']['default'] ?? 8);
-        $maxMovies = (int)($defaults['overviewMaxMovies']['default'] ?? 8);
-        $maxNextEpisodeShows = (int)($defaults['overviewMaxNextEpisodeShows']['default'] ?? 8);
+        $maxEpisodes = (int)($defaults["overviewMaxEpisodes"]["default"] ?? 8);
+        $maxMovies = (int)($defaults["overviewMaxMovies"]["default"] ?? 8);
+        $maxNextEpisodeShows = (int)($defaults["overviewMaxNextEpisodeShows"]["default"] ?? 8);
 
         $user = $this->getUser();
         if ($user !== null) {
-            $savedSettings = $entityManager->getRepository(Settings::class)->findBy(['user' => $user]);
+            $savedSettings = $entityManager->getRepository(Settings::class)->findBy(["user" => $user]);
             foreach ($savedSettings as $setting) {
-                if ($setting->getSetting() === 'overviewMaxEpisodes') {
+                if ($setting->getSetting() === "overviewMaxEpisodes") {
                     $maxEpisodes = (int)$setting->getValue();
-                } elseif ($setting->getSetting() === 'overviewMaxMovies') {
+                } elseif ($setting->getSetting() === "overviewMaxMovies") {
                     $maxMovies = (int)$setting->getValue();
-                } elseif ($setting->getSetting() === 'overviewMaxNextEpisodeShows') {
+                } elseif ($setting->getSetting() === "overviewMaxNextEpisodeShows") {
                     $maxNextEpisodeShows = (int)$setting->getValue();
                 }
             }
