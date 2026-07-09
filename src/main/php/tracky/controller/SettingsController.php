@@ -54,6 +54,7 @@ class SettingsController extends AbstractController
             "options" => [
                 "ended"    => "settings.shows.hide-shows.option.ended",
                 "finished" => "settings.shows.hide-shows.option.finished",
+                "unwatched" => "settings.shows.hide-shows.option.unwatched",
             ],
             "default" => "",
         ],

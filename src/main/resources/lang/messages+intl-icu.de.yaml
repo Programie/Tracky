@@ -215,6 +215,7 @@ settings:
       option:
         ended: "Beendete Serien"
         finished: "Vollständig angesehene Serien"
+        unwatched: "Nicht angefangene Serien"
   items:
     label: "Einträge"
   save:

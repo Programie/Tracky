@@ -219,6 +219,7 @@ settings:
       option:
         ended: "Ended shows"
         finished: "Fully watched shows"
+        unwatched: "Not yet started shows"
   items:
     label: "items"
   save:

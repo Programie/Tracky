@@ -4,7 +4,8 @@
 
         {% if not (
             ('ended' in hideOptions and show.status == 'ended') or
-            ('finished' in hideOptions and show.getWatchProgress(watchStatsProvider) == 100)
+            ('finished' in hideOptions and show.getWatchProgress(watchStatsProvider) == 100) or
+            ('unwatched' in hideOptions and show.getWatchProgress(watchStatsProvider) == 0)
         ) %}
             <div class="col">
                 {% include "components/show-card-small.twig" with {"show": show} %}
