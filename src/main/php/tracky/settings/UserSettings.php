@@ -29,7 +29,6 @@ class UserSettings
             new Number("overviewMaxEpisodes", "settings.overview.max-episodes.label", default: 8, min: 4, max: 16),
             new Number("overviewMaxMovies", "settings.overview.max-movies.label", default: 8, min: 4, max: 16),
             new Number("overviewMaxNextEpisodeShows", "settings.overview.max-next-episode-shows.label", default: 8, min: 4, max: 16),
-            new Number("overviewMaxNextEpisodeShows", "settings.overview.max-next-episode-shows.label", default: 8, min: 4, max: 16),
 
             new Section("shows", "settings.section.shows.label"),
             new Number("showsMaxEpisodes", "settings.shows.max-episodes.label", default: 10, min: 5, max: 60),
