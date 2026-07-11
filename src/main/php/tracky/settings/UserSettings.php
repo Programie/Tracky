@@ -1,0 +1,85 @@
+<?php
+namespace tracky\settings;
+
+use tracky\model\Setting;
+use tracky\model\User;
+use tracky\orm\SettingRepository;
+use tracky\settings\type\Checkbox;
+use tracky\settings\type\Number;
+use tracky\settings\type\Section;
+use tracky\settings\type\Type;
+
+class UserSettings
+{
+    /**
+     * @var array<string, Type>
+     */
+    private array $options = [];
+
+    public function __construct(
+        private readonly SettingRepository $settingRepository,
+        private readonly ?User $user
+    )
+    {
+        $options = [
+            new Section("overview", "settings.section.overview.label"),
+            new Number("overviewMaxEpisodes", "settings.overview.max-episodes.label", default: 8, min: 4, max: 16),
+            new Number("overviewMaxMovies", "settings.overview.max-movies.label", default: 8, min: 4, max: 16),
+            new Number("overviewMaxNextEpisodeShows", "settings.overview.max-next-episode-shows.label", default: 8, min: 4, max: 16),
+            new Number("overviewMaxNextEpisodeShows", "settings.overview.max-next-episode-shows.label", default: 8, min: 4, max: 16),
+            new Section("shows", "settings.section.shows.label"),
+            new Number("showsMaxEpisodes", "settings.shows.max-episodes.label", default: 10, min: 5, max: 60),
+            new Checkbox("hideShows", "settings.shows.hide-shows.label", options: [
+                "ended"    => "settings.shows.hide-shows.option.ended",
+                "finished" => "settings.shows.hide-shows.option.finished",
+                "unwatched" => "settings.shows.hide-shows.option.unwatched",
+            ]),
+            /*
+            new Select("exampleSelect", "settings.example-select.label", default: "foo", options: [
+                "foo" => "Foo",
+                "bar" => "Bar",
+                "baz" => "Baz"
+            ]),
+            new Text("exampleText", "settings.example-text.label", placeholder: "settings.example-text.placeholder", default: "anonymous", regex: "^[a-zA-Z0-9\-_]{3,20}$"),
+            new Radio("exampleRadio", "settings.example-radio.label", default: "foo", options: [
+                "foo" => "Foo",
+                "bar" => "Bar"
+            ]),
+            */
+        ];
+
+        /**
+         * @var array<string, Setting>
+         */
+        $settings = [];
+
+        if ($user !== null) {
+            foreach ($this->settingRepository->findBy(["user" => $this->user]) as $setting) {
+                $settings[$setting->getSetting()] = $setting;
+            }
+        }
+
+        foreach ($options as $option) {
+            $option->setSetting($settings[$option->getName()] ?? null);
+            $this->options[$option->getName()] = $option;
+        }
+    }
+
+    public function getOption(string $name): ?Type
+    {
+        return $this->options[$name] ?? null;
+    }
+
+    /**
+     * @return array<string, Type>
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    public function getOptionValue(string $name)
+    {
+        return $this->getOption($name)?->getValue();
+    }
+}

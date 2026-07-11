@@ -1,28 +1,22 @@
 <?php
 namespace tracky\controller;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use tracky\HistoryEntry;
 use tracky\orm\EpisodeRepository;
 use tracky\orm\MovieRepository;
-use tracky\orm\Settings;
+use tracky\orm\SettingRepository;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\scrobbler\Scrobbler;
+use tracky\settings\UserSettings;
 use tracky\ViewType;
 use tracky\watchstats\WatchStatsProvider;
 
 class HomeController extends AbstractController
 {
-    public function __construct(
-        private readonly SettingsController $settingsController
-    )
-    {
-    }
-
     #[Route("/", name: "home_page")]
     public function home(
         ShowRepository $showRepository,
@@ -30,8 +24,8 @@ class HomeController extends AbstractController
         MovieRepository $movieRepository,
         ViewRepository $viewRepository,
         WatchStatsProvider $watchStatsProvider,
-        Scrobbler $scrobbler,
-        EntityManagerInterface $entityManager
+        SettingRepository $settingRepository,
+        Scrobbler $scrobbler
     ): Response
     {
         $nowWatching = null;
@@ -39,24 +33,14 @@ class HomeController extends AbstractController
         $latestWatchedMovies = null;
         $nextEpisodes = null;
 
-        // Initialize fallback values from settings schema defaults
-        $defaults = $this->settingsController->getSettingDefaults();
-        $maxEpisodes = (int)($defaults["overviewMaxEpisodes"]["default"] ?? 8);
-        $maxMovies = (int)($defaults["overviewMaxMovies"]["default"] ?? 8);
-        $maxNextEpisodeShows = (int)($defaults["overviewMaxNextEpisodeShows"]["default"] ?? 8);
+        $userSettings = new UserSettings($settingRepository, $this->getUser());
+
+        $maxEpisodes = $userSettings->getOption("overviewMaxEpisodes")->getValue();
+        $maxMovies = $userSettings->getOption("overviewMaxMovies")->getValue();
+        $maxNextEpisodeShows = $userSettings->getOption("overviewMaxNextEpisodeShows")->getValue();
 
         $user = $this->getUser();
         if ($user !== null) {
-            $savedSettings = $entityManager->getRepository(Settings::class)->findBy(["user" => $user]);
-            foreach ($savedSettings as $setting) {
-                if ($setting->getSetting() === "overviewMaxEpisodes") {
-                    $maxEpisodes = (int)$setting->getValue();
-                } elseif ($setting->getSetting() === "overviewMaxMovies") {
-                    $maxMovies = (int)$setting->getValue();
-                } elseif ($setting->getSetting() === "overviewMaxNextEpisodeShows") {
-                    $maxNextEpisodeShows = (int)$setting->getValue();
-                }
-            }
             $nowWatching = $scrobbler->getNowWatching($user);
 
             $episodeViews = $viewRepository->findBy(["user" => $user->getId()], ["dateTime" => "desc"], $maxEpisodes, type: ViewType::EPISODE);

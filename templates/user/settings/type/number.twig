@@ -1,0 +1,5 @@
+<label for="{{ setting.name }}" class="form-label">{{ setting.label|trans }}</label>
+<div class="input-group">
+    <input type="number" name="{{ setting.name }}" id="{{ setting.name }}" class="form-control" value="{{ setting.value }}" min="{{ setting.min }}" max="{{ setting.max }}"/>
+    <span class="input-group-text">{{ "settings.items.label"|trans }}</span>
+</div>

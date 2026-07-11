@@ -1,0 +1,25 @@
+{% extends "page.twig" %}
+
+{% block title %}{{ "settings.title"|trans }}{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2>{{ "settings.title"|trans }}</h2>
+
+        {% if app.request.query.get("flash") == "success" %}
+            <div class="alert alert-success">{{ "settings.flash.saved"|trans }}</div>
+        {% elseif app.request.query.get("flash") == "error" %}
+            <div class="alert alert-danger">{{ "settings.flash.error"|trans }}</div>
+        {% endif %}
+
+        <form method="post" action="{{ path("settings_save_action") }}" class="mt-3">
+            {% for setting in settings %}
+                <div class="mb-3">
+                    {% include "user/settings/type/" ~ setting.type ~ ".twig" %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary">{{ "settings.save.button"|trans }}</button>
+        </form>
+    </div>
+{% endblock %}

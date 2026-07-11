@@ -1,0 +1,6 @@
+<label for="{{ setting.name }}" class="form-label">{{ setting.label|trans }}</label>
+<select name="{{ setting.name }}" id="{{ setting.name }}" class="form-select" required>
+    {% for optionName, optionLabel in setting.options %}
+        <option value="{{ optionName }}" {% if setting.value == optionName %}selected{% endif %}>{{ optionLabel|trans }}</option>
+    {% endfor %}
+</select>

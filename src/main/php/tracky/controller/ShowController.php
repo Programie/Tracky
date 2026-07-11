@@ -19,9 +19,10 @@ use tracky\model\Episode;
 use tracky\model\Season;
 use tracky\model\Show;
 use tracky\model\View;
-use tracky\orm\Settings;
+use tracky\orm\SettingRepository;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
+use tracky\settings\UserSettings;
 use tracky\ViewType;
 use tracky\watchstats\WatchStatsProvider;
 
@@ -30,7 +31,7 @@ class ShowController extends AbstractController
     public function __construct(
         private readonly ShowRepository $showRepository,
         private readonly ViewRepository $viewRepository,
-        private readonly SettingsController $settingsController,
+        private readonly SettingRepository $settingRepository,
     )
     {
     }
@@ -69,13 +70,11 @@ class ShowController extends AbstractController
     }
 
     #[Route("/shows", name: "shows_page")]
-    public function getShowsPage(EntityManagerInterface $entityManager): Response
+    public function getShowsPage(): Response
     {
-        $settings = $this->getSettings($entityManager);
-
         return $this->render("shows/shows.twig", [
             "shows" => $this->showRepository->findAllWithEpisodes(),
-            "hideShows" => $settings["hideShows"],
+            "hideShows" => $this->getSettings()->getOptionValue("hideShows"),
         ]);
     }
 
@@ -115,60 +114,56 @@ class ShowController extends AbstractController
     }
 
     #[Route("/shows/{show}/random-episodes", name: "shows_random_episodes_page")]
-    public function getRandomEpisodesPage(int $show, EntityManagerInterface $entityManager): Response
+    public function getRandomEpisodesPage(int $show): Response
     {
-        $settings = $this->getSettings($entityManager);
         $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.random-episodes",
-            "episodes" => $show->getRandomEpisodes($settings["showsMaxEpisodes"]),
+            "episodes" => $show->getRandomEpisodes($this->getSettings()->getOptionValue("showsMaxEpisodes")),
             "displaySeason" => true
         ]);
     }
 
     #[Route("/shows/{show}/latest-watched", name: "shows_latest_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getLatestWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider, EntityManagerInterface $entityManager): Response
+    public function getLatestWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
     {
-        $settings = $this->getSettings($entityManager);
         $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.latest-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getLatestWatchedEpisodes($watchStatsProvider, $settings["showsMaxEpisodes"])),
+            "episodes" => array_map(fn($item) => $item[0], $show->getLatestWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue("showsMaxEpisodes"))),
             "displaySeason" => true
         ]);
     }
 
     #[Route("/shows/{show}/most-watched", name: "shows_most_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getMostWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider, EntityManagerInterface $entityManager): Response
+    public function getMostWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
     {
-        $settings = $this->getSettings($entityManager);
         $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.most-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $settings["showsMaxEpisodes"], false)),
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue("showsMaxEpisodes"), false)),
             "displaySeason" => true
         ]);
     }
 
     #[Route("/shows/{show}/least-watched", name: "shows_least_watched_episodes_page")]
     #[IsGranted("IS_AUTHENTICATED")]
-    public function getLeastWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider, EntityManagerInterface $entityManager): Response
+    public function getLeastWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
     {
-        $settings = $this->getSettings($entityManager);
         $show = $this->showRepository->findByIdWithEpisodes($show);
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.least-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $settings["showsMaxEpisodes"], true)),
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue("showsMaxEpisodes"), true)),
             "displaySeason" => true
         ]);
     }
@@ -374,31 +369,8 @@ class ShowController extends AbstractController
         return $this->file($path, null, ResponseHeaderBag::DISPOSITION_INLINE);
     }
 
-    private function getSettings(EntityManagerInterface $entityManager): array
+    private function getSettings(): UserSettings
     {
-        $defaults = $this->settingsController->getSettingDefaults();
-
-        $settings = [
-            "showsMaxEpisodes" => (int)($defaults["showsMaxEpisodes"]["default"] ?? 10),
-            "hideShows" => null,
-        ];
-
-        $user = $this->getUser();
-        if ($user !== null) {
-            $savedSettings = $entityManager->getRepository(Settings::class)->findBy(["user" => $user]);
-
-            foreach ($savedSettings as $setting) {
-                switch ($setting->getSetting()) {
-                    case "showsMaxEpisodes":
-                        $settings["showsMaxEpisodes"] = (int)$setting->getValue();
-                        break;
-                    case "hideShows":
-                        $settings["hideShows"] = $setting->getValue() ?: null;
-                        break;
-                }
-            }
-        }
-
-        return $settings;
+        return new UserSettings($this->settingRepository, $this->getUser());
     }
 }

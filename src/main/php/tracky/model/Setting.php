@@ -1,12 +1,12 @@
 <?php
-namespace tracky\orm;
+namespace tracky\model;
 
 use Doctrine\ORM\Mapping as ORM;
 use tracky\model\User;
 
 #[ORM\Entity]
 #[ORM\Table(name: "settings")]
-class Settings
+class Setting
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

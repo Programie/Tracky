@@ -5,8 +5,7 @@
 {% block content %}
     <h1>{{ "shows.all-shows"|trans }}</h1>
 
-    {% set hideOptions = hideShows|default("")|split(",") %}
-    {% if hideOptions|filter(value => value != "")|length > 0 %}
+    {% if hideShows|length > 0 %}
         <div class="alert alert-info">{{ "shows.some-shows-hidden"|trans }}</div>
     {% endif %}
 
