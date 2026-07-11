@@ -2,11 +2,11 @@
 namespace tracky\settings\type;
 
 use Symfony\Component\HttpFoundation\InputBag;
-use tracky\model\Setting;
+use tracky\model\UserSetting;
 
 abstract class BaseType implements Type
 {
-    private ?Setting $setting = null;
+    private ?UserSetting $setting = null;
 
     public function __construct(
         protected readonly string $name,
@@ -25,12 +25,12 @@ abstract class BaseType implements Type
         return $this->label;
     }
 
-    public function getSetting(): ?Setting
+    public function getSetting(): ?UserSetting
     {
         return $this->setting;
     }
 
-    public function setSetting(?Setting $setting): void
+    public function setSetting(?UserSetting $setting): void
     {
         $this->setting = $setting;
     }

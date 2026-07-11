@@ -5,8 +5,8 @@ use Doctrine\ORM\Mapping as ORM;
 use tracky\model\User;
 
 #[ORM\Entity]
-#[ORM\Table(name: "settings")]
-class Setting
+#[ORM\Table(name: "usersettings")]
+class UserSetting
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -14,11 +14,11 @@ class Setting
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
+    #[ORM\JoinColumn(name: "user", referencedColumnName: "id", nullable: false, onDelete: "CASCADE")]
     private User $user;
 
     #[ORM\Column(type: "string", length: 255)]
-    private string $setting;
+    private string $name;
 
     #[ORM\Column(type: "string", length: 255)]
     private string $value;
@@ -39,14 +39,14 @@ class Setting
         return $this;
     }
 
-    public function getSetting(): string
+    public function getName(): string
     {
-        return $this->setting;
+        return $this->name;
     }
 
-    public function setSetting(string $setting): self
+    public function setName(string $name): self
     {
-        $this->setting = $setting;
+        $this->name = $name;
         return $this;
     }
 

@@ -7,8 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use tracky\model\Setting;
 use tracky\model\User;
+use tracky\model\UserSetting;
 
 class SettingsController extends AbstractController
 {
@@ -52,9 +52,9 @@ class SettingsController extends AbstractController
 
             $setting = $option->getSetting();
             if ($setting === null) {
-                $setting = new Setting;
+                $setting = new UserSetting;
                 $setting->setUser($user);
-                $setting->setSetting($option->getName());
+                $setting->setName($option->getName());
             }
 
             $setting->setValue($value);

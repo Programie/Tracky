@@ -18,9 +18,9 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
     private string $password;
 
     /**
-     * @var Setting[]
+     * @var UserSetting[]
      */
-    #[ORM\OneToMany(mappedBy: "user", targetEntity: Setting::class)]
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: UserSetting::class)]
     private mixed $settings = [];
 
     private ?UserSettings $userSettings = null;
@@ -70,7 +70,7 @@ class User extends BaseEntity implements UserInterface, PasswordAuthenticatedUse
         $this->userSettings = new UserSettings;
 
         foreach ($this->settings as $setting) {
-            $option = $this->userSettings->getOption($setting->getSetting());
+            $option = $this->userSettings->getOption($setting->getName());
             if ($option === null) {
                 continue;
             }
