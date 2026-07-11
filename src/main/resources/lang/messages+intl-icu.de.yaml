@@ -202,6 +202,8 @@ settings:
       label: "Übersicht"
     shows:
       label: "Serien"
+    user-profile:
+      label: "Benutzerprofil"
   flash:
     saved: "Einstellungen erfolgreich gespeichert."
     error: "Beim Speichern der Einstellungen ist ein Fehler aufgetreten."
@@ -228,6 +230,11 @@ settings:
         ended: "Beendete Serien"
         finished: "Vollständig angesehene Serien"
         unwatched: "Nicht angefangene Serien"
+  user-profile:
+    history-items-per-page:
+      label: "Einräge pro Seite im Verlauf"
+    history-max-previous-next-pages:
+      label: "Anzahl der vorherigen und nächsten Seiten im Verlauf"
   items:
     label: "Einträge"
   save:

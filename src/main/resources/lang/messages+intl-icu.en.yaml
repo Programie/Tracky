@@ -204,6 +204,8 @@ settings:
       label: "Overview"
     shows:
       label: "Shows"
+    user-profile:
+      label: "User profile"
   flash:
     saved: "Settings saved successfully."
     error: "An error occurred while saving settings."
@@ -230,6 +232,11 @@ settings:
         ended: "Ended shows"
         finished: "Fully watched shows"
         unwatched: "Not yet started shows"
+  user-profile:
+    history-items-per-page:
+      label: "Items per page on history page"
+    history-max-previous-next-pages:
+      label: "Number of previous and next pages on history page"
   items:
     label: "items"
   save:

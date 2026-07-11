@@ -12,18 +12,12 @@ use tracky\orm\EpisodeRepository;
 use tracky\orm\MovieRepository;
 use tracky\orm\ViewRepository;
 use tracky\Pagination;
+use tracky\settings\UserSettings;
 use tracky\ViewType;
 use tracky\watchstats\WatchStatsProvider;
 
 class HistoryController extends AbstractController
 {
-    public function __construct(
-        private readonly int $itemsPerPage,
-        private readonly int $maxPreviousNextPages
-    )
-    {
-    }
-
     #[Route("/users/{username}/history", name: "user_profile_history_page")]
     public function getPage(Request $request, User $user, ViewRepository $viewRepository, EpisodeRepository $episodeRepository, MovieRepository $movieRepository)
     {
@@ -55,18 +49,27 @@ class HistoryController extends AbstractController
 
         $count = $viewRepository->count($criteria, $type, $dateRange);
 
-        $pagination = new Pagination($page, $count, $this->itemsPerPage, $this->maxPreviousNextPages);
+        /**
+         * @var User
+         */
+        $currentUser = $this->getUser();
+        $userSettings = $currentUser?->getSettings() ?? new UserSettings;
+
+        $itemsPerPage = $userSettings->getOptionValue("profileHistoryItemsPerPage");
+        $maxPreviousNextPages = $userSettings->getOptionValue("profileHistoryMaxPreviousNextPages");
+
+        $pagination = new Pagination($page, $count, $itemsPerPage, $maxPreviousNextPages);
 
         if ($dateRange === null) {
-            $firstPage = $viewRepository->getPaged($criteria, 1, $this->itemsPerPage, $type, $dateRange);
-            $lastPage = $viewRepository->getPaged($criteria, $pagination->getLastPage(), $this->itemsPerPage, $type, $dateRange);
+            $firstPage = $viewRepository->getPaged($criteria, 1, $itemsPerPage, $type, $dateRange);
+            $lastPage = $viewRepository->getPaged($criteria, $pagination->getLastPage(), $itemsPerPage, $type, $dateRange);
 
             if (!empty($firstPage) and !empty($lastPage)) {
                 $dateRange = new DateRange($lastPage[count($lastPage) - 1]->getDateTime()->toDate(), $firstPage[0]->getDateTime()->toDate());
             }
         }
 
-        $views = $viewRepository->getPaged($criteria, $page, $this->itemsPerPage, $type, $dateRange);
+        $views = $viewRepository->getPaged($criteria, $page, $itemsPerPage, $type, $dateRange);
 
         return $this->render("user/history.twig", [
             "user" => $user,

@@ -38,6 +38,10 @@ class UserSettings
                 "unwatched" => "settings.shows.hide-shows.option.unwatched",
             ]),
 
+            new Section("settings.section.user-profile.label"),
+            new Number("profileHistoryItemsPerPage", "settings.user-profile.history-items-per-page.label", default: 20, min: 4, max: 100, suffixLabel: "settings.items.label"),
+            new Number("profileHistoryMaxPreviousNextPages", "settings.user-profile.history-max-previous-next-pages.label", default: 3, min: 1, max: 10, suffixLabel: "settings.items.label"),
+
             /*
             new Select("exampleSelect", "settings.example-select.label", default: "foo", options: [
                 "foo" => "Foo",
