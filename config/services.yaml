@@ -59,6 +59,3 @@ services:
   tracky\scrobbler\Scrobbler:
     arguments:
       $useQueue: "%scrobbler.use-queue%"
-  tracky\Config:
-    arguments:
-      $container: "@service_container"
