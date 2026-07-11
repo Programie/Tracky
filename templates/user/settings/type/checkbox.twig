@@ -1,8 +1,8 @@
 <label for="{{ setting.name }}" class="form-label">{{ setting.label|trans }}</label>
-<div class="d-flex gap-2">
+<div class="d-flex gap-3">
     {% for optionName, optionLabel in setting.options %}
         <div class="form-check">
-            <input type="checkbox" name="{{ setting.name }}[]" id="{{ setting.name }}_{{ optionName }}" value="{{ optionName }}" class="form-check-input" {% if optionName in setting.value %}checked{% endif %}/>
+            <input type="checkbox" name="{{ setting.name }}[]" id="{{ setting.name }}_{{ optionName }}" value="{{ optionName }}" class="{{ html_classes("form-check-input", {"is-invalid": isInvalid}) }}" {% if optionName in setting.value %}checked{% endif %}/>
             <label class="form-check-label" for="{{ setting.name }}_{{ optionName }}">{{ optionLabel|trans }}</label>
         </div>
     {% endfor %}

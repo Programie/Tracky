@@ -1,5 +1,5 @@
 <label for="{{ setting.name }}" class="form-label">{{ setting.label|trans }}</label>
-<select name="{{ setting.name }}" id="{{ setting.name }}" class="form-select" required>
+<select name="{{ setting.name }}" id="{{ setting.name }}" class="{{ html_classes("form-select", {"is-invalid": isInvalid}) }}" required>
     {% for optionName, optionLabel in setting.options %}
         {% if optionLabel is null %}
             <hr/>

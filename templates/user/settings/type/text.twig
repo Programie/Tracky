@@ -1,2 +1,2 @@
 <label for="{{ setting.name }}" class="form-label">{{ setting.label|trans }}</label>
-<input type="text" name="{{ setting.name }}" id="{{ setting.name }}" class="form-control" value="{{ setting.value }}" placeholder="{{ setting.placeholder|trans }}" {% if setting.required %}required{% endif %}/>
+<input type="text" name="{{ setting.name }}" id="{{ setting.name }}" class="{{ html_classes("form-control", {"is-invalid": isInvalid}) }}" value="{{ setting.value }}" placeholder="{{ setting.placeholder|trans }}" {% if setting.required %}required{% endif %}/>
