@@ -1,3 +1,5 @@
+language-title: "Deutsch"
+
 unknown-title: "Unbekannt"
 runtime: "{runtime} min"
 sort-by: "Sortieren nach"
@@ -194,6 +196,8 @@ library-management:
 settings:
   title: "Einstellungen"
   section:
+    localization:
+      label: "Lokalisierung"
     overview:
       label: "Übersicht"
     shows:
@@ -201,6 +205,13 @@ settings:
   flash:
     saved: "Einstellungen erfolgreich gespeichert."
     error: "Beim Speichern der Einstellungen ist ein Fehler aufgetreten."
+  localization:
+    language:
+      label: "Sprache"
+      option:
+        auto: "Browsersprache"
+        de: "Deutsch"
+        en: "Englisch"
   overview:
     max-episodes:
       label: "Maximale Anzahl anzuzeigender Folgen"

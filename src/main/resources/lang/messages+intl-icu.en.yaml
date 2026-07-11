@@ -198,6 +198,8 @@ library-management:
 settings:
   title: "Settings"
   section:
+    localization:
+      label: "Localization"
     overview:
       label: "Overview"
     shows:
@@ -205,6 +207,13 @@ settings:
   flash:
     saved: "Settings saved successfully."
     error: "An error occurred while saving settings."
+  localization:
+    language:
+      label: "Language"
+      option:
+        auto: "Browser language"
+        de: "German"
+        en: "English"
   overview:
     max-episodes:
       label: "Maximum number of episodes to show"

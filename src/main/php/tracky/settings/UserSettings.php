@@ -7,6 +7,7 @@ use tracky\orm\SettingRepository;
 use tracky\settings\type\Checkbox;
 use tracky\settings\type\Number;
 use tracky\settings\type\Section;
+use tracky\settings\type\Select;
 use tracky\settings\type\Type;
 
 class UserSettings
@@ -22,11 +23,19 @@ class UserSettings
     )
     {
         $options = [
+            new Section("localization", "settings.section.localization.label"),
+            new Select("language", "settings.localization.language.label", "auto", [
+                "auto" => "settings.localization.language.option.auto",
+                "de" => "settings.localization.language.option.de",
+                "en" => "settings.localization.language.option.en"
+            ]),
+
             new Section("overview", "settings.section.overview.label"),
             new Number("overviewMaxEpisodes", "settings.overview.max-episodes.label", default: 8, min: 4, max: 16),
             new Number("overviewMaxMovies", "settings.overview.max-movies.label", default: 8, min: 4, max: 16),
             new Number("overviewMaxNextEpisodeShows", "settings.overview.max-next-episode-shows.label", default: 8, min: 4, max: 16),
             new Number("overviewMaxNextEpisodeShows", "settings.overview.max-next-episode-shows.label", default: 8, min: 4, max: 16),
+
             new Section("shows", "settings.section.shows.label"),
             new Number("showsMaxEpisodes", "settings.shows.max-episodes.label", default: 10, min: 5, max: 60),
             new Checkbox("hideShows", "settings.shows.hide-shows.label", options: [
@@ -34,6 +43,7 @@ class UserSettings
                 "finished" => "settings.shows.hide-shows.option.finished",
                 "unwatched" => "settings.shows.hide-shows.option.unwatched",
             ]),
+
             /*
             new Select("exampleSelect", "settings.example-select.label", default: "foo", options: [
                 "foo" => "Foo",
