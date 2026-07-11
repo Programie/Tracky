@@ -10,7 +10,8 @@ class Number extends BaseType
         protected readonly string $label,
         protected readonly int $default,
         protected readonly int $min = 0,
-        protected readonly int $max = PHP_INT_MAX
+        protected readonly int $max = PHP_INT_MAX,
+        protected readonly ?string $suffixLabel = null
     )
     {
     }
@@ -33,6 +34,11 @@ class Number extends BaseType
     public function getMax(): int
     {
         return $this->max;
+    }
+
+    public function getSuffixLabel(): ?string
+    {
+        return $this->suffixLabel;
     }
 
     public function isValid(InputBag $inputBag): bool

@@ -26,12 +26,12 @@ class UserSettings
             ]),
 
             new Section("settings.section.overview.label"),
-            new Number("overviewMaxEpisodes", "settings.overview.max-episodes.label", default: 8, min: 4, max: 16),
-            new Number("overviewMaxMovies", "settings.overview.max-movies.label", default: 8, min: 4, max: 16),
-            new Number("overviewMaxNextEpisodeShows", "settings.overview.max-next-episode-shows.label", default: 8, min: 4, max: 16),
+            new Number("overviewMaxEpisodes", "settings.overview.max-episodes.label", default: 8, min: 4, max: 16, suffixLabel: "settings.items.label"),
+            new Number("overviewMaxMovies", "settings.overview.max-movies.label", default: 8, min: 4, max: 16, suffixLabel: "settings.items.label"),
+            new Number("overviewMaxNextEpisodeShows", "settings.overview.max-next-episode-shows.label", default: 8, min: 4, max: 16, suffixLabel: "settings.items.label"),
 
             new Section("settings.section.shows.label"),
-            new Number("showsMaxEpisodes", "settings.shows.max-episodes.label", default: 10, min: 5, max: 60),
+            new Number("showsMaxEpisodes", "settings.shows.max-episodes.label", default: 10, min: 5, max: 60, suffixLabel: "settings.items.label"),
             new Checkbox("hideShows", "settings.shows.hide-shows.label", options: [
                 "ended"    => "settings.shows.hide-shows.option.ended",
                 "finished" => "settings.shows.hide-shows.option.finished",
