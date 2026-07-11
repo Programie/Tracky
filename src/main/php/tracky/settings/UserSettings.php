@@ -70,6 +70,29 @@ class UserSettings
         return $this->options;
     }
 
+    /**
+     * @return array<string, list<Type>>
+     */
+    public function getOptionsGroupedBySections(): array
+    {
+        $perSectionOptions = [];
+        $section = null;
+
+        foreach ($this->options as $option) {
+            if ($option instanceof Section) {
+                $section = $option->getName();
+                $perSectionOptions[$section] = [
+                    "section" => $option,
+                    "options" => []
+                ];
+            } elseif ($section !== null) {
+                $perSectionOptions[$section]["options"][] = $option;
+            }
+        }
+
+        return $perSectionOptions;
+    }
+
     public function getOptionValue(string $name)
     {
         return $this->getOption($name)?->getValue();

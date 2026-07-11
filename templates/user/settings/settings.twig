@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="container mt-4">
-        <h2>{{ "settings.title"|trans }}</h2>
+        <h1>{{ "settings.title"|trans }}</h1>
 
         {% if app.request.query.get("flash") == "success" %}
             <div class="alert alert-success">{{ "settings.flash.saved"|trans }}</div>
@@ -13,10 +13,18 @@
         {% endif %}
 
         <form method="post" action="{{ path("settings_save_action") }}" class="mt-3">
-            {% for setting in settings %}
-                {% set isInvalid = app.request.query.get("flash") == "error" and app.request.query.get("option") == setting.name %}
-                <div class="mb-3">
-                    {% include "user/settings/type/" ~ setting.type ~ ".twig" %}
+            {% for section in groupedSettings %}
+                <div class="card my-3">
+                    <div class="card-body">
+                        <h3 class="card-title text-primary">{{ section.section.label|trans }}</h3>
+
+                        {% for setting in section.options %}
+                            {% set isInvalid = app.request.query.get("flash") == "error" and app.request.query.get("option") == setting.name %}
+                            <div class="mt-3">
+                                {% include "user/settings/type/" ~ setting.type ~ ".twig" %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             {% endfor %}
 

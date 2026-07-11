@@ -22,7 +22,7 @@ class SettingsController extends AbstractController
         $user = $this->getUser();
 
         return $this->render("user/settings/settings.twig", [
-            "settings" => $user->getSettings()->getOptions()
+            "groupedSettings" => $user->getSettings()->getOptionsGroupedBySections()
         ]);
     }
 
