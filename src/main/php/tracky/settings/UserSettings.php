@@ -18,7 +18,7 @@ class UserSettings
     {
         $options = [
             new Section("settings.section.localization.label"),
-            new Select("language", "settings.localization.language.label", "auto", [
+            new Select(SettingName::LANGUAGE, "settings.localization.language.label", "auto", [
                 "auto" => "settings.localization.language.option.auto",
                 null,
                 "de" => "settings.localization.language.option.de",
@@ -26,21 +26,21 @@ class UserSettings
             ]),
 
             new Section("settings.section.overview.label"),
-            new Number("overviewMaxEpisodes", "settings.overview.max-episodes.label", default: 8, min: 4, max: 16, suffixLabel: "settings.items.label"),
-            new Number("overviewMaxMovies", "settings.overview.max-movies.label", default: 8, min: 4, max: 16, suffixLabel: "settings.items.label"),
-            new Number("overviewMaxNextEpisodeShows", "settings.overview.max-next-episode-shows.label", default: 8, min: 4, max: 16, suffixLabel: "settings.items.label"),
+            new Number(SettingName::OVERVIEW_MAX_EPISODES, "settings.overview.max-episodes.label", default: 8, min: 4, max: 16, suffixLabel: "settings.items.label"),
+            new Number(SettingName::OVERVIEW_MAX_MOVIES, "settings.overview.max-movies.label", default: 8, min: 4, max: 16, suffixLabel: "settings.items.label"),
+            new Number(SettingName::OVERVIEW_MAX_NEXT_EPISODE_SHOWS, "settings.overview.max-next-episode-shows.label", default: 8, min: 4, max: 16, suffixLabel: "settings.items.label"),
 
             new Section("settings.section.shows.label"),
-            new Number("showsMaxEpisodes", "settings.shows.max-episodes.label", default: 10, min: 5, max: 60, suffixLabel: "settings.items.label"),
-            new Checkbox("hideShows", "settings.shows.hide-shows.label", options: [
+            new Number(SettingName::SHOWS_MAX_EPISODES, "settings.shows.max-episodes.label", default: 10, min: 5, max: 60, suffixLabel: "settings.items.label"),
+            new Checkbox(SettingName::HIDE_SHOWS, "settings.shows.hide-shows.label", options: [
                 "ended"    => "settings.shows.hide-shows.option.ended",
                 "finished" => "settings.shows.hide-shows.option.finished",
                 "unwatched" => "settings.shows.hide-shows.option.unwatched",
             ]),
 
             new Section("settings.section.user-profile.label"),
-            new Number("profileHistoryItemsPerPage", "settings.user-profile.history-items-per-page.label", default: 20, min: 4, max: 100, suffixLabel: "settings.items.label"),
-            new Number("profileHistoryMaxPreviousNextPages", "settings.user-profile.history-max-previous-next-pages.label", default: 3, min: 1, max: 10, suffixLabel: "settings.items.label"),
+            new Number(SettingName::PROFILE_HISTORY_ITEMS_PER_PAGE, "settings.user-profile.history-items-per-page.label", default: 20, min: 4, max: 100, suffixLabel: "settings.items.label"),
+            new Number(SettingName::PROFILE_HISTORY_MAX_PREVIOUS_NEXT_PAGES, "settings.user-profile.history-max-previous-next-pages.label", default: 3, min: 1, max: 10, suffixLabel: "settings.items.label"),
 
             /*
             new Select("exampleSelect", "settings.example-select.label", default: "foo", options: [
@@ -97,8 +97,8 @@ class UserSettings
         return $perSectionOptions;
     }
 
-    public function getOptionValue(string $name)
+    public function getOptionValue(SettingName $name)
     {
-        return $this->getOption($name)?->getValue();
+        return $this->getOption($name->value)?->getValue();
     }
 }

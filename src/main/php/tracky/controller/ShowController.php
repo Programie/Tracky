@@ -22,6 +22,7 @@ use tracky\model\User;
 use tracky\model\View;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
+use tracky\settings\SettingName;
 use tracky\settings\UserSettings;
 use tracky\ViewType;
 use tracky\watchstats\WatchStatsProvider;
@@ -73,7 +74,7 @@ class ShowController extends AbstractController
     {
         return $this->render("shows/shows.twig", [
             "shows" => $this->showRepository->findAllWithEpisodes(),
-            "hideShows" => $this->getSettings()->getOptionValue("hideShows"),
+            "hideShows" => $this->getSettings()->getOptionValue(SettingName::HIDE_SHOWS),
         ]);
     }
 
@@ -120,7 +121,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.random-episodes",
-            "episodes" => $show->getRandomEpisodes($this->getSettings()->getOptionValue("showsMaxEpisodes")),
+            "episodes" => $show->getRandomEpisodes($this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES)),
             "displaySeason" => true
         ]);
     }
@@ -134,7 +135,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.latest-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getLatestWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue("showsMaxEpisodes"))),
+            "episodes" => array_map(fn($item) => $item[0], $show->getLatestWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES))),
             "displaySeason" => true
         ]);
     }
@@ -148,7 +149,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.most-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue("showsMaxEpisodes"), false)),
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
             "displaySeason" => true
         ]);
     }
@@ -162,7 +163,7 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.least-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue("showsMaxEpisodes"), true)),
+            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
             "displaySeason" => true
         ]);
     }

@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use tracky\model\User;
+use tracky\settings\SettingName;
 use tracky\settings\UserSettings;
 
 class LocaleSubscriber implements EventSubscriberInterface
@@ -33,7 +34,7 @@ class LocaleSubscriber implements EventSubscriberInterface
 
         $settings = $user?->getSettings() ?? new UserSettings;
 
-        $language = $settings->getOptionValue("language");
+        $language = $settings->getOptionValue(SettingName::LANGUAGE);
         if ($language === null or $language === "auto") {
             $language = $request->getPreferredLanguage();
         }

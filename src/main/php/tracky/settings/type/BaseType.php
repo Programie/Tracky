@@ -3,13 +3,14 @@ namespace tracky\settings\type;
 
 use Symfony\Component\HttpFoundation\InputBag;
 use tracky\model\UserSetting;
+use tracky\settings\SettingName;
 
 abstract class BaseType implements Type
 {
     private ?UserSetting $setting = null;
 
     public function __construct(
-        protected readonly string $name,
+        protected readonly SettingName $name,
         protected readonly string $label
     )
     {
@@ -17,7 +18,7 @@ abstract class BaseType implements Type
 
     public function getName(): string
     {
-        return $this->name;
+        return $this->name->value;
     }
 
     public function getLabel(): string

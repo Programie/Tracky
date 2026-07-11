@@ -11,6 +11,7 @@ use tracky\orm\MovieRepository;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\scrobbler\Scrobbler;
+use tracky\settings\SettingName;
 use tracky\settings\UserSettings;
 use tracky\ViewType;
 use tracky\watchstats\WatchStatsProvider;
@@ -39,9 +40,9 @@ class HomeController extends AbstractController
 
         $userSettings = $user?->getSettings() ?? new UserSettings;
 
-        $maxEpisodes = $userSettings->getOption("overviewMaxEpisodes")->getValue();
-        $maxMovies = $userSettings->getOption("overviewMaxMovies")->getValue();
-        $maxNextEpisodeShows = $userSettings->getOption("overviewMaxNextEpisodeShows")->getValue();
+        $maxEpisodes = $userSettings->getOptionValue(SettingName::OVERVIEW_MAX_EPISODES);
+        $maxMovies = $userSettings->getOptionValue(SettingName::OVERVIEW_MAX_MOVIES);
+        $maxNextEpisodeShows = $userSettings->getOptionValue(SettingName::OVERVIEW_MAX_NEXT_EPISODE_SHOWS);
 
         if ($user !== null) {
             $nowWatching = $scrobbler->getNowWatching($user);

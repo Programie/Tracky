@@ -12,6 +12,7 @@ use tracky\orm\EpisodeRepository;
 use tracky\orm\MovieRepository;
 use tracky\orm\ViewRepository;
 use tracky\Pagination;
+use tracky\settings\SettingName;
 use tracky\settings\UserSettings;
 use tracky\ViewType;
 use tracky\watchstats\WatchStatsProvider;
@@ -55,8 +56,8 @@ class HistoryController extends AbstractController
         $currentUser = $this->getUser();
         $userSettings = $currentUser?->getSettings() ?? new UserSettings;
 
-        $itemsPerPage = $userSettings->getOptionValue("profileHistoryItemsPerPage");
-        $maxPreviousNextPages = $userSettings->getOptionValue("profileHistoryMaxPreviousNextPages");
+        $itemsPerPage = $userSettings->getOptionValue(SettingName::PROFILE_HISTORY_ITEMS_PER_PAGE);
+        $maxPreviousNextPages = $userSettings->getOptionValue(SettingName::PROFILE_HISTORY_MAX_PREVIOUS_NEXT_PAGES);
 
         $pagination = new Pagination($page, $count, $itemsPerPage, $maxPreviousNextPages);
 

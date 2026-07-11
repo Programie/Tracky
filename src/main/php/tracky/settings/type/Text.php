@@ -2,11 +2,12 @@
 namespace tracky\settings\type;
 
 use Symfony\Component\HttpFoundation\InputBag;
+use tracky\settings\SettingName;
 
 class Text extends BaseType
 {
     public function __construct(
-        protected readonly string $name,
+        protected readonly SettingName $name,
         protected readonly string $label,
         protected readonly string $default,
         protected readonly string $placeholder,
