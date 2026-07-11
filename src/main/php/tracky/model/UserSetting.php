@@ -6,6 +6,7 @@ use tracky\model\User;
 
 #[ORM\Entity]
 #[ORM\Table(name: "usersettings")]
+#[ORM\UniqueConstraint(columns: ["user", "name"])]
 class UserSetting
 {
     #[ORM\Id]

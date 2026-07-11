@@ -16,6 +16,7 @@ final class Version20260711145754 extends AbstractMigration
         $this->addSql('CREATE TABLE usersettings (id INT AUTO_INCREMENT NOT NULL, user INT NOT NULL, name VARCHAR(255) NOT NULL, value VARCHAR(255) NOT NULL, INDEX IDX_C9005FB28D93D649 (user), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE usersettings ADD CONSTRAINT FK_C9005FB28D93D649 FOREIGN KEY (user) REFERENCES users (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE settings DROP FOREIGN KEY FK_SETTINGS_USER');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_C9005FB28D93D6495E237E06 ON usersettings (user, name)');
         $this->addSql('DROP TABLE settings');
     }
 
