@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   app:
+    image: ghcr.io/programie/tracky:main
     volumes:
       - .:/app
       - var:/app/var
