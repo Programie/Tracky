@@ -47,8 +47,19 @@ class Checkbox extends BaseType
         return $this->options;
     }
 
+    public function isDefault(InputBag $inputBag): bool
+    {
+        $value = $this->getValueFromInputBag($inputBag);
+        return empty(array_diff(array_merge($value, $this->default), array_intersect($value, $this->default)));
+    }
+
     public function getSettingValueFromInputBag(InputBag $inputBag): string
     {
-        return implode(",", array_unique(array_filter($inputBag->all($this->getName()))));
+        return implode(",", $this->getValueFromInputBag($inputBag));
+    }
+
+    private function getValueFromInputBag(InputBag $inputBag): array
+    {
+        return array_unique(array_filter($inputBag->all($this->getName())));
     }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace tracky\settings\type;
 
+use Symfony\Component\HttpFoundation\InputBag;
+
 class Radio extends BaseType
 {
     public function __construct(
@@ -31,5 +33,10 @@ class Radio extends BaseType
     public function getOptions(): array
     {
         return $this->options;
+    }
+
+    public function isDefault(InputBag $inputBag): bool
+    {
+        return $inputBag->get($this->getName()) === $this->default;
     }
 }

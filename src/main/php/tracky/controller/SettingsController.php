@@ -35,6 +35,7 @@ class SettingsController extends AbstractController
          */
         $user = $this->getUser();
         $settingsToPersist = [];
+        $settingsToRemove = [];
 
         foreach ($user->getSettings()->getOptions() as $option) {
             if (!$option->isSavable()) {
@@ -51,19 +52,31 @@ class SettingsController extends AbstractController
             }
 
             $setting = $option->getSetting();
-            if ($setting === null) {
-                $setting = new UserSetting;
-                $setting->setUser($user);
-                $setting->setName($option->getName());
-            }
 
-            $setting->setValue($value);
-            $settingsToPersist[] = $setting;
+            if ($option->isDefault($request->request)) {
+                if ($setting !== null) {
+                    $settingsToRemove[] = $setting;
+                }
+            } else {
+                if ($setting === null) {
+                    $setting = new UserSetting;
+                    $setting->setUser($user);
+                    $setting->setName($option->getName());
+                }
+
+                $setting->setValue($value);
+                $settingsToPersist[] = $setting;
+            }
         }
 
         foreach ($settingsToPersist as $setting) {
             $entityManager->persist($setting);
         }
+
+        foreach ($settingsToRemove as $setting) {
+            $entityManager->remove($setting);
+        }
+
         $entityManager->flush();
 
         return $this->redirectToRoute("settings_page", ["flash" => "success"]);

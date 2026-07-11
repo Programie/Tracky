@@ -41,4 +41,9 @@ class Number extends BaseType
 
         return $value >= $this->min and $value <= $this->max;
     }
+
+    public function isDefault(InputBag $inputBag): bool
+    {
+        return ((int) $inputBag->getDigits($this->getName())) === $this->default;
+    }
 }

@@ -2,6 +2,7 @@
 namespace tracky\settings\type;
 
 use Exception;
+use Symfony\Component\HttpFoundation\InputBag;
 
 class Section extends BaseType
 {
@@ -29,5 +30,10 @@ class Section extends BaseType
     public function isSavable(): bool
     {
         return false;
+    }
+
+    public function isDefault(InputBag $inputBag): bool
+    {
+        throw new Exception("Not implemented");
     }
 }

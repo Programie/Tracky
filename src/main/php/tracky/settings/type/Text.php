@@ -59,4 +59,9 @@ class Text extends BaseType
 
         return true;
     }
+
+    public function isDefault(InputBag $inputBag): bool
+    {
+        return $inputBag->get($this->getName()) === $this->default;
+    }
 }
