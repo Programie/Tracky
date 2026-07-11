@@ -3,11 +3,13 @@
 ## [2.0.0] - pending
 
 - Use Doctrine to handle database migrations - importing database.sql and manually updating database no longer required
-- Improve and modernize frontend making it looking less like a basic Bootstrap page
-- Improve page load times (e.g. startpage with user logged in and TV show progress)
+- Improved and modernize frontend making it looking less like a basic Bootstrap page
+- Improved page load times (e.g. startpage with user logged in and TV show progress)
 - Show plot for shows and seasons if available
 - Show watch progress in show and season cards
 - Use TMDB as data provider for shows by default
+- Added buttons to mark a complete season as watched or unwatched
+- Per-user settings
 
 ## [1.6.0] - 2026-06-10
 
