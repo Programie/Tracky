@@ -8,23 +8,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\model\Setting;
-use tracky\orm\SettingRepository;
-use tracky\settings\UserSettings;
+use tracky\model\User;
 
 class SettingsController extends AbstractController
 {
-    public function __construct(
-        private readonly SettingRepository $settingRepository
-    )
-    {
-    }
-
     #[Route("/settings", name: "settings_page")]
     #[IsGranted("IS_AUTHENTICATED")]
     public function getSettingsPage(): Response
     {
+        /**
+         * @var User
+         */
+        $user = $this->getUser();
+
         return $this->render("user/settings/settings.twig", [
-            "settings" => (new UserSettings($this->settingRepository, $this->getUser()))->getOptions()
+            "settings" => $user->getSettings()->getOptions()
         ]);
     }
 
@@ -32,11 +30,13 @@ class SettingsController extends AbstractController
     #[IsGranted("IS_AUTHENTICATED")]
     public function saveSettings(Request $request, EntityManagerInterface $entityManager): Response
     {
+        /**
+         * @var User
+         */
         $user = $this->getUser();
-        $userSettings = new UserSettings($this->settingRepository, $user);
         $settingsToPersist = [];
 
-        foreach ($userSettings->getOptions() as $option) {
+        foreach ($user->getSettings()->getOptions() as $option) {
             if (!$option->isSavable()) {
                 continue;
             }

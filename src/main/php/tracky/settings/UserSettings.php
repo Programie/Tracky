@@ -1,9 +1,6 @@
 <?php
 namespace tracky\settings;
 
-use tracky\model\Setting;
-use tracky\model\User;
-use tracky\orm\SettingRepository;
 use tracky\settings\type\Checkbox;
 use tracky\settings\type\Number;
 use tracky\settings\type\Section;
@@ -17,10 +14,7 @@ class UserSettings
      */
     private array $options = [];
 
-    public function __construct(
-        private readonly SettingRepository $settingRepository,
-        private readonly ?User $user
-    )
+    public function __construct()
     {
         $options = [
             new Section("localization", "settings.section.localization.label"),
@@ -59,19 +53,7 @@ class UserSettings
             */
         ];
 
-        /**
-         * @var array<string, Setting>
-         */
-        $settings = [];
-
-        if ($user !== null) {
-            foreach ($this->settingRepository->findBy(["user" => $this->user]) as $setting) {
-                $settings[$setting->getSetting()] = $setting;
-            }
-        }
-
         foreach ($options as $option) {
-            $option->setSetting($settings[$option->getName()] ?? null);
             $this->options[$option->getName()] = $option;
         }
     }

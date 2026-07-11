@@ -5,9 +5,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use tracky\HistoryEntry;
+use tracky\model\User;
 use tracky\orm\EpisodeRepository;
 use tracky\orm\MovieRepository;
-use tracky\orm\SettingRepository;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\scrobbler\Scrobbler;
@@ -24,7 +24,6 @@ class HomeController extends AbstractController
         MovieRepository $movieRepository,
         ViewRepository $viewRepository,
         WatchStatsProvider $watchStatsProvider,
-        SettingRepository $settingRepository,
         Scrobbler $scrobbler
     ): Response
     {
@@ -33,13 +32,17 @@ class HomeController extends AbstractController
         $latestWatchedMovies = null;
         $nextEpisodes = null;
 
-        $userSettings = new UserSettings($settingRepository, $this->getUser());
+        /**
+         * @var User
+         */
+        $user = $this->getUser();
+
+        $userSettings = $user?->getSettings() ?? new UserSettings;
 
         $maxEpisodes = $userSettings->getOption("overviewMaxEpisodes")->getValue();
         $maxMovies = $userSettings->getOption("overviewMaxMovies")->getValue();
         $maxNextEpisodeShows = $userSettings->getOption("overviewMaxNextEpisodeShows")->getValue();
 
-        $user = $this->getUser();
         if ($user !== null) {
             $nowWatching = $scrobbler->getNowWatching($user);
 

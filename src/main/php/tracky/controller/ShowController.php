@@ -18,8 +18,8 @@ use tracky\ImageFetcher;
 use tracky\model\Episode;
 use tracky\model\Season;
 use tracky\model\Show;
+use tracky\model\User;
 use tracky\model\View;
-use tracky\orm\SettingRepository;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
 use tracky\settings\UserSettings;
@@ -30,8 +30,7 @@ class ShowController extends AbstractController
 {
     public function __construct(
         private readonly ShowRepository $showRepository,
-        private readonly ViewRepository $viewRepository,
-        private readonly SettingRepository $settingRepository,
+        private readonly ViewRepository $viewRepository
     )
     {
     }
@@ -371,6 +370,11 @@ class ShowController extends AbstractController
 
     private function getSettings(): UserSettings
     {
-        return new UserSettings($this->settingRepository, $this->getUser());
+        /**
+         * @var User
+         */
+        $user = $this->getUser();
+
+        return $user?->getSettings() ?? new UserSettings;
     }
 }

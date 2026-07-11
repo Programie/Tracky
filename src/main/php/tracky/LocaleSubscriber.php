@@ -7,13 +7,11 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use tracky\model\User;
-use tracky\orm\SettingRepository;
 use tracky\settings\UserSettings;
 
 class LocaleSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly SettingRepository $settingRepository,
         private readonly Security $security,
         private readonly TranslatorInterface $translator
     )
@@ -33,7 +31,7 @@ class LocaleSubscriber implements EventSubscriberInterface
          */
         $user = $this->security->getUser();
 
-        $settings = new UserSettings($this->settingRepository, $user);
+        $settings = $user?->getSettings() ?? new UserSettings;
 
         $language = $settings->getOptionValue("language");
         if ($language === null or $language === "auto") {
