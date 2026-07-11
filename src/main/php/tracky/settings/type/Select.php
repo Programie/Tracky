@@ -8,7 +8,7 @@ class Select extends BaseType
         protected readonly string $label,
         protected readonly string $default,
         /**
-         * @var array<string, string>
+         * @var array<string, string | null>
          */
         protected readonly array $options
     )
@@ -26,7 +26,7 @@ class Select extends BaseType
     }
 
     /**
-     * @var array<string, string>
+     * @var array<string, string | null>
      */
     public function getOptions(): array
     {

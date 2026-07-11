@@ -26,6 +26,7 @@ class UserSettings
             new Section("localization", "settings.section.localization.label"),
             new Select("language", "settings.localization.language.label", "auto", [
                 "auto" => "settings.localization.language.option.auto",
+                null,
                 "de" => "settings.localization.language.option.de",
                 "en" => "settings.localization.language.option.en"
             ]),
