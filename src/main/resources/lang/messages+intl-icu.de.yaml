@@ -140,6 +140,8 @@ movies:
     runtime: "Filmlänge"
     playCount: "Anzahl gesehen"
     lastPlayed: "Zuletzt gesehen"
+  details:
+    title: "Details"
 
 views:
   views: "{count} mal gesehen"

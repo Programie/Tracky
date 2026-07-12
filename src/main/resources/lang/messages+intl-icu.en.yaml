@@ -138,6 +138,8 @@ movies:
     runtime: "Runtime"
     playCount: "Play count"
     lastPlayed: "Last played"
+  details:
+    title: "Details"
 
 views:
   views: >-

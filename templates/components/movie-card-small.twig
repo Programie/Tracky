@@ -14,10 +14,12 @@
 
         <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ movie.year }}</small>
 
-        {% set itemWatchStats = watchStatsProvider.getItemStats(movie) %}
-        {% if itemWatchStats %}
-            <small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ "views.views"|trans({"%count%": itemWatchStats.count}) }}</small>
-            <small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ itemWatchStats.lastWatched|format_datetime }}</small>
+        {% if showWatchStats ?? true %}
+            {% set itemWatchStats = watchStatsProvider.getItemStats(movie) %}
+            {% if itemWatchStats %}
+                <small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ "views.views"|trans({"%count%": itemWatchStats.count}) }}</small>
+                <small class="d-block text-body-secondary"><i class="fa-regular fa-eye"></i> {{ itemWatchStats.lastWatched|format_datetime }}</small>
+            {% endif %}
         {% endif %}
     </div>
 </div>

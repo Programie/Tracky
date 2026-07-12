@@ -168,6 +168,10 @@ html {
     }
 }
 
+#movie-set .card {
+    flex: 0 0 200px;
+}
+
 #nav-searchbar {
     width: 100%;
     max-width: 700px;

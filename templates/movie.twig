@@ -16,21 +16,6 @@
                     {% if movie.tagline is not null %}
                         <small class="d-block text-body-secondary fst-italic my-2">{{ movie.tagline }}</small>
                     {% endif %}
-
-                    <div class="my-2">
-                        {% if movie.tmdbId %}
-                            <a href="https://www.themoviedb.org/movie/{{ movie.tmdbId }}" class="badge text-bg-secondary" target="_blank">TMDB</a>
-                        {% endif %}
-                        {% if movie.tvdbId %}
-                            <a href="https://www.thetvdb.com/dereferrer/movie/{{ movie.tvdbId }}" class="badge text-bg-secondary" target="_blank">TVDB</a>
-                        {% endif %}
-                    </div>
-
-                    {% if movie.runtime is not null %}
-                        <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
-                    {% endif %}
-
-                    <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ movie.year }}</small>
                 </div>
 
                 {% include "components/view-buttons.twig" with {"type": "movie", "item": movie} only %}
@@ -44,11 +29,36 @@
         </div>
     </div>
 
-    {% if movie.movieSet %}
-        <div class="mt-4">
-            <h2>{{ movie.movieSet.title }}</h2>
+    <div class="row mt-3">
+        <div class="col-lg-3 col-12">
+            <h3 class="mb-3">{{ "movies.details.title"|trans }}</h3>
 
-            {% include "components/movie-list-small.twig" with {"movies": movie.movieSet.movies} %}
+            <div class="vstack gap-2 mx-auto">
+                {% if movie.tmdbId %}
+                    <a href="https://www.themoviedb.org/movie/{{ movie.tmdbId }}" class="badge text-bg-secondary" target="_blank">TMDB</a>
+                {% endif %}
+                {% if movie.tvdbId %}
+                    <a href="https://www.thetvdb.com/dereferrer/movie/{{ movie.tvdbId }}" class="badge text-bg-secondary" target="_blank">TVDB</a>
+                {% endif %}
+
+                {% if movie.runtime is not null %}
+                    <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
+                {% endif %}
+
+                <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ movie.year }}</small>
+            </div>
         </div>
-    {% endif %}
+
+        <div class="col-lg-9 col-12">
+            {% if movie.movieSet %}
+                <h3 class="mb-3">{{ movie.movieSet.title }}</h3>
+
+                <div class="overflow-x-auto d-flex flex-nowrap gap-3 pb-3" id="movie-set">
+                    {% for thisMovie in movie.movieSet.movies %}
+                        {% include "components/movie-card-small.twig" with {"movie": thisMovie, "showWatchStats": false} %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
