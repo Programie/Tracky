@@ -3,6 +3,7 @@ namespace tracky\dataprovider;
 
 use tracky\model\Episode;
 use tracky\model\Movie;
+use tracky\model\MovieSet;
 use tracky\model\Season;
 use tracky\model\Show;
 
@@ -10,9 +11,7 @@ interface Provider
 {
     public function getIdFieldName(): string;
 
-    public function setIdForShow(Show $show, mixed $id): void;
-
-    public function setIdForMovie(Movie $movie, mixed $id): void;
+    public function setIdForEntity(Show|Movie|MovieSet $entity, mixed $id): void;
 
     public function getIdFromUniqueIds(array $uniqueIds): mixed;
 
@@ -23,6 +22,8 @@ interface Provider
     public function fetchEpisode(Episode $episode): bool;
 
     public function fetchMovie(Movie $movie): bool;
+
+    public function fetchMovieSet(MovieSet $movieSet): bool;
 
     public function searchShow(string $query, ?int $year): array;
 

@@ -10,8 +10,11 @@ use tracky\datetime\Date;
 use tracky\datetime\DateTime;
 use tracky\model\Episode;
 use tracky\model\Movie;
+use tracky\model\MovieSet;
 use tracky\model\Season;
 use tracky\model\Show;
+use tracky\orm\MovieRepository;
+use tracky\orm\MovieSetRepository;
 use UnexpectedValueException;
 
 class TVDB implements Provider
@@ -19,12 +22,14 @@ class TVDB implements Provider
     private ?Client $client = null;
 
     public function __construct(
-        private readonly string $baseUrl,
-        private readonly string $apiKey,
-        private readonly string $authTokenFilePath,
-        private readonly int    $maxAuthTokenAge,
-        private readonly string $defaultMovieLanguage,
-        private readonly string $defaultShowLanguage
+        private readonly string             $baseUrl,
+        private readonly string             $apiKey,
+        private readonly string             $authTokenFilePath,
+        private readonly int                $maxAuthTokenAge,
+        private readonly string             $defaultMovieLanguage,
+        private readonly string             $defaultShowLanguage,
+        private readonly MovieRepository    $movieRepository,
+        private readonly MovieSetRepository $movieSetRepository
     ) {}
 
     private function refreshToken(): void
@@ -148,14 +153,9 @@ class TVDB implements Provider
         return "tvdbId";
     }
 
-    public function setIdForShow(Show $show, mixed $id): void
+    public function setIdForEntity(Show|Movie|MovieSet $entity, mixed $id): void
     {
-        $show->setTvdbId($id);
-    }
-
-    public function setIdForMovie(Movie $movie, mixed $id): void
-    {
-        $movie->setTvdbId($id);
+        $entity->setTvdbId($id);
     }
 
     public function getIdFromUniqueIds(array $uniqueIds): ?int
@@ -313,7 +313,7 @@ class TVDB implements Provider
             return false;
         }
 
-        $data = $this->getJson(sprintf("movies/%d", $tvdbId));
+        $data = $this->getJson(sprintf("movies/%d/extended", $tvdbId));
         if ($data === null) {
             return false;
         }
@@ -340,6 +340,67 @@ class TVDB implements Provider
             $movie->setTitle($translationData["name"]);
             $movie->setTagline($translationData["tagline"] ?? null);
             $movie->setPlot($translationData["overview"] ?? null);
+        }
+
+        $listData = null;
+
+        foreach ($data["lists"] ?? [] as $list) {
+            if ($list["isOfficial"] ?? false) {
+                $listData = $list;
+                break;
+            }
+        }
+
+        if ($listData !== null) {
+            $listId = $listData["id"];
+
+            $movieSet = $this->movieSetRepository->findOneBy(["tvdbId" => $listId]);
+            if ($movieSet === null) {
+                $movieSet = new MovieSet;
+                $movieSet->setTvdbId($listId);
+            }
+
+            $movieSet->setTitle($listData["name"]);
+            $movie->setMovieSet($movieSet);
+        } else {
+            $movie->setMovieSet(null);
+        }
+
+        return true;
+    }
+
+    public function fetchMovieSet(MovieSet $movieSet): bool
+    {
+        $tvdbId = $movieSet->getTvdbId();
+        if ($tvdbId === null) {
+            return false;
+        }
+
+        $listData = $this->getJson(sprintf("lists/%d/extended", $tvdbId));
+
+        $movieSet->setTitle($listData["name"]);
+        $movieSet->setPlot($listData["overview"] ?? null);
+        $movieSet->setPosterImageUrl($this->getImageUrl($listData["image"] ?? null));
+
+        foreach ($listData["entities"] ?? [] as $entity) {
+            $movie = $this->movieRepository->findOneBy(["tvdbId" => $entity["movieId"]]);
+
+            if ($movie === null) {
+                $movie = new Movie;
+                $this->setIdForEntity($movie, $entity["movieId"]);
+                $movieSet->addMovie($movie);
+            }
+
+            $this->fetchMovie($movie);
+        }
+
+        $translationData = $this->getJson(sprintf("lists/%d/translations/%s", $tvdbId, $this->getMovieLanguage($movieSet)));
+        if ($translationData !== null) {
+            $title = $translationData["name"] ?? null;
+            if ($title !== null) {
+                $movieSet->setTitle($title);
+            }
+            $movieSet->setPlot($translationData["overview"] ?? null);
         }
 
         return true;
@@ -392,7 +453,7 @@ class TVDB implements Provider
         return $show->getLanguage() ?? $this->defaultShowLanguage;
     }
 
-    private function getMovieLanguage(Movie $movie): string
+    private function getMovieLanguage(Movie|MovieSet $movie): string
     {
         return $movie->getLanguage() ?? $this->defaultMovieLanguage;
     }

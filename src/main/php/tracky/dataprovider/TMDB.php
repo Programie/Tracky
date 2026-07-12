@@ -8,17 +8,22 @@ use tracky\datetime\Date;
 use tracky\datetime\DateTime;
 use tracky\model\Episode;
 use tracky\model\Movie;
+use tracky\model\MovieSet;
 use tracky\model\Season;
 use tracky\model\Show;
+use tracky\orm\MovieRepository;
+use tracky\orm\MovieSetRepository;
 
 class TMDB implements Provider
 {
     private Client $client;
 
     public function __construct(
-        string                  $apiToken,
-        private readonly string $defaultMovieLanguage,
-        private readonly string $defaultShowLanguage
+        string                              $apiToken,
+        private readonly string             $defaultMovieLanguage,
+        private readonly string             $defaultShowLanguage,
+        private readonly MovieRepository    $movieRepository,
+        private readonly MovieSetRepository $movieSetRepository
     )
     {
         $this->client = new Client([
@@ -95,14 +100,9 @@ class TMDB implements Provider
         return "tmdbId";
     }
 
-    public function setIdForShow(Show $show, mixed $id): void
+    public function setIdForEntity(Show|Movie|MovieSet $entity, mixed $id): void
     {
-        $show->setTmdbId($id);
-    }
-
-    public function setIdForMovie(Movie $movie, mixed $id): void
-    {
-        $movie->setTmdbId($id);
+        $entity->setTmdbId($id);
     }
 
     public function getIdFromUniqueIds(array $uniqueIds): ?int
@@ -237,11 +237,55 @@ class TMDB implements Provider
         $movie->setPosterImageUrl($this->getImageUrl($movieData["poster_path"] ?? null));
         $movie->setRuntime($movieData["runtime"] ?? null);
 
+        $belongsToCollection = $movieData["belongs_to_collection"] ?? null;
+        $collectionId = $belongsToCollection["id"] ?? null;
+        if ($collectionId) {
+            $movieSet = $this->movieSetRepository->findOneBy(["tmdbId" => $collectionId]);
+
+            if ($movieSet === null) {
+                $movieSet = new MovieSet;
+                $movieSet->setTmdbId($collectionId);
+            }
+
+            $movieSet->setTitle($belongsToCollection["name"]);
+            $movie->setMovieSet($movieSet);
+        } else {
+            $movie->setMovieSet(null);
+        }
+
         $externalIds = $this->getJson(sprintf("movie/%d/external_ids", $tmdbId));
 
         $tvdb_id = $externalIds["tvdb_id"] ?? null;
         if ($tvdb_id) {
             $movie->setTvdbId($tvdb_id);
+        }
+
+        return true;
+    }
+
+    public function fetchMovieSet(MovieSet $movieSet): bool
+    {
+        $tmdbId = $movieSet->getTmdbId();
+        if ($tmdbId === null) {
+            return false;
+        }
+
+        $collectionData = $this->getLocalizedJson(sprintf("collection/%d", $tmdbId), $movieSet->getLanguage(), $this->defaultMovieLanguage);
+
+        $movieSet->setTitle($collectionData["name"]);
+        $movieSet->setPlot($collectionData["overview"] ?? null);
+        $movieSet->setPosterImageUrl($this->getImageUrl($collectionData["poster_path"] ?? null));
+
+        foreach ($collectionData["parts"] ?? [] as $part) {
+            $movie = $this->movieRepository->findOneBy(["tmdbId" => $part["id"]]);
+
+            if ($movie === null) {
+                $movie = new Movie;
+                $this->setIdForEntity($movie, $part["id"]);
+                $movieSet->addMovie($movie);
+            }
+
+            $this->fetchMovie($movie);
         }
 
         return true;

@@ -39,6 +39,10 @@ class Movie extends BaseEntity
     #[ORM\Column(type: "integer", nullable: true)]
     private ?int $year;
 
+    #[ORM\ManyToOne(targetEntity: MovieSet::class, cascade: ["persist"])]
+    #[ORM\JoinColumn(name: "movieset", referencedColumnName: "id")]
+    private ?MovieSet $movieSet;
+
     public function getTitle(): string
     {
         return $this->title;
@@ -69,6 +73,17 @@ class Movie extends BaseEntity
     public function setYear(?int $year): Movie
     {
         $this->year = $year;
+        return $this;
+    }
+
+    public function getMovieSet(): ?MovieSet
+    {
+        return $this->movieSet;
+    }
+
+    public function setMovieSet(?MovieSet $movieSet): Movie
+    {
+        $this->movieSet = $movieSet;
         return $this;
     }
 

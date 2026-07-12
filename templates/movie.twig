@@ -43,4 +43,12 @@
             </div>
         </div>
     </div>
+
+    {% if movie.movieSet %}
+        <div class="mt-4">
+            <h2>{{ movie.movieSet.title }}</h2>
+
+            {% include "components/movie-list-small.twig" with {"movies": movie.movieSet.movies} %}
+        </div>
+    {% endif %}
 {% endblock %}

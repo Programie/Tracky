@@ -10,6 +10,7 @@
 - Use TMDB as data provider for shows by default
 - Added buttons to mark a complete season as watched or unwatched
 - Per-user settings
+- Add movie sets
 
 ## [1.6.0] - 2026-06-10
 

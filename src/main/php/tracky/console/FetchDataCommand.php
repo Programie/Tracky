@@ -10,8 +10,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use tracky\dataprovider\Helper;
 use tracky\ImageFetcher;
 use tracky\model\Movie;
+use tracky\model\MovieSet;
 use tracky\model\Show;
 use tracky\orm\MovieRepository;
+use tracky\orm\MovieSetRepository;
 use tracky\orm\ShowRepository;
 use UnexpectedValueException;
 
@@ -21,6 +23,7 @@ class FetchDataCommand extends Command
     public function __construct(
         private readonly Helper                 $dataProviderHelper,
         private readonly MovieRepository        $movieRepository,
+        private readonly MovieSetRepository     $movieSetRepository,
         private readonly ShowRepository         $showRepository,
         private readonly ImageFetcher           $imageFetcher,
         private readonly EntityManagerInterface $entityManager,
@@ -32,8 +35,8 @@ class FetchDataCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument("type", InputArgument::REQUIRED, "The type (movie or show)");
-        $this->addArgument("id", InputArgument::REQUIRED, "The movie or show ID");
+        $this->addArgument("type", InputArgument::REQUIRED, "The type (movie, movieset or show)");
+        $this->addArgument("id", InputArgument::REQUIRED, "The ID for the movie, movieset or show");
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -48,7 +51,7 @@ class FetchDataCommand extends Command
                  */
                 $show = $this->showRepository->findOneBy(["id" => $id]);
                 if ($show === null) {
-                    throw new UnexpectedValueException(sprintf("Show with ID %d not found", $show));
+                    throw new UnexpectedValueException(sprintf("Show with ID %d not found", $id));
                 }
 
                 $dataProvider = $this->dataProviderHelper->getProviderByEntry($show);
@@ -74,7 +77,7 @@ class FetchDataCommand extends Command
                  */
                 $movie = $this->movieRepository->findOneBy(["id" => $id]);
                 if ($movie === null) {
-                    throw new UnexpectedValueException(sprintf("Movie with ID %d not found", $movie));
+                    throw new UnexpectedValueException(sprintf("Movie with ID %d not found", $id));
                 }
 
                 $dataProvider = $this->dataProviderHelper->getProviderByEntry($movie);
@@ -92,6 +95,32 @@ class FetchDataCommand extends Command
                     $output->writeln(sprintf("Fetching images for movie %d (%s)", $id, $movie->getTitle()));
 
                     $movie->fetchPosterImage($this->imageFetcher);
+                }
+                break;
+            case Helper::TYPE_MOVIE_SET:
+                /**
+                 * @var MovieSet
+                 */
+                $movieSet = $this->movieSetRepository->findOneBy(["id" => $id]);
+                if ($movieSet === null) {
+                    throw new UnexpectedValueException(sprintf("Movie set with ID %d not found", $id));
+                }
+
+                $dataProvider = $this->dataProviderHelper->getProviderByEntry($movieSet);
+
+                $output->writeln(sprintf("Fetching data for movie set %d (%s) using provider %s", $id, $movieSet->getTitle(), $dataProvider::class));
+
+                if (!$dataProvider->fetchMovieSet($movieSet)) {
+                    throw new UnexpectedValueException("Fetching movie set failed");
+                }
+
+                $this->entityManager->persist($movieSet);
+                $this->entityManager->flush();
+
+                if ($this->downloadAllImages) {
+                    $output->writeln(sprintf("Fetching images for movie set %d (%s)", $id, $movieSet->getTitle()));
+
+                    $movieSet->fetchPosterImage($this->imageFetcher);
                 }
                 break;
             default:

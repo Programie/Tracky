@@ -83,7 +83,7 @@ class LibraryManagementController extends AbstractController
             case Helper::TYPE_MOVIE:
                 $movie = new Movie;
 
-                $dataProvider->setIdForMovie($movie, $id);
+                $dataProvider->setIdForEntity($movie, $id);
                 $dataProvider->fetchMovie($movie);
 
                 $entityManager->persist($movie);
@@ -93,7 +93,7 @@ class LibraryManagementController extends AbstractController
             case Helper::TYPE_SHOW:
                 $show = new Show;
 
-                $dataProvider->setIdForShow($show, $id);
+                $dataProvider->setIdForEntity($show, $id);
                 $dataProvider->fetchShow($show, false);
 
                 $entityManager->persist($show);
