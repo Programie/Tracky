@@ -104,8 +104,13 @@ html {
 }
 
 .card-plot {
-    max-height: 200px;
     overflow-y: auto;
+    max-height: 150px;
+
+    @media (min-width: 768px) {
+        height: 150px;
+        max-height: inherit;
+    }
 }
 
 .show-card-progress, .season-card-progress {
