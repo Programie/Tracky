@@ -17,6 +17,8 @@
             {% set year = firstMovie.year ~ " - " ~ lastMovie.year %}
         {% endif %}
 
+        <small class="d-block text-body-secondary"><i class="fa-solid fa-film"></i> {{ "movies.count"|trans({"%count%": movieSet.movies|length}) }}</small>
+        <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movieSet.runtime}) }}</small>
         <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ year }}</small>
     </div>
 </div>

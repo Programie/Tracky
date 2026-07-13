@@ -41,7 +41,7 @@ class MovieSet extends BaseEntity
         return $this->movies;
     }
 
-        /**
+    /**
      * @param Movie[] $movies
      * @return MovieSet
      */
@@ -55,5 +55,16 @@ class MovieSet extends BaseEntity
     {
         $this->movies[] = $movie;
         return $this;
+    }
+
+    public function getRuntime(): int
+    {
+        $runtime = 0;
+
+        foreach ($this->getMovies() as $movie) {
+            $runtime += $movie->getRuntime();
+        }
+
+        return $runtime;
     }
 }

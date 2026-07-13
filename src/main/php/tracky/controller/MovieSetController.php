@@ -33,7 +33,7 @@ class MovieSetController extends AbstractController
 
         list($sortField, $sortDirection) = $sort + ["", ""];
 
-        $sortOptions = ["title", "year"];
+        $sortOptions = ["title", "year", "runtime"];
 
         if (!in_array($sortField, $sortOptions)) {
             $sortField = "title";
@@ -57,6 +57,10 @@ class MovieSetController extends AbstractController
                 case "year":
                     $value1 = $movieSet1->getMovies()[0]->getYear();
                     $value2 = $movieSet2->getMovies()[0]->getYear();
+                    break;
+                case "runtime":
+                    $value1 = $movieSet1->getRuntime();
+                    $value2 = $movieSet2->getRuntime();
                     break;
             }
 
