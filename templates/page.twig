@@ -55,6 +55,7 @@
                     <ul class="nav nav-pills flex-column mb-auto">
                         {{ _self.navItem(icon_classes: "fa-solid fa-tv", path: "shows_page", route_starts_with: "shows_", title: "navbar.shows"|trans) }}
                         {{ _self.navItem(icon_classes: "fa-solid fa-film", path: "movies_page", route_starts_with: "movies_", title: "navbar.movies"|trans) }}
+                        {{ _self.navItem(icon_classes: "fa-solid fa-layer-group", path: "moviesets_page", route_starts_with: "moviesets_", title: "navbar.movie-sets"|trans) }}
                         {% if is_granted("IS_AUTHENTICATED") %}
                             {{ _self.navItem(icon_classes: "fa-solid fa-wrench", path: "library_management_page", route_starts_with: "library_", title: "library-management.title"|trans) }}
                         {% endif %}

@@ -83,6 +83,7 @@ search:
 navbar:
   shows: "Serien"
   movies: "Filme"
+  movie-sets: "Filmreihen"
 
 shows:
   season: "Staffel {number}"
@@ -142,6 +143,15 @@ movies:
     lastPlayed: "Zuletzt gesehen"
   details:
     title: "Details"
+
+movie-sets:
+  title: "Alle Filmreihen"
+  no-movie-sets-available: "Keine Filmreihen verfügbar."
+  count: >-
+    {count, plural,
+      =1    {1 Filmreihe}
+      other {# Filmreihen}
+    }
 
 views:
   views: "{count} mal gesehen"

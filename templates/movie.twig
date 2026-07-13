@@ -51,7 +51,7 @@
 
         <div class="col-lg-9 col-12">
             {% if movie.movieSet %}
-                <h3 class="mb-3">{{ movie.movieSet.title }}</h3>
+                <h3 class="mb-3"><a href="{{ path("moviesets_single_page", {"movieSet": movie.movieSet.id}) }}" class="text-reset text-decoration-none">{{ movie.movieSet.title }}</a></h3>
 
                 <div class="overflow-x-auto d-flex flex-nowrap gap-3 pb-3" id="movie-set">
                     {% for thisMovie in movie.movieSet.movies %}

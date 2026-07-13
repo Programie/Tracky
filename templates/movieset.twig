@@ -1,0 +1,15 @@
+{% extends "page.twig" %}
+
+{% block title %}{{ movieSet.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ movieSet.title }}</h1>
+
+    <small class="d-block mb-3">{{ "movies.count"|trans({"%count%": movieSet.movies|length}) }}</small>
+
+    {% if movieSet.movies %}
+        {% include "components/movie-list-small.twig" with {"movies": movieSet.movies, "watchStats": watchStats} only %}
+    {% else %}
+        <div class="alert alert-warning">{{ "movies.no-movies-available"|trans }}</div>
+    {% endif %}
+{% endblock %}

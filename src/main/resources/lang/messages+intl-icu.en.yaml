@@ -81,6 +81,7 @@ search:
 navbar:
   shows: "Shows"
   movies: "Movies"
+  movie-sets: "Movie sets"
 
 shows:
   season: "Season {number}"
@@ -140,6 +141,15 @@ movies:
     lastPlayed: "Last played"
   details:
     title: "Details"
+
+movie-sets:
+  title: "All movie sets"
+  no-movie-sets-available: "No movie sets available."
+  count: >-
+    {count, plural,
+      =1    {1 movie set}
+      other {# movie sets}
+    }
 
 views:
   views: >-

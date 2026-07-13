@@ -1,0 +1,48 @@
+{% extends "page.twig" %}
+
+{% block title %}{{ "movie-sets.title"|trans }}{% endblock %}
+
+{% block content %}
+    <h1>{{ "movie-sets.title"|trans }}</h1>
+
+    <small class="d-block">{{ "movie-sets.count"|trans({"%count%": movieSets|length}) }}</small>
+
+    <div class="row my-3">
+        <div class="col">
+            {% if is_granted("IS_AUTHENTICATED") %}
+                <a href="{{ path("library_add_page", {"type": "movie"}) }}" class="btn btn-primary">{{ "movies.add-new"|trans }}</a>
+            {% endif %}
+        </div>
+
+        <div class="col">
+            <div class="dropdown text-end">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">{{ "sort-by"|trans }} ({{ ("movies.sort." ~ sort.field)|trans }})</button>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+                    {% for field in sortOptions %}
+                        {% if sort.field == field %}
+                            {% if sort.direction == "asc" %}
+                                {% set icon = "up" %}
+                                {% set nextDirection = "desc" %}
+                            {% else %}
+                                {% set icon = "down" %}
+                                {% set nextDirection = "asc" %}
+                            {% endif %}
+                        {% else %}
+                            {% set icon = null %}
+                            {% set nextDirection = "asc" %}
+                        {% endif %}
+
+                        <li><a href="{{ path("moviesets_page", {"sort": field ~ "/" ~ nextDirection }) }}" class="{{ html_classes("dropdown-item", "d-flex", "justify-content-between", "align-items-center", {"active": sort.field == field}) }}">{{ ("movies.sort." ~ field)|trans }}{% if icon %}<i class="fa-solid fa-sort-{{ icon }}"></i>{% endif %}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% if movieSets %}
+        {% include "components/movieset-list-small.twig" with {"movieSets": movieSets} only %}
+    {% else %}
+        <div class="alert alert-warning">{{ "movie-sets.no-movie-sets-available"|trans }}</div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% set linkUrl = path("moviesets_single_page", {"movieSet": movieSet.id}) %}
+<div class="card">
+    <a href="{{ linkUrl }}">
+        <img class="card-img-top rounded-top image-poster" loading="lazy" src="{{ path("moviesets_get_image", {"movieSet": movieSet.id}) }}"/>
+    </a>
+    <div class="card-body">
+        <h5 class="card-title text-truncate" title="{{ movieSet.title }}">
+            <a href="{{ linkUrl }}" class="text-reset text-decoration-none">{{ movieSet.title }}</a>
+        </h5>
+
+        {% set firstMovie = movieSet.movies.first %}
+        {% set lastMovie = movieSet.movies.last %}
+
+        {% if firstMovie.year == lastMovie.year %}
+            {% set year = firstMovie.year %}
+        {% else %}
+            {% set year = firstMovie.year ~ " - " ~ lastMovie.year %}
+        {% endif %}
+
+        <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ year }}</small>
+    </div>
+</div>
