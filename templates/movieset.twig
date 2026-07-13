@@ -3,13 +3,55 @@
 {% block title %}{{ movieSet.title }}{% endblock %}
 
 {% block content %}
-    <h1>{{ movieSet.title }}</h1>
+    <div class="row">
+        <div class="col-lg-3 col-12">
+            <img class="img-fluid rounded fullscreen-image image-poster" loading="lazy" src="{{ path("moviesets_get_image", {"movieSet": movieSet.id}) }}"/>
+        </div>
 
-    <small class="d-block mb-3">{{ "movies.count"|trans({"%count%": movieSet.movies|length}) }}</small>
+        <div class="col-lg-9 col-12">
+            <h1>{{ movieSet.title }}</h1>
 
-    {% if movieSet.movies %}
-        {% include "components/movie-list-small.twig" with {"movies": movieSet.movies, "watchStats": watchStats} only %}
-    {% else %}
-        <div class="alert alert-warning">{{ "movies.no-movies-available"|trans }}</div>
-    {% endif %}
+            <div class="card-text mt-3">{{ movieSet.plot }}</div>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-lg-3 col-12">
+            <h3 class="mb-3">{{ "movies.details.title"|trans }}</h3>
+
+            <div class="vstack gap-2 mx-auto">
+                {% if movieSet.tmdbId %}
+                    <a href="https://www.themoviedb.org/movie/{{ movieSet.tmdbId }}" class="badge text-bg-secondary" target="_blank">TMDB</a>
+                {% endif %}
+                {% if movieSet.tvdbId %}
+                    <a href="https://www.thetvdb.com/dereferrer/movie/{{ movieSet.tvdbId }}" class="badge text-bg-secondary" target="_blank">TVDB</a>
+                {% endif %}
+
+                <small class="d-block">{{ "movies.count"|trans({"%count%": movieSet.movies|length}) }}</small>
+
+                {% set firstMovie = movieSet.movies.first %}
+                {% set lastMovie = movieSet.movies.last %}
+
+                {% if firstMovie.year == lastMovie.year %}
+                    {% set year = firstMovie.year %}
+                {% else %}
+                    {% set year = firstMovie.year ~ " - " ~ lastMovie.year %}
+                {% endif %}
+
+                <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ year }}</small>
+
+                {% if movieSet.runtime %}
+                    <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movieSet.runtime}) }}</small>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-12">
+            {% if movieSet.movies %}
+                {% include "components/movie-list-small.twig" with {"movies": movieSet.movies, "watchStats": watchStats} only %}
+            {% else %}
+                <div class="alert alert-warning">{{ "movies.no-movies-available"|trans }}</div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
