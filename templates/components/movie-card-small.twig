@@ -8,7 +8,7 @@
             <a href="{{ linkUrl }}" class="text-reset text-decoration-none">{{ movie.title }}</a>
         </h5>
 
-        {% if movie.runtime is not null %}
+        {% if movie.runtime %}
             <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
         {% endif %}
 

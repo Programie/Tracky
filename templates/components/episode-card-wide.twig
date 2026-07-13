@@ -16,7 +16,7 @@
                             {% if episode.firstAired is not null %}
                                 • <span>{{ episode.firstAired|format_date }}</span>
                             {% endif %}
-                            {% if episode.runtime is not null %}
+                            {% if episode.runtime %}
                                 • <span>{{ "runtime"|trans({"%runtime%": episode.runtime}) }}</span>
                             {% endif %}
                         </small>

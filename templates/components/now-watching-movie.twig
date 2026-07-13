@@ -14,7 +14,7 @@
                         {% endif %}
 
                         <small class="card-subtitle text-body-secondary">
-                            {% if movie.runtime is not null %}
+                            {% if movie.runtime %}
                                 <span>{{ "runtime"|trans({"%runtime%": movie.runtime}) }}</span> •
                             {% endif %}
 

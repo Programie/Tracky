@@ -41,7 +41,7 @@
                     <a href="https://www.thetvdb.com/dereferrer/movie/{{ movie.tvdbId }}" class="badge text-bg-secondary" target="_blank">TVDB</a>
                 {% endif %}
 
-                {% if movie.runtime is not null %}
+                {% if movie.runtime %}
                     <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movie.runtime}) }}</small>
                 {% endif %}
 
