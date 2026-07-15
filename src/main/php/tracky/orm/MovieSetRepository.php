@@ -2,7 +2,7 @@
 namespace tracky\orm;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use tracky\model\MovieSet;
 
@@ -24,7 +24,7 @@ class MovieSetRepository extends ServiceEntityRepository
             LEFT JOIN movieset.movies movie
         ");
 
-        $query->setFetchMode(MovieSet::class, "movies", ClassMetadataInfo::FETCH_EAGER);
+        $query->setFetchMode(MovieSet::class, "movies", ClassMetadata::FETCH_EAGER);
 
         return $query->getResult();
     }

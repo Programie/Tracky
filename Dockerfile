@@ -24,7 +24,7 @@ FROM ghcr.io/programie/php-docker
 
 ENV WEB_ROOT=/app/public
 
-RUN install-php 8.3 curl dom intl pdo-mysql && \
+RUN install-php 8.4 curl dom intl pdo-mysql && \
     a2enmod rewrite && \
     mkdir -p /app/var && \
     chown www-data: /app/var

@@ -2,7 +2,7 @@
 namespace tracky\orm;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use tracky\model\Episode;
 use tracky\model\Season;
@@ -30,8 +30,8 @@ class ShowRepository extends ServiceEntityRepository
             ORDER BY show.title ASC
         ");
 
-        $query->setFetchMode(Show::class, "seasons", ClassMetadataInfo::FETCH_EAGER);
-        $query->setFetchMode(Season::class, "episodes", ClassMetadataInfo::FETCH_EAGER);
+        $query->setFetchMode(Show::class, "seasons", ClassMetadata::FETCH_EAGER);
+        $query->setFetchMode(Season::class, "episodes", ClassMetadata::FETCH_EAGER);
 
         return $query->getResult();
     }
@@ -49,8 +49,8 @@ class ShowRepository extends ServiceEntityRepository
 
         $query->setParameter("showId", $showId);
 
-        $query->setFetchMode(Show::class, "seasons", ClassMetadataInfo::FETCH_EAGER);
-        $query->setFetchMode(Season::class, "episodes", ClassMetadataInfo::FETCH_EAGER);
+        $query->setFetchMode(Show::class, "seasons", ClassMetadata::FETCH_EAGER);
+        $query->setFetchMode(Season::class, "episodes", ClassMetadata::FETCH_EAGER);
 
         return $query->getOneOrNullResult();
     }
@@ -71,9 +71,9 @@ class ShowRepository extends ServiceEntityRepository
         $query->setParameter("showId", $showId);
         $query->setParameter("userId", $userId);
 
-        $query->setFetchMode(Show::class, "seasons", ClassMetadataInfo::FETCH_EAGER);
-        $query->setFetchMode(Season::class, "episodes", ClassMetadataInfo::FETCH_EAGER);
-        $query->setFetchMode(Episode::class, "views", ClassMetadataInfo::FETCH_EAGER);
+        $query->setFetchMode(Show::class, "seasons", ClassMetadata::FETCH_EAGER);
+        $query->setFetchMode(Season::class, "episodes", ClassMetadata::FETCH_EAGER);
+        $query->setFetchMode(Episode::class, "views", ClassMetadata::FETCH_EAGER);
 
         return $query->getOneOrNullResult();
     }
