@@ -145,6 +145,7 @@ movies:
 movie-sets:
   title: "All movie sets"
   no-movie-sets-available: "No movie sets available."
+  movies: "Movies"
   count: >-
     {count, plural,
       =1    {1 movie set}

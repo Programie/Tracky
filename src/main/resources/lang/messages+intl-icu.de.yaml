@@ -147,6 +147,7 @@ movies:
 movie-sets:
   title: "Alle Filmreihen"
   no-movie-sets-available: "Keine Filmreihen verfügbar."
+  movies: "Filme"
   count: >-
     {count, plural,
       =1    {1 Filmreihe}
