@@ -120,7 +120,7 @@ class FetchDataCommand extends Command
                 if ($this->downloadAllImages) {
                     $output->writeln(sprintf("Fetching images for movie set %d (%s)", $id, $movieSet->getTitle()));
 
-                    $movieSet->fetchPosterImage($this->imageFetcher);
+                    $movieSet->fetchPosterImages($this->imageFetcher, true);
                 }
                 break;
             default:

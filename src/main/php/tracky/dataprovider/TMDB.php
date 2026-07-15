@@ -288,6 +288,8 @@ class TMDB implements Provider
             $this->fetchMovie($movie);
         }
 
+        $movieSet->setLastUpdate(new DateTime);
+
         return true;
     }
 

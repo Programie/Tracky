@@ -403,6 +403,8 @@ class TVDB implements Provider
             $movieSet->setPlot($translationData["overview"] ?? null);
         }
 
+        $movieSet->setLastUpdate(new DateTime);
+
         return true;
     }
 

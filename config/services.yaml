@@ -24,6 +24,7 @@ services:
   tracky\console\UpdateDataCommand:
     arguments:
       $showFetchInterval: "%show-fetch-interval%"
+      $movieSetFetchInterval: "%movie-set-fetch-interval%"
       $downloadAllImages: "%image-fetcher.download-all-on-update%"
   tracky\controller\UserController:
     arguments:

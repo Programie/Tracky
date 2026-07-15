@@ -9,6 +9,7 @@ parameters:
   tvdb.shows.language: eng
   scrobbler.use-queue: false
   show-fetch-interval: 86400
+  movie-set-fetch-interval: 86400
   image-fetcher.storage-path: "%kernel.cache_dir%/images"
   image-fetcher.download-all-on-update: true
   user.enable-register: true
