@@ -15,6 +15,8 @@ services:
       DATABASE_USERNAME: tracky
       DATABASE_PASSWORD: tracky
       DATABASE_SERVER_VERSION: "11.1.2-MariaDB"
+    volumes:
+      - var:/app/var
 
   mysql:
     image: mariadb
@@ -24,3 +26,9 @@ services:
       MYSQL_DATABASE: tracky
       MYSQL_USER: tracky
       MYSQL_PASSWORD: tracky
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  db:
+  var:
