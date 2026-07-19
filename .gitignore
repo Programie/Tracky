@@ -4,7 +4,7 @@
 /.env.*.local
 /config/config.yaml
 /config/secrets/prod/prod.decrypt.private.php
-/docker-compose.local.yml
+/compose.local.yaml
 /node_modules/
 /public/assets/
 /public/bundles/
