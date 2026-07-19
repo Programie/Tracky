@@ -36,91 +36,103 @@ class FetchDataCommand extends Command
     protected function configure(): void
     {
         $this->addArgument("type", InputArgument::REQUIRED, "The type (movie, movieset or show)");
-        $this->addArgument("id", InputArgument::REQUIRED, "The ID for the movie, movieset or show");
+        $this->addArgument("id", InputArgument::IS_ARRAY, "The ID(s) for the movie, movieset or show (omit to fetch all of that type)");
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $type = strtolower(trim($input->getArgument("type")));
-        $id = (int)$input->getArgument("id");
+        $ids = array_map(fn($id) => (int)$id, $input->getArgument("id"));
 
         switch ($type) {
             case Helper::TYPE_SHOW:
+                if (empty($ids)) {
+                    $shows = $this->showRepository->findAll();
+                } else {
+                    $shows = $this->showRepository->findByIds($ids);
+                }
+
                 /**
-                 * @var Show
+                 * @var Show $show
                  */
-                $show = $this->showRepository->findOneBy(["id" => $id]);
-                if ($show === null) {
-                    throw new UnexpectedValueException(sprintf("Show with ID %d not found", $id));
-                }
+                foreach ($shows as $show) {
+                    $dataProvider = $this->dataProviderHelper->getProviderByEntry($show);
 
-                $dataProvider = $this->dataProviderHelper->getProviderByEntry($show);
+                    $output->writeln(sprintf("Fetching data for show %d (%s) using provider %s", $show->getId(), $show->getTitle(), $dataProvider::class));
 
-                $output->writeln(sprintf("Fetching data for show %d (%s) using provider %s", $id, $show->getTitle(), $dataProvider::class));
+                    if (!$dataProvider->fetchShow($show, true)) {
+                        $output->writeln(sprintf("ERROR: Fetching show %d (%s) failed!", $show->getId(), $show->getTitle()));
+                        continue;
+                    }
 
-                if (!$dataProvider->fetchShow($show, true)) {
-                    throw new UnexpectedValueException("Fetching show failed");
-                }
+                    $this->entityManager->persist($show);
+                    $this->entityManager->flush();
 
-                $this->entityManager->persist($show);
-                $this->entityManager->flush();
+                    if ($this->downloadAllImages) {
+                        $output->writeln(sprintf("Fetching images for show %d (%s)", $show->getId(), $show->getTitle()));
 
-                if ($this->downloadAllImages) {
-                    $output->writeln(sprintf("Fetching images for show %d (%s)", $id, $show->getTitle()));
-
-                    $show->fetchPosterImages($this->imageFetcher, true, true);
+                        $show->fetchPosterImages($this->imageFetcher, true, true);
+                    }
                 }
                 break;
             case Helper::TYPE_MOVIE:
+                if (empty($ids)) {
+                    $movies = $this->movieRepository->findAll();
+                } else {
+                    $movies = $this->movieRepository->findByIds($ids);
+                }
+
                 /**
-                 * @var Movie
+                 * @var Movie $movie
                  */
-                $movie = $this->movieRepository->findOneBy(["id" => $id]);
-                if ($movie === null) {
-                    throw new UnexpectedValueException(sprintf("Movie with ID %d not found", $id));
-                }
+                foreach ($movies as $movie) {
+                    $dataProvider = $this->dataProviderHelper->getProviderByEntry($movie);
 
-                $dataProvider = $this->dataProviderHelper->getProviderByEntry($movie);
+                    $output->writeln(sprintf("Fetching data for movie %d (%s) using provider %s", $movie->getId(), $movie->getTitle(), $dataProvider::class));
 
-                $output->writeln(sprintf("Fetching data for movie %d (%s) using provider %s", $id, $movie->getTitle(), $dataProvider::class));
+                    if (!$dataProvider->fetchMovie($movie)) {
+                        $output->writeln(sprintf("ERROR: Fetching movie %d (%s) failed!", $movie->getId(), $movie->getTitle()));
+                        continue;
+                    }
 
-                if (!$dataProvider->fetchMovie($movie)) {
-                    throw new UnexpectedValueException("Fetching movie failed");
-                }
+                    $this->entityManager->persist($movie);
+                    $this->entityManager->flush();
 
-                $this->entityManager->persist($movie);
-                $this->entityManager->flush();
+                    if ($this->downloadAllImages) {
+                        $output->writeln(sprintf("Fetching images for movie %d (%s)", $movie->getId(), $movie->getTitle()));
 
-                if ($this->downloadAllImages) {
-                    $output->writeln(sprintf("Fetching images for movie %d (%s)", $id, $movie->getTitle()));
-
-                    $movie->fetchPosterImage($this->imageFetcher);
+                        $movie->fetchPosterImage($this->imageFetcher);
+                    }
                 }
                 break;
             case Helper::TYPE_MOVIE_SET:
+                if (empty($ids)) {
+                    $movieSets = $this->movieSetRepository->findAll();
+                } else {
+                    $movieSets = $this->movieSetRepository->findByIds($ids);
+                }
+
                 /**
                  * @var MovieSet
                  */
-                $movieSet = $this->movieSetRepository->findOneBy(["id" => $id]);
-                if ($movieSet === null) {
-                    throw new UnexpectedValueException(sprintf("Movie set with ID %d not found", $id));
-                }
+                foreach ($movieSets as $movieSet) {
+                    $dataProvider = $this->dataProviderHelper->getProviderByEntry($movieSet);
 
-                $dataProvider = $this->dataProviderHelper->getProviderByEntry($movieSet);
+                    $output->writeln(sprintf("Fetching data for movie set %d (%s) using provider %s", $movieSet->getId(), $movieSet->getTitle(), $dataProvider::class));
 
-                $output->writeln(sprintf("Fetching data for movie set %d (%s) using provider %s", $id, $movieSet->getTitle(), $dataProvider::class));
+                    if (!$dataProvider->fetchMovieSet($movieSet)) {
+                        $output->writeln(sprintf("ERROR: Fetching movie set %d (%s) failed!", $movieSet->getId(), $movieSet->getTitle()));
+                        continue;
+                    }
 
-                if (!$dataProvider->fetchMovieSet($movieSet)) {
-                    throw new UnexpectedValueException("Fetching movie set failed");
-                }
+                    $this->entityManager->persist($movieSet);
+                    $this->entityManager->flush();
 
-                $this->entityManager->persist($movieSet);
-                $this->entityManager->flush();
+                    if ($this->downloadAllImages) {
+                        $output->writeln(sprintf("Fetching images for movie set %d (%s)", $movieSet->getId(), $movieSet->getTitle()));
 
-                if ($this->downloadAllImages) {
-                    $output->writeln(sprintf("Fetching images for movie set %d (%s)", $id, $movieSet->getTitle()));
-
-                    $movieSet->fetchPosterImages($this->imageFetcher, true);
+                        $movieSet->fetchPosterImages($this->imageFetcher, true);
+                    }
                 }
                 break;
             default:

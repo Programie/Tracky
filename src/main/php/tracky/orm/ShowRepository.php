@@ -77,4 +77,20 @@ class ShowRepository extends ServiceEntityRepository
 
         return $query->getOneOrNullResult();
     }
+
+    /**
+     * @return Show[]
+     */
+    public function findByIds(array $ids): array
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $queryBuilder = $this->createQueryBuilder("show");
+
+        $queryBuilder->where($queryBuilder->expr()->in("show.id", $ids));
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

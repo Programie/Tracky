@@ -28,4 +28,20 @@ class MovieSetRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
+    /**
+     * @return MovieSet[]
+     */
+    public function findByIds(array $ids): array
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $queryBuilder = $this->createQueryBuilder("movieset");
+
+        $queryBuilder->where($queryBuilder->expr()->in("movieset.id", $ids));
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
