@@ -1,14 +1,13 @@
 <?php
 namespace tracky\orm;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use tracky\model\Episode;
 use tracky\model\Season;
 use tracky\model\Show;
 
-class ShowRepository extends ServiceEntityRepository
+class ShowRepository extends AbstractRepository
 {
     use SearchTrait;
 
@@ -76,21 +75,5 @@ class ShowRepository extends ServiceEntityRepository
         $query->setFetchMode(Episode::class, "views", ClassMetadata::FETCH_EAGER);
 
         return $query->getOneOrNullResult();
-    }
-
-    /**
-     * @return Show[]
-     */
-    public function findByIds(array $ids): array
-    {
-        if (empty($ids)) {
-            return [];
-        }
-
-        $queryBuilder = $this->createQueryBuilder("show");
-
-        $queryBuilder->where($queryBuilder->expr()->in("show.id", $ids));
-
-        return $queryBuilder->getQuery()->getResult();
     }
 }

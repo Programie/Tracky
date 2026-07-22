@@ -62,3 +62,21 @@
         <span class="mx-1 flex-shrink-1 progress-text-right">{{ ((watchedEpisodes / episodes|length) * 100)|round }}%</span>
     </div>
 {% endmacro %}
+
+{% macro navItem(path, title, icon_classes = null, route_starts_with = null, parameters = {}) %}
+    {% if route_starts_with != null and app.request.attributes.get("_route") starts with route_starts_with %}
+        {% set active = true %}
+    {% elseif app.request.attributes.get("_route") == path %}
+        {% set active = true %}
+    {% else %}
+        {% set active = false %}
+    {% endif %}
+    <li class="nav-item">
+        <a class="{{ html_classes("nav-link", {"active": active}) }}" href="{{ path(path, parameters) }}">
+            {% if icon_classes != null %}
+                <i class="{{ icon_classes }}"></i>
+            {% endif %}
+            {{ title }}
+        </a>
+    </li>
+{% endmacro %}

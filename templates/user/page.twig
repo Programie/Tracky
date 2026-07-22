@@ -1,8 +1,17 @@
+{% from "components/macros.twig" import navItem %}
+
 {% extends "page.twig" %}
 
-{% macro navItem(path, parameters, title) %}
+{% macro navItem(path, title, route_starts_with = null, parameters = {}) %}
+    {% if route_starts_with != null and app.request.attributes.get("_route") starts with route_starts_with %}
+        {% set active = true %}
+    {% elseif app.request.attributes.get("_route") == path %}
+        {% set active = true %}
+    {% else %}
+        {% set active = false %}
+    {% endif %}
     <li class="nav-item">
-        <a class="{{ html_classes("nav-link", {"active": app.request.attributes.get("_route") == path}) }}" href="{{ path(path, parameters) }}">{{ title }}</a>
+        <a class="{{ html_classes("nav-link", {"active": active}) }}" href="{{ path(path, parameters) }}">{{ title }}</a>
     </li>
 {% endmacro %}
 
@@ -10,9 +19,10 @@
     <h1>{{ user.username }}</h1>
 
     <ul class="nav nav-underline mb-3">
-        {{ _self.navItem("user_profile_page", {"username": user.username}, "user.profile"|trans) }}
-        {{ _self.navItem("user_profile_history_page", {"username": user.username}, "user.history"|trans) }}
-        {{ _self.navItem("user_profile_show_progress_page", {"username": user.username}, "user.show-progress"|trans) }}
+        {{ navItem(icon_classes: "fa-solid fa-user", path: "user_profile_page", parameters: {"username": user.username}, title: "user.profile"|trans) }}
+        {{ navItem(icon_classes: "fa-solid fa-calendar-days", path: "user_profile_history_page", parameters: {"username": user.username}, title: "user.history"|trans) }}
+        {{ navItem(icon_classes: "fa-solid fa-bars-progress", path: "user_profile_show_progress_page", parameters: {"username": user.username}, title: "user.show-progress"|trans) }}
+        {{ navItem(icon_classes: "fa-solid fa-layer-group", path: "user_profile_collections_page", route_starts_with: "user_profile_collection", parameters: {"username": user.username}, title: "user.collections.title"|trans) }}
     </ul>
 
     {% block profileContent %}{% endblock %}

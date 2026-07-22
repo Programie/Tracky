@@ -68,6 +68,14 @@ user:
   logout: "Logout"
   login: "Login"
   no-history-available: "Kein Verlauf verfügbar."
+  collections:
+    title: "Sammlungen"
+    create-collection: "Sammlung erstellen"
+    no-collections-available: "Keine Sammlungen verfügbar."
+    no-items-available: "Keine Elemente verfügbar."
+    name: "Name"
+    items: "Elemente"
+    creation-date: "Erstelldatum"
 
 search:
   title: "Suche"
