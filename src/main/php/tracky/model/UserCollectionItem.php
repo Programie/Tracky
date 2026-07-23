@@ -7,15 +7,8 @@ use tracky\orm\UserCollectionItemRepository;
 use tracky\UserCollectionItemType;
 
 #[ORM\Entity(repositoryClass: UserCollectionItemRepository::class)]
-#[ORM\Table(
-    name: "usercollectionitems",
-    uniqueConstraints: [
-        new ORM\UniqueConstraint(
-            name: "unique_collection_type_item",
-            columns: ["collection", "type", "item"]
-        )
-    ]
-)]
+#[ORM\Table(name: "usercollectionitems")]
+#[ORM\UniqueConstraint(name: "unique_collection_type_item", columns: ["collection", "type", "item"])]
 class UserCollectionItem extends BaseEntity
 {
     #[ORM\ManyToOne(targetEntity: UserCollection::class)]
