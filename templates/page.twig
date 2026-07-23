@@ -6,6 +6,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
+        {% if app.user %}
+            <meta name="username" content="{{ app.user.username }}"/>
+        {% endif %}
+
         {% set pageTitle = block("title") %}
         <title>{% if pageTitle is not empty %}{{ pageTitle|raw }} - {% endif %}Tracky</title>
 
@@ -129,6 +133,21 @@
                     <div>
                         <button class="btn btn-sm btn-primary" type="submit">{{ "views.add.ok"|trans }}</button>
                         <button class="btn btn-sm btn-secondary" id="add-view-tooltip-cancel" type="button">{{ "views.add.cancel"|trans }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="add-collection-item-tooltip" class="popper">
+            <div data-popper-arrow></div>
+
+            <div class="card">
+                <div class="card-header">{{ "user.collections.add-item.header"|trans }}</div>
+                <form class="card-body form" id="add-collection-item-tooltip-form">
+                    <select class="form-select mb-3" id="add-collection-item-tooltip-collection"></select>
+                    <div>
+                        <button class="btn btn-sm btn-primary" type="submit">{{ "user.collections.add-item.ok"|trans }}</button>
+                        <button class="btn btn-sm btn-secondary" id="add-collection-item-tooltip-cancel" type="button">{{ "user.collections.add-item.cancel"|trans }}</button>
                     </div>
                 </form>
             </div>

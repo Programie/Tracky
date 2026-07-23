@@ -75,6 +75,11 @@ user:
         error:
           empty-name: "No name specified!"
           duplicate-collection: "Another collection with the name ''{name}'' already exists!"
+    add-item:
+      header: "Add item to collection"
+      ok: "OK"
+      cancel: "Cancel"
+    add-to-collection: "Add to collection"
     no-collections-available: "No collections available."
     no-items-available: "No items available."
     name: "Name"

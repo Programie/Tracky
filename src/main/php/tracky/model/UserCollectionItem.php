@@ -55,8 +55,10 @@ class UserCollectionItem extends BaseEntity
 
     public function setItem(Show|Season|Episode|Movie|MovieSet $item): self
     {
+        $this->type = UserCollectionItemType::fromEntity($item);
         $this->item = $item->getId();
         $this->resolvedItem = $item;
+
         return $this;
     }
 
