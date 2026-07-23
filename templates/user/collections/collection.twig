@@ -1,0 +1,31 @@
+{% extends "user/page.twig" %}
+
+{% block title %}{{ collection.name }} - {{ user.username }}{% endblock %}
+
+{% block profileContent %}
+    <h2 class="mb-3">{{ collection.name }}</h2>
+
+    {% if collection.items|length %}
+        {% set UserCollectionItemType = enum("tracky\\UserCollectionItemType") %}
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            {% for item in collection.items %}
+                <div class="col">
+                    {% if item.type == UserCollectionItemType.SHOW %}
+                        {% include "components/show-card-small.twig" with {"show": item.resolvedItem} %}
+                    {% elseif item.type == UserCollectionItemType.SEASON %}
+                        {% include "components/season-card-small.twig" with {"season": item.resolvedItem} %}
+                    {% elseif item.type == UserCollectionItemType.EPISODE %}
+                        {% include "components/episode-card-small.twig" with {"episode": item.resolvedItem} %}
+                    {% elseif item.type == UserCollectionItemType.MOVIE %}
+                        {% include "components/movie-card-small.twig" with {"movie": item.resolvedItem} %}
+                    {% elseif item.type == UserCollectionItemType.MOVIE_SET %}
+                        {% include "components/movieset-card-small.twig" with {"movieSet": item.resolvedItem} %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">{{ "user.collections.no-items-available"|trans }}</div>
+    {% endif %}
+{% endblock %}

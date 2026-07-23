@@ -1,0 +1,47 @@
+{% extends "user/page.twig" %}
+
+{% block title %}{{ "user.collections.title"|trans }} - {{ user.username }}{% endblock %}
+
+{% block profileContent %}
+    <h2 class="mb-3">{{ "user.collections.title"|trans }}</h2>
+
+    {% if user == app.user %}
+        {% if app.request.query.get("flash") == "success" %}
+            <div class="alert alert-success">{{ "user.collections.create.submit-response.success"|trans({"name": app.request.query.get("name")}) }}</div>
+        {% elseif app.request.query.get("flash") == "error" %}
+            <div class="alert alert-danger">{{ ("user.collections.create.submit-response.error." ~ app.request.query.get("error"))|trans({"name": app.request.query.get("name")}) }}</div>
+        {% endif %}
+
+        <form class="d-flex flex-column flex-sm-row gap-3 mb-3" action="{{ path("user_profile_collection_create_action", {"username": user.username}) }}" method="post">
+            <div class="flex-grow-1">
+                <input type="text" id="new-user-collection-name" name="name" class="form-control" placeholder="{{ "user.collections.name"|trans }}" required></input>
+            </div>
+            <button type="submit" class="btn btn-primary user-collection-create">{{ "user.collections.create.title"|trans }}</button>
+        </form>
+    {% endif %}
+
+    {% if collections %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{{ "user.collections.name"|trans }}</th>
+                    <th>{{ "user.collections.items"|trans }}</th>
+                    <th>{{ "user.collections.creation-date"|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for collection in collections %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td><a class="text-reset text-decoration-none" href="{{ path("user_profile_collection_page", {"username": user.username, "collection": collection.id}) }}">{{ collection.name }}</a></td>
+                        <td>{{ collection.items|length }}</td>
+                        <td>{{ collection.createdAt.formatForDisplay }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-warning">{{ "user.collections.no-collections-available"|trans }}</div>
+    {% endif %}
+{% endblock %}
