@@ -44,7 +44,16 @@
         <h2 class="my-0">{{ "shows.episodes"|trans }}</h2>
         {% if is_granted("IS_AUTHENTICATED") and season.episodes|length > 0 %}
             <button
-                    class="btn btn-success btn-sm add-view ms-2"
+                    class="btn btn-primary btn-sm add-to-collection"
+                    data-type="season"
+                    data-item="{{ season.id }}"
+                    title="{{ "user.collections.add-to-collection"|trans }}"
+            >
+                <i class="fa-solid fa-folder-plus"></i>
+            </button>
+
+            <button
+                    class="btn btn-success btn-sm add-view"
                     data-type="season"
                     data-show-id="{{ show.id }}"
                     data-season="{{ season.number }}"
