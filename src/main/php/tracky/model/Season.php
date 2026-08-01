@@ -137,20 +137,15 @@ class Season extends BaseEntity
         }
     }
 
-    public function getTotalRuntime(): int
+    public function getRuntime(): int
     {
-        $totalRuntime = 0;
+        $runtime = 0;
 
         foreach ($this->getEpisodes() as $episode) {
-            $runtime = $episode->getRuntime();
-            if ($runtime === null) {
-                continue;
-            }
-
-            $totalRuntime += $runtime;
+            $runtime += $episode->getRuntime();
         }
 
-        return $totalRuntime;
+        return $runtime;
     }
 
     public function getFirstAired(): ?Date

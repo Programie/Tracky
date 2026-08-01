@@ -189,6 +189,17 @@ class Show extends BaseEntity
         return $randomEpisodes;
     }
 
+    public function getRuntime(): int
+    {
+        $runtime = 0;
+
+        foreach ($this->getSeasons() as $season) {
+            $runtime += $season->getRuntime();
+        }
+
+        return $runtime;
+    }
+
     /**
      * @return list<array{Episode, ItemWatchStats}>
      */

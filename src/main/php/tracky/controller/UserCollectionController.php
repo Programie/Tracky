@@ -72,8 +72,22 @@ class UserCollectionController extends AbstractController
     }
 
     #[Route("/users/{username}/collections/{collection}", name: "user_profile_collection_page", methods: ["GET"])]
-    public function getCollectionPage(User $user, UserCollection $collection): Response
+    public function getCollectionPage(User $user, UserCollection $collection, Request $request): Response
     {
+        $sort = explode("/", trim($request->query->get("sort", "")), 2);
+
+        list($sortBy, $sortDirection) = $sort + ["", ""];
+
+        $sortOptions = ["title", "type", "added", "runtime"];
+
+        if (!in_array($sortBy, $sortOptions)) {
+            $sortBy = "added";
+        }
+
+        if (!in_array($sortDirection, ["asc", "desc"])) {
+            $sortDirection = "asc";
+        }
+
         /**
          * @var array<string, array<int, UserCollectionItem>>
          */
@@ -101,9 +115,51 @@ class UserCollectionController extends AbstractController
             }
         }
 
+        $items = iterator_to_array($collection->getItems());
+
+        usort($items, function(UserCollectionItem $item1, UserCollectionItem $item2) use ($sortBy, $sortDirection) {
+            $resolvedItem1 = $item1->getResolvedItem();
+            $resolvedItem2 = $item2->getResolvedItem();
+
+            switch ($sortBy) {
+                case "title":
+                    $value1 = $resolvedItem1->getTitle();
+                    $value2 = $resolvedItem2->getTitle();
+                    break;
+                case "type":
+                    $value1 = $item1->getType();
+                    $value2 = $item2->getType();
+                    break;
+                case "added":
+                    $value1 = $item1->getAddedAt()->getTimestamp();
+                    $value2 = $item2->getAddedAt()->getTimestamp();
+                    break;
+                case "runtime":
+                    $value1 = $resolvedItem1->getRuntime();
+                    $value2 = $resolvedItem2->getRuntime();
+                    break;
+                default:
+                    return 0;
+            }
+
+            if ($value1 < $value2) {
+                return $sortDirection == "asc" ? -1 : 1;
+            } elseif ($value1 > $value2) {
+                return $sortDirection == "asc" ? 1 : -1;
+            } else {
+                return 0;
+            }
+        });
+
         return $this->render("user/collections/collection.twig", [
             "user" => $user,
-            "collection" => $collection
+            "collection" => $collection,
+            "items" => $items,
+            "sortOptions" => $sortOptions,
+            "sort" => [
+                "field" => $sortBy,
+                "direction" => $sortDirection
+            ]
         ]);
     }
 

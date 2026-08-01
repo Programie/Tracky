@@ -11,7 +11,7 @@
             <small class="d-block text-body-secondary my-1">{{ season.year }}</small>
         </div>
         <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": season.episodes|length}) }}</small>
-        <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.totalRuntime}) }}</small>
+        <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.runtime}) }}</small>
     </div>
 
     {% if app.user %}

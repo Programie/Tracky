@@ -101,6 +101,11 @@ user:
     name: "Name"
     items: "Items"
     creation-date: "Creation date"
+    sort:
+      title: "Title"
+      type: "Type"
+      added: "Added"
+      runtime: "Runtime"
 
 search:
   title: "Search"

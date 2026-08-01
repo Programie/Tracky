@@ -73,7 +73,7 @@ class UserCollectionItem extends BaseEntity
         return $this;
     }
 
-    public function getResolvedItem(): BaseEntity
+    public function getResolvedItem(): Show|Season|Episode|Movie|MovieSet
     {
         return $this->resolvedItem;
     }
