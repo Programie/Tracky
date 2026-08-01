@@ -75,6 +75,22 @@ user:
         error:
           empty-name: "No name specified!"
           duplicate-collection: "Another collection with the name ''{name}'' already exists!"
+    rename:
+      title: "Rename"
+      submit-response:
+        success: "Collection ''{name}'' renamed to ''{newName}''."
+        error:
+          empty-name: "No name specified!"
+          duplicate-collection: "Another collection with the name ''{name}'' already exists!"
+      ok: "OK"
+      cancel: "Cancel"
+    remove:
+      title: "Remove"
+      header: "Remove collection"
+      ok: "OK"
+      cancel: "Cancel"
+      submit-response:
+        success: "Collection ''{name}'' removed."
     add-item:
       header: "Add item to collection"
       ok: "OK"

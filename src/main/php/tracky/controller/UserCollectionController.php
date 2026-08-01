@@ -123,11 +123,11 @@ class UserCollectionController extends AbstractController
         $name = trim($request->request->getString("name"));
 
         if ($name === "") {
-            return $this->redirectToRoute("user_profile_collections_page", ["username" => $user->getUsername(), "flash" => "error", "error" => "empty-name", "name" => $name]);
+            return $this->redirectToRoute("user_profile_collections_page", ["username" => $user->getUsername(), "flash" => "error", "action" => "create", "error" => "empty-name", "name" => $name]);
         }
 
         if ($userCollectionRepository->count(["user" => $user, "name" => $name])) {
-            return $this->redirectToRoute("user_profile_collections_page", ["username" => $user->getUsername(), "flash" => "error", "error" => "duplicate-collection", "name" => $name]);
+            return $this->redirectToRoute("user_profile_collections_page", ["username" => $user->getUsername(), "flash" => "error", "action" => "create", "error" => "duplicate-collection", "name" => $name]);
         }
 
         $collection = new UserCollection;
@@ -138,7 +138,59 @@ class UserCollectionController extends AbstractController
         $entityManager->persist($collection);
         $entityManager->flush();
 
-        return $this->redirectToRoute("user_profile_collections_page", ["username" => $user->getUsername(), "flash" => "success", "name" => $name]);
+        return $this->redirectToRoute("user_profile_collections_page", ["username" => $user->getUsername(), "flash" => "success", "action" => "create", "name" => $name]);
+    }
+
+    #[Route("/users/{username}/collections/{collection}", name: "user_profile_collection_remove_action", methods: ["DELETE"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function removeCollection(User $user, UserCollection $collection, EntityManagerInterface $entityManager): Response
+    {
+        /**
+         * @var User
+         */
+        $currentUser = $this->getUser();
+
+        if ($collection->getUser()->getId() !== $user->getId() or $user->getId() !== $currentUser->getId()) {
+            throw new AccessDeniedHttpException;
+        }
+
+        $entityManager->remove($collection);
+        $entityManager->flush();
+
+        return new Response("Collection removed");
+    }
+
+    #[Route("/users/{username}/collections/{collection}/rename", name: "user_profile_collection_rename_action", methods: ["POST"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function renameCollection(User $user, UserCollection $collection, Request $request, UserCollectionRepository $userCollectionRepository, EntityManagerInterface $entityManager): Response
+    {
+        /**
+         * @var User
+         */
+        $currentUser = $this->getUser();
+
+        if ($collection->getUser()->getId() !== $user->getId() or $user->getId() !== $currentUser->getId()) {
+            throw new AccessDeniedHttpException;
+        }
+
+        $name = trim($request->request->getString("name"));
+        if ($name === "") {
+            return $this->redirectToRoute("user_profile_collection_page", ["username" => $user->getUsername(), "collection" => $collection->getId(), "flash" => "error", "error" => "empty-name"]);
+        }
+
+        foreach ($userCollectionRepository->findBy(["user" => $user, "name" => $name]) as $otherCollection) {
+            if ($otherCollection->getId() !== $collection->getId()) {
+                return $this->redirectToRoute("user_profile_collection_page", ["username" => $user->getUsername(), "collection" => $collection->getId(), "flash" => "error", "error" => "duplicate-collection", "name" => $name]);
+            }
+        }
+
+        $oldName = $collection->getName();
+        $collection->setName($name);
+
+        $entityManager->persist($collection);
+        $entityManager->flush();
+
+        return $this->redirectToRoute("user_profile_collection_page", ["username" => $user->getUsername(), "collection" => $collection->getId(), "flash" => "success", "name" => $oldName, "new-name" => $name]);
     }
 
     #[Route("/users/{username}/collections/{collection}/add-item", name: "user_profile_collection_add_item_action", methods: ["POST"])]

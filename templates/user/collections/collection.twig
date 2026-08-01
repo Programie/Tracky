@@ -3,7 +3,31 @@
 {% block title %}{{ collection.name }} - {{ user.username }}{% endblock %}
 
 {% block profileContent %}
-    <h2 class="mb-3">{{ collection.name }}</h2>
+    <div class="mb-3 gap-2 d-flex align-items-center">
+        <div>
+            <h2 id="collection-name">{{ collection.name }}</h2>
+            <form id="collection-rename-form" class="d-none" method="post" action="{{ path("user_profile_collection_rename_action", {"username": user.username, "collection": collection.id}) }}">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="name" value="{{ collection.name }}" required/>
+                    <button type="submit" class="btn btn-primary" title="{{ "user.collections.rename.ok"|trans }}"><i class="fa-solid fa-check"></i></button>
+                    <button type="button" class="btn btn-secondary" id="collection-rename-cancel" title="{{ "user.collections.rename.cancel"|trans }}"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </form>
+        </div>
+
+        {% if app.user == collection.user %}
+            <button class="btn btn-secondary btn-sm" id="rename-collection" title="{{ "user.collections.rename.title"|trans }}"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button class="btn btn-danger btn-sm" id="remove-collection" data-id="{{ collection.id }}" data-name="{{ collection.name }}" title="{{ "user.collections.remove.title"|trans }}"><i class="fa-solid fa-trash"></i></button>
+        {% endif %}
+    </div>
+
+    {% if user == app.user %}
+        {% if app.request.query.get("flash") == "success" %}
+            <div class="my-3 alert alert-success">{{ "user.collections.rename.submit-response.success"|trans({"name": app.request.query.get("name"), "newName": app.request.query.get("new-name")}) }}</div>
+        {% elseif app.request.query.get("flash") == "error" %}
+            <div class="my-3 alert alert-danger">{{ ("user.collections.rename.submit-response.error." ~ app.request.query.get("error"))|trans({"name": app.request.query.get("name")}) }}</div>
+        {% endif %}
+    {% endif %}
 
     {% if collection.items|length %}
         {% set UserCollectionItemType = enum("tracky\\UserCollectionItemType") %}

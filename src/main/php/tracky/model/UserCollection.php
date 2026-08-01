@@ -19,7 +19,7 @@ class UserCollection extends BaseEntity
     #[ORM\Column(name: "createdAt", type: "datetime", nullable: false)]
     private DateTime $createdAt;
 
-    #[ORM\OneToMany(mappedBy: "collection", targetEntity: UserCollectionItem::class, cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: "collection", targetEntity: UserCollectionItem::class, cascade: ["persist"], orphanRemoval: true)]
     private mixed $items = [];
 
     public function getUser(): User

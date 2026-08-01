@@ -7,8 +7,10 @@ interface Dictionary {
 document.addEventListener("DOMContentLoaded", () => {
     let username = document.querySelector<HTMLMetaElement>('meta[name="username"]')?.content;
     let addCollectionItemTooltipElement = document.querySelector<HTMLElement>("#add-collection-item-tooltip")!;
+    let removeCollectionTooltipElement = document.querySelector<HTMLElement>("#remove-collection-tooltip")!;
     let collections: Dictionary | null = null;
     let activeAddCollectionItemEntry: DOMStringMap | null = null;
+    let activeRemoveCollectionEntry: DOMStringMap | null = null;
 
     function loadCollections() {
         if (collections === null) {
@@ -72,5 +74,48 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#add-collection-item-tooltip-cancel")?.addEventListener("click", () => {
         addCollectionItemTooltipElement.style.display = "none";
         activeAddCollectionItemEntry = null;
+    });
+
+    document.querySelector("#rename-collection")?.addEventListener("click", () => {
+        document.querySelectorAll("#collection-name, #rename-collection").forEach((element) => element.classList.add("d-none"));
+        document.querySelector("#collection-rename-form")?.classList.remove("d-none");
+    });
+
+    document.querySelector("#collection-rename-cancel")?.addEventListener("click", () => {
+        document.querySelectorAll("#collection-name, #rename-collection").forEach((element) => element.classList.remove("d-none"));
+
+        let form = document.querySelector<HTMLFormElement>("#collection-rename-form");
+        form?.classList.add("d-none");
+        form?.reset();
+    });
+
+    document.querySelector("#remove-collection")?.addEventListener("click", () => {
+        let buttonElement = document.querySelector<HTMLButtonElement>("#remove-collection")!;
+
+        createPopper(buttonElement, removeCollectionTooltipElement, {
+            placement: "bottom"
+        });
+
+        removeCollectionTooltipElement.style.display = "block";
+        activeRemoveCollectionEntry = buttonElement.dataset;
+    });
+
+    document.querySelector("#remove-collection-tooltip-confirm")?.addEventListener("click", () => {
+        if (activeRemoveCollectionEntry === null) {
+            return;
+        }
+
+        let collectionName = activeRemoveCollectionEntry.name;
+
+        fetch(`/users/${username}/collections/${activeRemoveCollectionEntry.id}`, {
+            method: "DELETE"
+        }).then(() => {
+            document.location.href = `/users/${username}/collections?flash=success&action=remove&name=${encodeURIComponent(collectionName ?? "")}`;
+        });
+    });
+
+    document.querySelector("#remove-collection-tooltip-cancel")?.addEventListener("click", () => {
+        removeCollectionTooltipElement.style.display = "none";
+        activeRemoveCollectionEntry = null;
     });
 });

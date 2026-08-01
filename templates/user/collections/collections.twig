@@ -7,9 +7,9 @@
 
     {% if user == app.user %}
         {% if app.request.query.get("flash") == "success" %}
-            <div class="alert alert-success">{{ "user.collections.create.submit-response.success"|trans({"name": app.request.query.get("name")}) }}</div>
+            <div class="alert alert-success">{{ ("user.collections." ~ app.request.query.get("action") ~ ".submit-response.success")|trans({"name": app.request.query.get("name")}) }}</div>
         {% elseif app.request.query.get("flash") == "error" %}
-            <div class="alert alert-danger">{{ ("user.collections.create.submit-response.error." ~ app.request.query.get("error"))|trans({"name": app.request.query.get("name")}) }}</div>
+            <div class="alert alert-danger">{{ ("user.collections." ~ app.request.query.get("action") ~ ".submit-response.error." ~ app.request.query.get("error"))|trans({"name": app.request.query.get("name")}) }}</div>
         {% endif %}
 
         <form class="d-flex flex-column flex-sm-row gap-3 mb-3" action="{{ path("user_profile_collection_create_action", {"username": user.username}) }}" method="post">
