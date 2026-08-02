@@ -1,15 +1,22 @@
-{% if app.request.attributes.get("_route") == "search_page" %}
+{% set currentRoute = app.request.attributes.get("_route") %}
+{% if currentRoute == "search_page" %}
     {% set value = app.request.query.get("query") %}
     {% set selectedType = app.request.query.get("type") %}
     {% set showId = app.request.query.get("show_id") %}
 {% else %}
     {% set value = "" %}
     {% set selectedType = "" %}
+    {% set showId = "" %}
 
-    {% if app.request.attributes.get("_route") starts with "shows_" and show|default(null)%}
-        {% set showId = show.id %}
-    {% else %}
-        {% set showId = "" %}
+    {% if currentRoute starts with "shows_" %}
+        {% if show|default(null) %}
+            {% set selectedType = "episodes_in_show" %}
+            {% set showId = show.id %}
+        {% else %}
+            {% set selectedType = "shows" %}
+        {% endif %}
+    {% elseif currentRoute starts with "movies_" or currentRoute starts with "moviesets_" %}
+        {% set selectedType = "movies" %}
     {% endif %}
 {% endif %}
 {% set types = ["shows", "episodes", "movies"] %}
