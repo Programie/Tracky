@@ -82,25 +82,17 @@ user:
         error:
           empty-name: "Kein Name angegeben!"
           duplicate-collection: "Eine andere Sammlung mit dem Name ''{name}'' existiert bereits!"
-      ok: "OK"
-      cancel: "Abbrechen"
     remove:
       title: "Löschen"
       header: "Sammlung löschen"
-      ok: "OK"
-      cancel: "Abbrechen"
       submit-response:
         success: "Sammlung ''{name}'' gelöscht."
     add-item:
       title: "Zu Sammlung hinzufügen"
       header: "Zu Sammlung hinzufügen"
-      ok: "OK"
-      cancel: "Abbrechen"
     remove-item:
       title: "Von Sammlung entfernen"
       header: "Eintrag von Sammlung entfernen"
-      ok: "OK"
-      cancel: "Abbrechen"
       submit-response:
         success: "Eintrag ''{name}'' von Sammlung entfernt."
     no-collections-available: "Keine Sammlungen verfügbar."
@@ -212,14 +204,10 @@ views:
     header: "Verlauf entfernen?"
     this-view: "Diesen Eintrag"
     all-views: "Alle Einträge"
-    confirm: "Bestätigen"
-    cancel: "Abbrechen"
   add:
     header: "Als gesehen markieren"
     datetime: "Datum und Uhrzeit"
     now: "Jetzt"
-    ok: "OK"
-    cancel: "Abbrechen"
 
 library-management:
   title: "Administration"

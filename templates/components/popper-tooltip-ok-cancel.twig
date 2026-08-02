@@ -1,0 +1,11 @@
+<div id="{{ prefix }}-tooltip" class="popper">
+    <div data-popper-arrow></div>
+
+    <div class="card">
+        <div class="card-header">{{ header|trans }}</div>
+        <div class="card-body">
+            <button class="btn btn-sm btn-{{ confirmColor }}" id="{{ prefix }}-tooltip-confirm">{{ "modal.ok"|trans }}</button>
+            <button class="btn btn-sm btn-{{ cancelColor }}" id="{{ prefix }}-tooltip-cancel">{{ "modal.cancel"|trans }}</button>
+        </div>
+    </div>
+</div>

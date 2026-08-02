@@ -103,19 +103,7 @@
                 <div class="card-body">
                     <button class="btn btn-sm btn-danger" id="history-edit-tooltip-remove-this-view">{{ "views.remove.this-view"|trans }}</button>
                     <button class="btn btn-sm btn-danger" id="history-edit-tooltip-remove-all-views">{{ "views.remove.all-views"|trans }}</button>
-                    <button class="btn btn-sm btn-secondary" id="history-edit-tooltip-cancel">{{ "views.remove.cancel"|trans }}</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="remove-view-tooltip" class="popper">
-            <div data-popper-arrow></div>
-
-            <div class="card">
-                <div class="card-header">{{ "views.remove.header"|trans }}</div>
-                <div class="card-body">
-                    <button class="btn btn-sm btn-danger" id="remove-view-tooltip-confirm">{{ "views.remove.confirm"|trans }}</button>
-                    <button class="btn btn-sm btn-secondary" id="remove-view-tooltip-cancel">{{ "views.remove.cancel"|trans }}</button>
+                    <button class="btn btn-sm btn-secondary" id="history-edit-tooltip-cancel">{{ "modal.cancel"|trans }}</button>
                 </div>
             </div>
         </div>
@@ -131,8 +119,8 @@
                         <button class="btn btn-sm btn-secondary" id="add-view-tooltip-now" type="button">{{ "views.add.now"|trans }}</button>
                     </div>
                     <div>
-                        <button class="btn btn-sm btn-primary" type="submit">{{ "views.add.ok"|trans }}</button>
-                        <button class="btn btn-sm btn-secondary" id="add-view-tooltip-cancel" type="button">{{ "views.add.cancel"|trans }}</button>
+                        <button class="btn btn-sm btn-primary" type="submit">{{ "modal.ok"|trans }}</button>
+                        <button class="btn btn-sm btn-secondary" id="add-view-tooltip-cancel" type="button">{{ "modal.cancel"|trans }}</button>
                     </div>
                 </form>
             </div>
@@ -146,36 +134,21 @@
                 <form class="card-body form" id="add-collection-item-tooltip-form">
                     <select class="form-select mb-3" id="add-collection-item-tooltip-collection"></select>
                     <div>
-                        <button class="btn btn-sm btn-primary" type="submit">{{ "user.collections.add-item.ok"|trans }}</button>
-                        <button class="btn btn-sm btn-secondary" id="add-collection-item-tooltip-cancel" type="button">{{ "user.collections.add-item.cancel"|trans }}</button>
+                        <button class="btn btn-sm btn-primary" type="submit">{{ "modal.ok"|trans }}</button>
+                        <button class="btn btn-sm btn-secondary" id="add-collection-item-tooltip-cancel" type="button">{{ "modal.cancel"|trans }}</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <div id="remove-collection-tooltip" class="popper">
-            <div data-popper-arrow></div>
-
-            <div class="card">
-                <div class="card-header">{{ "user.collections.remove.header"|trans }}</div>
-                <div class="card-body">
-                    <button class="btn btn-sm btn-danger" id="remove-collection-tooltip-confirm">{{ "user.collections.remove.ok"|trans }}</button>
-                    <button class="btn btn-sm btn-secondary" id="remove-collection-tooltip-cancel">{{ "user.collections.remove.cancel"|trans }}</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="remove-collection-item-tooltip" class="popper">
-            <div data-popper-arrow></div>
-
-            <div class="card">
-                <div class="card-header">{{ "user.collections.remove-item.header"|trans }}</div>
-                <div class="card-body">
-                    <button class="btn btn-sm btn-danger" id="remove-collection-item-tooltip-confirm">{{ "user.collections.remove-item.ok"|trans }}</button>
-                    <button class="btn btn-sm btn-secondary" id="remove-collection-item-tooltip-cancel">{{ "user.collections.remove-item.cancel"|trans }}</button>
-                </div>
-            </div>
-        </div>
+        {% set tooltips = {
+            "remove-view": "views.remove.header",
+            "remove-collection": "user.collections.remove.header",
+            "remove-collection-item": "user.collections.remove-item.header",
+        } %}
+        {% for prefix, header in tooltips %}
+            {% include "components/popper-tooltip-ok-cancel.twig" with {"prefix": prefix, "header": header, "confirmColor": "danger", "cancelColor": "secondary"} only %}
+        {% endfor %}
 
         {% block additional_content %}{% endblock %}
 

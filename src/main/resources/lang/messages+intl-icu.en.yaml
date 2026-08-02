@@ -82,25 +82,17 @@ user:
         error:
           empty-name: "No name specified!"
           duplicate-collection: "Another collection with the name ''{name}'' already exists!"
-      ok: "OK"
-      cancel: "Cancel"
     remove:
       title: "Remove"
       header: "Remove collection"
-      ok: "OK"
-      cancel: "Cancel"
       submit-response:
         success: "Collection ''{name}'' removed."
     add-item:
       title: "Add to collection"
       header: "Add item to collection"
-      ok: "OK"
-      cancel: "Cancel"
     remove-item:
       title: "Remove from collection"
       header: "Remove item from collection"
-      ok: "OK"
-      cancel: "Cancel"
       submit-response:
         success: "Item ''{name}'' removed from collection."
     no-collections-available: "No collections available."
@@ -216,14 +208,10 @@ views:
     header: "Remove history entries?"
     this-view: "This view"
     all-views: "All views"
-    confirm: "Confirm"
-    cancel: "Cancel"
   add:
     header: "Add view"
     datetime: "Date and time"
     now: "Now"
-    ok: "OK"
-    cancel: "Cancel"
 
 library-management:
   title: "Administration"

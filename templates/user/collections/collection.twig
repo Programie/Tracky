@@ -10,8 +10,8 @@
                 <form id="collection-rename-form" class="d-none" method="post" action="{{ path("user_profile_collection_rename_action", {"username": user.username, "collection": collection.id}) }}">
                     <div class="input-group">
                         <input type="text" class="form-control" name="name" value="{{ collection.name }}" required/>
-                        <button type="submit" class="btn btn-primary" title="{{ "user.collections.rename.ok"|trans }}"><i class="fa-solid fa-check"></i></button>
-                        <button type="button" class="btn btn-secondary" id="collection-rename-cancel" title="{{ "user.collections.rename.cancel"|trans }}"><i class="fa-solid fa-xmark"></i></button>
+                        <button type="submit" class="btn btn-primary" title="{{ "modal.ok"|trans }}"><i class="fa-solid fa-check"></i></button>
+                        <button type="button" class="btn btn-secondary" id="collection-rename-cancel" title="{{ "modal.cancel"|trans }}"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                 </form>
             </div>
