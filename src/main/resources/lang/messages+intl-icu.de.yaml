@@ -169,9 +169,9 @@ views:
   last-watched: "Zuletzt gesehen"
   remove:
     header: "Verlauf entfernen?"
-    season-views: "Alle Ansichten dieser Staffel entfernen?"
     this-view: "Diesen Eintrag"
     all-views: "Alle Einträge"
+    confirm: "Bestätigen"
     cancel: "Abbrechen"
   add:
     header: "Als gesehen markieren"

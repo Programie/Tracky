@@ -28,6 +28,8 @@
                 {% if is_granted("IS_AUTHENTICATED") %}
                     <div class="btn-group">
                         <button class="btn btn-primary btn-sm add-to-collection" data-type="show" data-item="{{ show.id }}" title="{{ "user.collections.add-to-collection"|trans }}"><i class="fa-solid fa-folder-plus"></i></button>
+                        <button class="btn btn-success btn-sm add-view" data-type="show" data-show-id="{{ show.id }}" title="{{ "views.add-show-view"|trans }}"><i class="fa-solid fa-check"></i></button>
+                        <button class="btn btn-danger btn-sm remove-view" data-type="show" data-show-id="{{ show.id }}" title="{{ "views.remove-show-view"|trans }}"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 {% endif %}
             </div>

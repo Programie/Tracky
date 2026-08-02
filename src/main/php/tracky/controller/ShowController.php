@@ -182,6 +182,62 @@ class ShowController extends AbstractController
         ]);
     }
 
+    #[Route("/shows/{show}/views", name: "shows_add_view_action", methods: ["POST"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function addShowView(Show $show, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        try {
+            $dateTime = new DateTime($request->getPayload()->get("timestamp"));
+        } catch (Exception) {
+            throw new BadRequestException("Invalid payload");
+        }
+
+        $episodes = $show->getAllEpisodes();
+        if (!is_array($episodes)) {
+            $episodes = iterator_to_array($episodes);
+        }
+
+        foreach (array_reverse($episodes) as $episode) {
+            $view = new View;
+            $view->setItem($episode);
+            $view->setUser($this->getUser());
+            $view->setDateTime(clone $dateTime);
+            $view->setType(ViewType::EPISODE);
+
+            $entityManager->persist($view);
+
+            $runtime = $episode->getRuntime();
+            if ($runtime !== null && $runtime > 0) {
+                $dateTime->sub(new DateInterval(sprintf("PT%dM", $runtime)));
+            }
+        }
+
+        $entityManager->flush();
+
+        return new Response("Show views added to database");
+    }
+
+    #[Route("/shows/{show}/views/all", name: "shows_remove_view_action", methods: ["DELETE"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function removeShowViews(Show $show, ViewRepository $viewRepository, EntityManagerInterface $entityManager): Response
+    {
+        $episodeIds = [];
+
+        foreach ($show->getAllEpisodes() as $episode) {
+            $episodeIds[] = $episode->getId();
+        }
+
+        $views = $viewRepository->findByItemIds($episodeIds, ["user" => $this->getUser()->getId(), "type" => ViewType::EPISODE->value]);
+
+        foreach ($views as $view) {
+            $entityManager->remove($view);
+        }
+
+        $entityManager->flush();
+
+        return new Response("Show views removed from database");
+    }
+
     #[Route("/shows/{show}/seasons/{number}", name: "shows_season_page")]
     public function getSeasonPage(Show $show, int $number): Response
     {

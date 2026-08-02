@@ -82,6 +82,23 @@ class ViewRepository extends AbstractRepository
     }
 
     /**
+     * @return View[]
+     */
+    public function findByItemIds(array $itemIds, array $criteria = [])
+    {
+        $queryBuilder = $this->createQueryBuilder("view");
+
+        $queryBuilder->where($queryBuilder->expr()->in("view.item", $itemIds));
+
+        foreach ($criteria as $key => $value) {
+            $queryBuilder->andWhere(sprintf("view.%s = :%s", $key, $key));
+            $queryBuilder->setParameter(sprintf(":%s", $key), $value);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @return int[]
      */
     public function getItemIdsBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null, ?ViewType $type = null, ?DateRange $dateRange = null): array

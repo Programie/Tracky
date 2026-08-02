@@ -58,9 +58,9 @@ function removeViews(url: string) {
 
 document.addEventListener("DOMContentLoaded", () => {
     let addViewTooltipElement = document.querySelector<HTMLElement>("#add-view-tooltip")!;
-    let removeSeasonViewTooltipElement = document.querySelector<HTMLElement>("#season-remove-view-tooltip")!;
+    let removeViewTooltipElement = document.querySelector<HTMLElement>("#remove-view-tooltip")!;
     let activeAddViewEntry: DOMStringMap | null = null;
-    let activeRemoveSeasonViewEntry: DOMStringMap | null = null;
+    let activeRemoveViewEntry: DOMStringMap | null = null;
 
     document.querySelectorAll<HTMLElement>(".add-view").forEach((buttonElement) => {
         buttonElement.addEventListener("click", () => {
@@ -77,12 +77,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll<HTMLElement>(".remove-view").forEach((buttonElement) => {
         buttonElement.addEventListener("click", () => {
-            createPopper(buttonElement, removeSeasonViewTooltipElement, {
+            createPopper(buttonElement, removeViewTooltipElement, {
                 placement: "bottom"
             });
 
-            removeSeasonViewTooltipElement.style.display = "block";
-            activeRemoveSeasonViewEntry = buttonElement.dataset;
+            removeViewTooltipElement.style.display = "block";
+            activeRemoveViewEntry = buttonElement.dataset;
         });
     });
 
@@ -105,6 +105,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 addViewAndReload(`/shows/${activeAddViewEntry.showId}/seasons/${activeAddViewEntry.season}/views`, dateTime);
                 break;
 
+            case "show":
+                addViewAndReload(`/shows/${activeAddViewEntry.showId}/views`, dateTime);
+                break;
+
             case "movie":
                 addViewAndReload(`/movies/${activeAddViewEntry.movieId}/views`, dateTime);
                 break;
@@ -115,21 +119,25 @@ document.addEventListener("DOMContentLoaded", () => {
         activeAddViewEntry = null;
     });
 
-    document.querySelector("#season-remove-view-tooltip-confirm")?.addEventListener("click", () => {
-        if (activeRemoveSeasonViewEntry === null) {
+    document.querySelector("#remove-view-tooltip-confirm")?.addEventListener("click", () => {
+        if (activeRemoveViewEntry === null) {
             return;
         }
 
-        switch (activeRemoveSeasonViewEntry.type) {
+        switch (activeRemoveViewEntry.type) {
             case "season":
-                removeViews(`/shows/${activeRemoveSeasonViewEntry.showId}/seasons/${activeRemoveSeasonViewEntry.season}/views/all`);
+                removeViews(`/shows/${activeRemoveViewEntry.showId}/seasons/${activeRemoveViewEntry.season}/views/all`);
+                break;
+
+            case "show":
+                removeViews(`/shows/${activeRemoveViewEntry.showId}/views/all`);
                 break;
         }
     });
 
-    document.querySelector("#season-remove-view-tooltip-cancel")?.addEventListener("click", () => {
-        removeSeasonViewTooltipElement.style.display = "none";
-        activeRemoveSeasonViewEntry = null;
+    document.querySelector("#remove-view-tooltip-cancel")?.addEventListener("click", () => {
+        removeViewTooltipElement.style.display = "none";
+        activeRemoveViewEntry = null;
     });
 
     document.querySelector("#add-view-tooltip-now")?.addEventListener("click", () => {
