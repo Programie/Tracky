@@ -50,29 +50,40 @@
 
     {% if user == app.user %}
         {% if app.request.query.get("flash") == "success" %}
-            <div class="my-3 alert alert-success">{{ "user.collections.rename.submit-response.success"|trans({"name": app.request.query.get("name"), "newName": app.request.query.get("new-name")}) }}</div>
+            <div class="my-3 alert alert-success">{{ ("user.collections." ~ app.request.query.get("action") ~ ".submit-response.success")|trans({"name": app.request.query.get("name"), "newName": app.request.query.get("new-name")}) }}</div>
         {% elseif app.request.query.get("flash") == "error" %}
-            <div class="my-3 alert alert-danger">{{ ("user.collections.rename.submit-response.error." ~ app.request.query.get("error"))|trans({"name": app.request.query.get("name")}) }}</div>
+            <div class="my-3 alert alert-danger">{{ ("user.collections." ~ app.request.query.get("action") ~ ".submit-response.error." ~ app.request.query.get("error"))|trans({"name": app.request.query.get("name")}) }}</div>
         {% endif %}
     {% endif %}
 
     {% if items|length %}
         {% set UserCollectionItemType = enum("tracky\\UserCollectionItemType") %}
 
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4" id="collection-items" data-id="{{ collection.id }}">
             {% for item in items %}
                 <div class="col">
-                    {% if item.type == UserCollectionItemType.SHOW %}
-                        {% include "components/show-card-small.twig" with {"show": item.resolvedItem} %}
-                    {% elseif item.type == UserCollectionItemType.SEASON %}
-                        {% include "components/season-card-small.twig" with {"season": item.resolvedItem} %}
-                    {% elseif item.type == UserCollectionItemType.EPISODE %}
-                        {% include "components/episode-card-small.twig" with {"episode": item.resolvedItem} %}
-                    {% elseif item.type == UserCollectionItemType.MOVIE %}
-                        {% include "components/movie-card-small.twig" with {"movie": item.resolvedItem} %}
-                    {% elseif item.type == UserCollectionItemType.MOVIE_SET %}
-                        {% include "components/movieset-card-small.twig" with {"movieSet": item.resolvedItem} %}
-                    {% endif %}
+                    <div class="position-relative">
+                        {% if item.type == UserCollectionItemType.SHOW %}
+                            {% set itemName = item.resolvedItem.title %}
+                            {% include "components/show-card-small.twig" with {"show": item.resolvedItem} %}
+                        {% elseif item.type == UserCollectionItemType.SEASON %}
+                            {% set itemName = item.resolvedItem.show.title ~ " - " ~ ("shows.season"|trans({"%number%": item.resolvedItem.number }))%}
+                            {% include "components/season-card-small.twig" with {"season": item.resolvedItem} %}
+                        {% elseif item.type == UserCollectionItemType.EPISODE %}
+                            {% set itemName = item.resolvedItem.season.show.title ~ " - " ~ ("shows.episode"|trans({"%number%": item.resolvedItem.season.number ~ "x" ~ item.resolvedItem.number }))%}
+                            {% include "components/episode-card-small.twig" with {"episode": item.resolvedItem} %}
+                        {% elseif item.type == UserCollectionItemType.MOVIE %}
+                            {% set itemName = item.resolvedItem.title %}
+                            {% include "components/movie-card-small.twig" with {"movie": item.resolvedItem} %}
+                        {% elseif item.type == UserCollectionItemType.MOVIE_SET %}
+                            {% set itemName = item.resolvedItem.title %}
+                            {% include "components/movieset-card-small.twig" with {"movieSet": item.resolvedItem} %}
+                        {% endif %}
+
+                        {% if app.user == collection.user %}
+                            <button class="btn btn-danger btn-sm position-absolute top-0 end-0 remove-collection-item" data-id="{{ item.id }}" data-item-name="{{ itemName }}" title="{{ "user.collections.remove-item.title"|trans }}"><i class="fa-solid fa-close"></i></button>
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
         </div>

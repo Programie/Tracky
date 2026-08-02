@@ -231,12 +231,12 @@ class UserCollectionController extends AbstractController
 
         $name = trim($request->request->getString("name"));
         if ($name === "") {
-            return $this->redirectToRoute("user_profile_collection_page", ["username" => $user->getUsername(), "collection" => $collection->getId(), "flash" => "error", "error" => "empty-name"]);
+            return $this->redirectToRoute("user_profile_collection_page", ["username" => $user->getUsername(), "collection" => $collection->getId(), "flash" => "error", "action" => "rename", "error" => "empty-name"]);
         }
 
         foreach ($userCollectionRepository->findBy(["user" => $user, "name" => $name]) as $otherCollection) {
             if ($otherCollection->getId() !== $collection->getId()) {
-                return $this->redirectToRoute("user_profile_collection_page", ["username" => $user->getUsername(), "collection" => $collection->getId(), "flash" => "error", "error" => "duplicate-collection", "name" => $name]);
+                return $this->redirectToRoute("user_profile_collection_page", ["username" => $user->getUsername(), "collection" => $collection->getId(), "flash" => "error", "action" => "rename", "error" => "duplicate-collection", "name" => $name]);
             }
         }
 
@@ -246,7 +246,7 @@ class UserCollectionController extends AbstractController
         $entityManager->persist($collection);
         $entityManager->flush();
 
-        return $this->redirectToRoute("user_profile_collection_page", ["username" => $user->getUsername(), "collection" => $collection->getId(), "flash" => "success", "name" => $oldName, "new-name" => $name]);
+        return $this->redirectToRoute("user_profile_collection_page", ["username" => $user->getUsername(), "collection" => $collection->getId(), "flash" => "success", "action" => "rename", "name" => $oldName, "new-name" => $name]);
     }
 
     #[Route("/users/{username}/collections/{collection}/add-item", name: "user_profile_collection_add_item_action", methods: ["POST"])]
@@ -287,5 +287,24 @@ class UserCollectionController extends AbstractController
         $entityManager->flush();
 
         return new Response("Item added");
+    }
+
+    #[Route("/users/{username}/collections/{collection}/{collectionItem}", name: "user_profile_collection_remove_item_action", methods: ["DELETE"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function removeItemFromCollection(User $user, UserCollection $collection, UserCollectionItem $collectionItem, EntityManagerInterface $entityManager): Response
+    {
+        /**
+         * @var User
+         */
+        $currentUser = $this->getUser();
+
+        if ($collection->getUser()->getId() !== $user->getId() or $user->getId() !== $currentUser->getId() or $collection->getId() !== $collectionItem->getCollection()->getId()) {
+            throw new AccessDeniedHttpException;
+        }
+
+        $entityManager->remove($collectionItem);
+        $entityManager->flush();
+
+        return new Response("Item removed");
     }
 }

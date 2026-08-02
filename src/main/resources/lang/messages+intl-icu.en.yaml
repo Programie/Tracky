@@ -95,6 +95,13 @@ user:
       header: "Add item to collection"
       ok: "OK"
       cancel: "Cancel"
+    remove-item:
+      title: "Remove from collection"
+      header: "Remove item from collection"
+      ok: "OK"
+      cancel: "Cancel"
+      submit-response:
+        success: "Item ''{name}'' removed from collection."
     add-to-collection: "Add to collection"
     no-collections-available: "No collections available."
     no-items-available: "No items available."
