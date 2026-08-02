@@ -9,33 +9,43 @@
         </div>
 
         <div class="col-lg-9 col-12">
-            <h1>{{ movieSet.title }}</h1>
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h1>{{ movieSet.title }}</h1>
 
-            <div class="my-2">
-                {% if movieSet.tmdbId %}
-                    <a href="https://www.themoviedb.org/movie/{{ movieSet.tmdbId }}" class="badge text-bg-secondary" target="_blank">TMDB</a>
-                {% endif %}
-                {% if movieSet.tvdbId %}
-                    <a href="https://www.thetvdb.com/dereferrer/movie/{{ movieSet.tvdbId }}" class="badge text-bg-secondary" target="_blank">TVDB</a>
-                {% endif %}
-            </div>
+                    <div class="my-2">
+                        {% if movieSet.tmdbId %}
+                            <a href="https://www.themoviedb.org/movie/{{ movieSet.tmdbId }}" class="badge text-bg-secondary" target="_blank">TMDB</a>
+                        {% endif %}
+                        {% if movieSet.tvdbId %}
+                            <a href="https://www.thetvdb.com/dereferrer/movie/{{ movieSet.tvdbId }}" class="badge text-bg-secondary" target="_blank">TVDB</a>
+                        {% endif %}
+                    </div>
 
-            <div class="vstack gap-1">
-                <small>{{ "movies.count"|trans({"%count%": movieSet.movies|length}) }}</small>
+                    <div class="vstack gap-1">
+                        <small>{{ "movies.count"|trans({"%count%": movieSet.movies|length}) }}</small>
 
-                {% set firstMovie = movieSet.movies.first %}
-                {% set lastMovie = movieSet.movies.last %}
+                        {% set firstMovie = movieSet.movies.first %}
+                        {% set lastMovie = movieSet.movies.last %}
 
-                {% if firstMovie.year == lastMovie.year %}
-                    {% set year = firstMovie.year %}
-                {% else %}
-                    {% set year = firstMovie.year ~ " - " ~ lastMovie.year %}
-                {% endif %}
+                        {% if firstMovie.year == lastMovie.year %}
+                            {% set year = firstMovie.year %}
+                        {% else %}
+                            {% set year = firstMovie.year ~ " - " ~ lastMovie.year %}
+                        {% endif %}
 
-                <small class="text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ year }}</small>
+                        <small class="text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ year }}</small>
 
-                {% if movieSet.runtime %}
-                    <small class="text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movieSet.runtime}) }}</small>
+                        {% if movieSet.runtime %}
+                            <small class="text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movieSet.runtime}) }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if is_granted("IS_AUTHENTICATED") %}
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm add-to-collection" data-type="movieset" data-item="{{ movieSet.id }}" title="{{ "user.collections.add-to-collection"|trans }}"><i class="fa-solid fa-folder-plus"></i></button>
+                    </div>
                 {% endif %}
             </div>
 

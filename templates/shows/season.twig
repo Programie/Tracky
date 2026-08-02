@@ -32,7 +32,7 @@
             </div>
 
             <small class="d-block text-body-secondary my-1"> {{ season.year }}</small>
-            <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.totalRuntime}) }}</small>
+            <small class="d-block"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": season.runtime}) }}</small>
 
             {% if season.plot %}
                 <span class="d-block my-3">{{ season.plot }}</span>
@@ -44,7 +44,16 @@
         <h2 class="my-0">{{ "shows.episodes"|trans }}</h2>
         {% if is_granted("IS_AUTHENTICATED") and season.episodes|length > 0 %}
             <button
-                    class="btn btn-success btn-sm add-view ms-2"
+                    class="btn btn-primary btn-sm add-to-collection"
+                    data-type="season"
+                    data-item="{{ season.id }}"
+                    title="{{ "user.collections.add-to-collection"|trans }}"
+            >
+                <i class="fa-solid fa-folder-plus"></i>
+            </button>
+
+            <button
+                    class="btn btn-success btn-sm add-view"
                     data-type="season"
                     data-show-id="{{ show.id }}"
                     data-season="{{ season.number }}"

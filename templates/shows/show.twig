@@ -15,12 +15,22 @@
         </div>
 
         <div class="col-lg-9 col-12">
-            <h1 class="mb-3">{{ show.title }}</h1>
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h1 class="mb-3">{{ show.title }}</h1>
 
-            {% include "components/show-badges.twig" with {"show": show} only %}
+                    {% include "components/show-badges.twig" with {"show": show} only %}
 
-            <small class="d-block">{{ "shows.count.seasons"|trans({"%count%": show.seasons|length}) }}</small>
-            <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": show.totalEpisodes}) }}</small>
+                    <small class="d-block">{{ "shows.count.seasons"|trans({"%count%": show.seasons|length}) }}</small>
+                    <small class="d-block">{{ "shows.count.episodes"|trans({"%count%": show.totalEpisodes}) }}</small>
+                </div>
+
+                {% if is_granted("IS_AUTHENTICATED") %}
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm add-to-collection" data-type="show" data-item="{{ show.id }}" title="{{ "user.collections.add-to-collection"|trans }}"><i class="fa-solid fa-folder-plus"></i></button>
+                    </div>
+                {% endif %}
+            </div>
 
             {% if show.plot %}
                 <span class="d-block my-3">{{ show.plot }}</span>

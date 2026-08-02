@@ -1,7 +1,6 @@
 <?php
 namespace tracky\orm;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use tracky\datetime\DateRange;
@@ -10,7 +9,7 @@ use tracky\model\View;
 use tracky\ViewType;
 use tracky\watchstats\WatchStatsCollection;
 
-class ViewRepository extends ServiceEntityRepository
+class ViewRepository extends AbstractRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

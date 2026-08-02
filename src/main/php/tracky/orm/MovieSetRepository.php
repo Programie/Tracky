@@ -1,12 +1,11 @@
 <?php
 namespace tracky\orm;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use tracky\model\MovieSet;
 
-class MovieSetRepository extends ServiceEntityRepository
+class MovieSetRepository extends AbstractRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -27,21 +26,5 @@ class MovieSetRepository extends ServiceEntityRepository
         $query->setFetchMode(MovieSet::class, "movies", ClassMetadata::FETCH_EAGER);
 
         return $query->getResult();
-    }
-
-    /**
-     * @return MovieSet[]
-     */
-    public function findByIds(array $ids): array
-    {
-        if (empty($ids)) {
-            return [];
-        }
-
-        $queryBuilder = $this->createQueryBuilder("movieset");
-
-        $queryBuilder->where($queryBuilder->expr()->in("movieset.id", $ids));
-
-        return $queryBuilder->getQuery()->getResult();
     }
 }

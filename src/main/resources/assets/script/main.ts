@@ -1,6 +1,7 @@
 import "./common";
 import "./history";
 import "./library-management";
+import "./usercollections";
 import "./view";
 
 import missingImagePoster from "../images/missing-image-poster.svg";

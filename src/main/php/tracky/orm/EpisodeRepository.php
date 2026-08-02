@@ -1,11 +1,10 @@
 <?php
 namespace tracky\orm;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use tracky\model\Episode;
 
-class EpisodeRepository extends ServiceEntityRepository
+class EpisodeRepository extends AbstractRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -33,21 +32,5 @@ class EpisodeRepository extends ServiceEntityRepository
             ->setParameter(":query", "%" . $query . "%")
             ->getQuery()
             ->getResult();
-    }
-
-    /**
-     * @return Episode[]
-     */
-    public function findByIds(array $ids): array
-    {
-        if (empty($ids)) {
-            return [];
-        }
-
-        $queryBuilder = $this->createQueryBuilder("episode");
-
-        $queryBuilder->where($queryBuilder->expr()->in("episode.id", $ids));
-
-        return $queryBuilder->getQuery()->getResult();
     }
 }

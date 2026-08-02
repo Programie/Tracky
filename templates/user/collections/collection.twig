@@ -1,0 +1,93 @@
+{% extends "user/page.twig" %}
+
+{% block title %}{{ collection.name }} - {{ user.username }}{% endblock %}
+
+{% block profileContent %}
+    <div class="row">
+        <div class="mb-3 gap-2 col d-flex align-items-center">
+            <div>
+                <h2 id="collection-name">{{ collection.name }}</h2>
+                <form id="collection-rename-form" class="d-none" method="post" action="{{ path("user_profile_collection_rename_action", {"username": user.username, "collection": collection.id}) }}">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="name" value="{{ collection.name }}" required/>
+                        <button type="submit" class="btn btn-primary" title="{{ "user.collections.rename.ok"|trans }}"><i class="fa-solid fa-check"></i></button>
+                        <button type="button" class="btn btn-secondary" id="collection-rename-cancel" title="{{ "user.collections.rename.cancel"|trans }}"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </form>
+            </div>
+
+            {% if app.user == collection.user %}
+                <button class="btn btn-secondary btn-sm" id="rename-collection" title="{{ "user.collections.rename.title"|trans }}"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button class="btn btn-danger btn-sm" id="remove-collection" data-id="{{ collection.id }}" data-name="{{ collection.name }}" title="{{ "user.collections.remove.title"|trans }}"><i class="fa-solid fa-trash"></i></button>
+            {% endif %}
+        </div>
+
+        <div class="col">
+            <div class="dropdown text-end">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">{{ "sort-by"|trans }} ({{ ("user.collections.sort." ~ sort.field)|trans }})</button>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+                    {% for field in sortOptions %}
+                        {% if sort.field == field %}
+                            {% if sort.direction == "asc" %}
+                                {% set icon = "up" %}
+                                {% set nextDirection = "desc" %}
+                            {% else %}
+                                {% set icon = "down" %}
+                                {% set nextDirection = "asc" %}
+                            {% endif %}
+                        {% else %}
+                            {% set icon = null %}
+                            {% set nextDirection = "asc" %}
+                        {% endif %}
+
+                        <li><a href="{{ path("user_profile_collection_page", {"username": collection.user.username, "collection": collection.id, "sort": field ~ "/" ~ nextDirection }) }}" class="{{ html_classes("dropdown-item", "d-flex", "justify-content-between", "align-items-center", {"active": sort.field == field}) }}">{{ ("user.collections.sort." ~ field)|trans }}{% if icon %}<i class="fa-solid fa-sort-{{ icon }}"></i>{% endif %}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% if user == app.user %}
+        {% if app.request.query.get("flash") == "success" %}
+            <div class="my-3 alert alert-success">{{ ("user.collections." ~ app.request.query.get("action") ~ ".submit-response.success")|trans({"name": app.request.query.get("name"), "newName": app.request.query.get("new-name")}) }}</div>
+        {% elseif app.request.query.get("flash") == "error" %}
+            <div class="my-3 alert alert-danger">{{ ("user.collections." ~ app.request.query.get("action") ~ ".submit-response.error." ~ app.request.query.get("error"))|trans({"name": app.request.query.get("name")}) }}</div>
+        {% endif %}
+    {% endif %}
+
+    {% if items|length %}
+        {% set UserCollectionItemType = enum("tracky\\UserCollectionItemType") %}
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4" id="collection-items" data-id="{{ collection.id }}">
+            {% for item in items %}
+                <div class="col">
+                    <div class="position-relative">
+                        {% if item.type == UserCollectionItemType.SHOW %}
+                            {% set itemName = item.resolvedItem.title %}
+                            {% include "components/show-card-small.twig" with {"show": item.resolvedItem} %}
+                        {% elseif item.type == UserCollectionItemType.SEASON %}
+                            {% set itemName = item.resolvedItem.show.title ~ " - " ~ ("shows.season"|trans({"%number%": item.resolvedItem.number }))%}
+                            {% include "components/season-card-small.twig" with {"season": item.resolvedItem} %}
+                        {% elseif item.type == UserCollectionItemType.EPISODE %}
+                            {% set itemName = item.resolvedItem.season.show.title ~ " - " ~ ("shows.episode"|trans({"%number%": item.resolvedItem.season.number ~ "x" ~ item.resolvedItem.number }))%}
+                            {% include "components/episode-card-small.twig" with {"episode": item.resolvedItem} %}
+                        {% elseif item.type == UserCollectionItemType.MOVIE %}
+                            {% set itemName = item.resolvedItem.title %}
+                            {% include "components/movie-card-small.twig" with {"movie": item.resolvedItem} %}
+                        {% elseif item.type == UserCollectionItemType.MOVIE_SET %}
+                            {% set itemName = item.resolvedItem.title %}
+                            {% include "components/movieset-card-small.twig" with {"movieSet": item.resolvedItem} %}
+                        {% endif %}
+
+                        {% if app.user == collection.user %}
+                            <button class="btn btn-danger btn-sm position-absolute top-0 end-0 remove-collection-item" data-id="{{ item.id }}" data-item-name="{{ itemName }}" title="{{ "user.collections.remove-item.title"|trans }}"><i class="fa-solid fa-close"></i></button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">{{ "user.collections.no-items-available"|trans }}</div>
+    {% endif %}
+{% endblock %}
