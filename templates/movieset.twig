@@ -44,7 +44,7 @@
 
                 {% if is_granted("IS_AUTHENTICATED") %}
                     <div class="btn-group">
-                        <button class="btn btn-primary btn-sm add-to-collection" data-type="movieset" data-item="{{ movieSet.id }}" title="{{ "user.collections.add-to-collection"|trans }}"><i class="fa-solid fa-folder-plus"></i></button>
+                        <button class="btn btn-primary btn-sm add-to-collection" data-type="movieset" data-item="{{ movieSet.id }}" title="{{ "user.collections.add-item.title"|trans }}"><i class="fa-solid fa-folder-plus"></i></button>
                     </div>
                 {% endif %}
             </div>

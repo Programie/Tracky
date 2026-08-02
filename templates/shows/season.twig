@@ -39,7 +39,7 @@
 
                 {% if is_granted("IS_AUTHENTICATED") %}
                     <div class="btn-group">
-                        <button class="btn btn-primary btn-sm add-to-collection" data-type="season" data-item="{{ season.id }}" title="{{ "user.collections.add-to-collection"|trans }}"><i class="fa-solid fa-folder-plus"></i></button>
+                        <button class="btn btn-primary btn-sm add-to-collection" data-type="season" data-item="{{ season.id }}" title="{{ "user.collections.add-item.title"|trans }}"><i class="fa-solid fa-folder-plus"></i></button>
                         <button class="btn btn-success btn-sm add-view" data-type="season" data-show-id="{{ show.id }}" data-season="{{ season.number }}" title="{{ "views.add-season-view"|trans }}"><i class="fa-solid fa-check"></i></button>
                         <button class="btn btn-danger btn-sm remove-view" data-type="season" data-show-id="{{ show.id }}" data-season="{{ season.number }}" title="{{ "views.remove-season-view"|trans }}"><i class="fa-solid fa-trash"></i></button>
                     </div>
