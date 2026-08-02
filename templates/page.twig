@@ -152,6 +152,24 @@
 
         {% block additional_content %}{% endblock %}
 
+        {% set translations = [
+            "date-ranges.all",
+            "date-ranges.custom",
+            "date-ranges.last-30-days",
+            "date-ranges.last-7-days",
+            "date-ranges.last-month",
+            "date-ranges.last-year",
+            "date-ranges.this-month",
+            "date-ranges.this-year",
+            "library-management.delete-item-failed",
+            "library-management.errors.view-exists",
+            "modal.cancel",
+            "modal.ok",
+            "user.collections.add-item.header",
+            "user.collections.add-item.submit-response.error.unknown",
+            "user.collections.add-item.submit-response.success"
+        ] %}
+
         <datalist id="translations">
             {% for key in translations|default([]) %}
                 <option value="{{ key }}">{{ key|trans }}</option>

@@ -1,8 +1,6 @@
 import {createPopper} from "@popperjs/core";
-
-interface Dictionary {
-  [key: string]: string;
-}
+import {createToast} from "./toast";
+import {Dictionary, tr} from "./utils";
 
 document.addEventListener("DOMContentLoaded", () => {
     let username = document.querySelector<HTMLMetaElement>('meta[name="username"]')?.content;
@@ -54,7 +52,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         let selectElement = document.querySelector<HTMLSelectElement>("#add-collection-item-tooltip-collection");
-        let collectionId = selectElement?.selectedOptions.item(0)?.value ?? null;
+        let selectedOption = selectElement?.selectedOptions.item(0);
+
+        if (selectedOption === null) {
+            return;
+        }
+
+        let collectionId = selectedOption?.value;
+        let collectionName = selectedOption?.textContent;
 
         if (collectionId === null) {
             return;
@@ -66,6 +71,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 type: activeAddCollectionItemEntry.type,
                 item: activeAddCollectionItemEntry.item
             })
+        }).then((response) => {
+            if (response.ok) {
+                createToast(tr("user.collections.add-item.header"), tr("user.collections.add-item.submit-response.success", {name: collectionName ?? ""}), "success");
+            } else {
+                createToast(tr("user.collections.add-item.header"), tr("user.collections.add-item.submit-response.error.unknown", {name: collectionName ?? ""}), "danger");
+            }
         });
 
         // Hide the modal
@@ -111,8 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         fetch(`/users/${username}/collections/${activeRemoveCollectionEntry.id}`, {
             method: "DELETE"
-        }).then(() => {
-            document.location.href = `/users/${username}/collections?flash=success&action=remove&name=${encodeURIComponent(collectionName ?? "")}`;
+        }).then((response) => {
+            document.location.href = `/users/${username}/collections?flash=${response.ok ? "success" : "error"}&action=remove&name=${encodeURIComponent(collectionName ?? "")}`;
         });
     });
 
@@ -142,8 +153,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         fetch(`/users/${username}/collections/${collectionId}/${activeRemoveCollectionItemEntry.id}`, {
             method: "DELETE"
-        }).then(() => {
-            document.location.href = `/users/${username}/collections/${collectionId}?flash=success&action=remove-item&name=${encodeURIComponent(itemName ?? "")}`;
+        }).then((response) => {
+            document.location.href = `/users/${username}/collections/${collectionId}?flash=${response.ok ? "success" : "error"}&action=remove-item&name=${encodeURIComponent(itemName ?? "")}`;
         });
     });
 

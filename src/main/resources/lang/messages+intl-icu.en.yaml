@@ -87,14 +87,22 @@ user:
       header: "Remove collection"
       submit-response:
         success: "Collection ''{name}'' removed."
+        error:
+          unknown: "An error occurred while removing collection ''{name}''!"
     add-item:
       title: "Add to collection"
       header: "Add item to collection"
+      submit-response:
+        success: "Item added to the collection ''{name}''."
+        error:
+          unknown: "An error occurred while adding the item to the collection ''{name}''!"
     remove-item:
       title: "Remove from collection"
       header: "Remove item from collection"
       submit-response:
         success: "Item ''{name}'' removed from collection."
+        error:
+          unknown: "An error occurred while removing ''{name}'' from the collection!"
     no-collections-available: "No collections available."
     no-items-available: "No items available."
     name: "Name"
