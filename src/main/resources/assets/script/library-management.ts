@@ -17,7 +17,7 @@ function deleteItem(url: string) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    let deleteItemTooltipElement = document.querySelector<HTMLElement>("#library-management-delete-item")!;
+    let deleteItemTooltipElement = document.querySelector<HTMLElement>("#library-management-delete-item-tooltip")!;
     let activeDeleteItem: DOMStringMap | null = null;
 
     document.querySelectorAll<HTMLButtonElement>(".add-item-to-library").forEach((element) => {
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    document.querySelector("#library-management-delete-item-confirm")?.addEventListener("click", () => {
+    document.querySelector("#library-management-delete-item-tooltip-confirm")?.addEventListener("click", () => {
         if (activeDeleteItem === null) {
             return;
         }
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    document.querySelector("#library-management-delete-item-cancel")?.addEventListener("click", () => {
+    document.querySelector("#library-management-delete-item-tooltip-cancel")?.addEventListener("click", () => {
         deleteItemTooltipElement.style.display = "none";
         activeDeleteItem = null;
     });
