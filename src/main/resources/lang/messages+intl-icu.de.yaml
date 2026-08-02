@@ -68,12 +68,51 @@ user:
   no-history-available: "Kein Verlauf verfügbar."
   collections:
     title: "Sammlungen"
-    create-collection: "Sammlung erstellen"
+    create:
+      title: "Sammlung erstellen"
+      submit-response:
+        success: "Sammlung ''{name}'' erstellt."
+        error:
+          empty-name: "Kein Name angegeben!"
+          duplicate-collection: "Eine andere Sammlung mit dem Name ''{name}'' existiert bereits!"
+    rename:
+      title: "Umbenennen"
+      submit-response:
+        success: "Sammlung ''{name}'' zu ''{newName}'' umbenannt."
+        error:
+          empty-name: "Kein Name angegeben!"
+          duplicate-collection: "Eine andere Sammlung mit dem Name ''{name}'' existiert bereits!"
+      ok: "OK"
+      cancel: "Abbrechen"
+    remove:
+      title: "Löschen"
+      header: "Sammlung löschen"
+      ok: "OK"
+      cancel: "Abbrechen"
+      submit-response:
+        success: "Sammlung ''{name}'' gelöscht."
+    add-item:
+      title: "Zu Sammlung hinzufügen"
+      header: "Zu Sammlung hinzufügen"
+      ok: "OK"
+      cancel: "Abbrechen"
+    remove-item:
+      title: "Von Sammlung entfernen"
+      header: "Eintrag von Sammlung entfernen"
+      ok: "OK"
+      cancel: "Abbrechen"
+      submit-response:
+        success: "Eintrag ''{name}'' von Sammlung entfernt."
     no-collections-available: "Keine Sammlungen verfügbar."
     no-items-available: "Keine Elemente verfügbar."
     name: "Name"
     items: "Elemente"
     creation-date: "Erstelldatum"
+    sort:
+      title: "Titel"
+      type: "Typ"
+      added: "Hinzugefügt"
+      runtime: "Länge"
 
 search:
   title: "Suche"
@@ -163,8 +202,10 @@ movie-sets:
 views:
   views: "{count} mal gesehen"
   add-view: "Als gesehen markieren"
-  add-season-view: "Alle Folgen der Staffel als gesehen markieren"
-  remove-season-view: "Gesehen-Status aller Folgen der Staffel zurücksetzen"
+  add-show-view: "Alle Folgen dieser Serie als gesehen markieren"
+  add-season-view: "Alle Folgen dieser Staffel als gesehen markieren"
+  remove-show-view: "Gesehen-Status aller Folgen dieser Serie zurücksetzen"
+  remove-season-view: "Gesehen-Status aller Folgen dieser Staffel zurücksetzen"
   show-all-views: "Gesamten Verlauf anzeigen"
   last-watched: "Zuletzt gesehen"
   remove:
