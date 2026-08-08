@@ -11,8 +11,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use tracky\datetime\DateTime;
 use tracky\model\BaseEntity;
+use tracky\model\Season;
 use tracky\model\User;
 use tracky\model\UserCollection;
 use tracky\model\UserCollectionItem;
@@ -72,7 +74,7 @@ class UserCollectionController extends AbstractController
     }
 
     #[Route("/users/{username}/collections/{collection}", name: "user_profile_collection_page", methods: ["GET"])]
-    public function getCollectionPage(User $user, UserCollection $collection, Request $request): Response
+    public function getCollectionPage(User $user, UserCollection $collection, Request $request, TranslatorInterface $translator): Response
     {
         $sort = explode("/", trim($request->query->get("sort", "")), 2);
 
@@ -117,30 +119,9 @@ class UserCollectionController extends AbstractController
 
         $items = iterator_to_array($collection->getItems());
 
-        usort($items, function(UserCollectionItem $item1, UserCollectionItem $item2) use ($sortBy, $sortDirection) {
-            $resolvedItem1 = $item1->getResolvedItem();
-            $resolvedItem2 = $item2->getResolvedItem();
-
-            switch ($sortBy) {
-                case "title":
-                    $value1 = $resolvedItem1->getTitle();
-                    $value2 = $resolvedItem2->getTitle();
-                    break;
-                case "type":
-                    $value1 = $item1->getType();
-                    $value2 = $item2->getType();
-                    break;
-                case "added":
-                    $value1 = $item1->getAddedAt()->getTimestamp();
-                    $value2 = $item2->getAddedAt()->getTimestamp();
-                    break;
-                case "runtime":
-                    $value1 = $resolvedItem1->getRuntime();
-                    $value2 = $resolvedItem2->getRuntime();
-                    break;
-                default:
-                    return 0;
-            }
+        usort($items, function(UserCollectionItem $item1, UserCollectionItem $item2) use ($sortBy, $sortDirection, $translator) {
+            $value1 = $this->getSortString($item1, $sortBy, $translator);
+            $value2 = $this->getSortString($item2, $sortBy, $translator);
 
             if ($value1 < $value2) {
                 return $sortDirection == "asc" ? -1 : 1;
@@ -161,6 +142,28 @@ class UserCollectionController extends AbstractController
                 "direction" => $sortDirection
             ]
         ]);
+    }
+
+    private function getSortString(UserCollectionItem $item, string $sortBy, TranslatorInterface $translator): string
+    {
+        $resolvedItem = $item->getResolvedItem();
+
+        switch ($sortBy) {
+            case "title":
+                if ($resolvedItem instanceof Season) {
+                    return $translator->trans("shows.season", ["%number%" => $resolvedItem->getNumber()]);
+                } else {
+                    return $resolvedItem->getTitle();
+                }
+            case "type":
+                return $item->getType()->value;
+            case "added":
+                return $item->getAddedAt()->getTimestamp();
+            case "runtime":
+                return $resolvedItem->getRuntime();
+            default:
+                return "";
+        }
     }
 
     #[Route("/users/{username}/collections", name: "user_profile_collection_create_action", methods: ["POST"])]
