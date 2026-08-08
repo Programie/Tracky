@@ -1,8 +1,14 @@
-# Tracky
+<h1 align="center">
+    <img src="src/main/resources/assets/images/app-icon.svg" alt="Logo" width="200"/>
+    <br/>
+    Tracky
+</h1>
 
-Track your watched movies and TV shows.
-
-Open Source, your data, do whatever you want with it.
+<p align="center">
+    <b>Track your watched movies and TV shows.</b>
+    <br/><br/>
+    Open Source, your data, do whatever you want with it.
+</p>
 
 To scrobble watched movies and episodes from Kodi, you might want to check out [HTTP Scrobbler for Kodi](https://github.com/Programie/KodiAddon-HttpScrobbler) which is a compatible scrobble client for Tracky.
 
