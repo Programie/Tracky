@@ -1,9 +1,9 @@
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
     {% for show in shows %}
         {% if not (
-            ("ended" in hideShows and show.status == "ended") or
-            ("finished" in hideShows and show.getWatchProgress(watchStatsProvider) == 100) or
-            ("unwatched" in hideShows and show.getWatchProgress(watchStatsProvider) == 0)
+            ("ended" in hideShows|default([]) and show.status == "ended") or
+            ("finished" in hideShows|default([]) and show.getWatchProgress(watchStatsProvider) == 100) or
+            ("unwatched" in hideShows|default([]) and show.getWatchProgress(watchStatsProvider) == 0)
         ) %}
             <div class="col">
                 {% include "components/show-card-small.twig" with {"show": show} %}
