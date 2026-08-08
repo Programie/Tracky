@@ -1,11 +1,9 @@
 <?php
 namespace tracky\controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use tracky\HistoryEntry;
-use tracky\model\User;
 use tracky\orm\EpisodeRepository;
 use tracky\orm\MovieRepository;
 use tracky\orm\ShowRepository;
@@ -33,9 +31,6 @@ class HomeController extends AbstractController
         $latestWatchedMovies = null;
         $nextEpisodes = null;
 
-        /**
-         * @var User
-         */
         $user = $this->getUser();
 
         $userSettings = $user?->getSettings() ?? new UserSettings;

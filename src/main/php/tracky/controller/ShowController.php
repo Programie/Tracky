@@ -5,7 +5,6 @@ use DateInterval;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use RuntimeException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +17,6 @@ use tracky\ImageFetcher;
 use tracky\model\Episode;
 use tracky\model\Season;
 use tracky\model\Show;
-use tracky\model\User;
 use tracky\model\View;
 use tracky\orm\ShowRepository;
 use tracky\orm\ViewRepository;
@@ -427,11 +425,6 @@ class ShowController extends AbstractController
 
     private function getSettings(): UserSettings
     {
-        /**
-         * @var User
-         */
-        $user = $this->getUser();
-
-        return $user?->getSettings() ?? new UserSettings;
+        return $this->getUser()?->getSettings() ?? new UserSettings;
     }
 }

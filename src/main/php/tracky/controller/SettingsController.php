@@ -2,12 +2,10 @@
 namespace tracky\controller;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use tracky\model\User;
 use tracky\model\UserSetting;
 
 class SettingsController extends AbstractController
@@ -16,13 +14,8 @@ class SettingsController extends AbstractController
     #[IsGranted("IS_AUTHENTICATED")]
     public function getSettingsPage(): Response
     {
-        /**
-         * @var User
-         */
-        $user = $this->getUser();
-
         return $this->render("user/settings/settings.twig", [
-            "groupedSettings" => $user->getSettings()->getOptionsGroupedBySections()
+            "groupedSettings" => $this->getUser()->getSettings()->getOptionsGroupedBySections()
         ]);
     }
 
@@ -30,9 +23,6 @@ class SettingsController extends AbstractController
     #[IsGranted("IS_AUTHENTICATED")]
     public function saveSettings(Request $request, EntityManagerInterface $entityManager): Response
     {
-        /**
-         * @var User
-         */
         $user = $this->getUser();
         $settingsToPersist = [];
         $settingsToRemove = [];

@@ -1,7 +1,6 @@
 <?php
 namespace tracky\controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use tracky\datetime\Date;
@@ -50,11 +49,7 @@ class HistoryController extends AbstractController
 
         $count = $viewRepository->count($criteria, $type, $dateRange);
 
-        /**
-         * @var User
-         */
-        $currentUser = $this->getUser();
-        $userSettings = $currentUser?->getSettings() ?? new UserSettings;
+        $userSettings = $this->getUser()?->getSettings() ?? new UserSettings;
 
         $itemsPerPage = $userSettings->getOptionValue(SettingName::PROFILE_HISTORY_ITEMS_PER_PAGE);
         $maxPreviousNextPages = $userSettings->getOptionValue(SettingName::PROFILE_HISTORY_MAX_PREVIOUS_NEXT_PAGES);
