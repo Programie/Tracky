@@ -53,6 +53,7 @@ class View extends BaseEntity
     public function setItem(Episode|Movie $item): self
     {
         $this->item = $item->getId();
+        $this->type = $item->getViewType();
         return $this;
     }
 
