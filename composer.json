@@ -17,8 +17,8 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=8.4",
-    "guzzlehttp/guzzle": "^7.5",
-    "guzzlehttp/psr7": "^2.6",
+    "guzzlehttp/guzzle": "^8.0",
+    "guzzlehttp/psr7": "^3.0",
     "symfony/asset": "^8.1",
     "symfony/cache": "^6.2",
     "symfony/config": "^7.4",
