@@ -13,7 +13,7 @@ class ScrobbleQueueItem extends BaseEntity
     #[ORM\JoinColumn(name: "user", referencedColumnName: "id")]
     private User $user;
 
-    #[ORM\Column(type: "string")]
+    #[ORM\Column(type: "text")]
     private string $json;
 
     #[ORM\Column(name: "dateTime", type: "datetime")]
