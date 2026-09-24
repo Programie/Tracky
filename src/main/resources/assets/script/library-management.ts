@@ -65,6 +65,10 @@ document.addEventListener("DOMContentLoaded", () => {
             case "movie":
                 deleteItem(`/movies/${activeDeleteItem.item}`);
                 break;
+
+            case "movie-set":
+                deleteItem(`/moviesets/${activeDeleteItem.item}`);
+                break;
         }
     });
 

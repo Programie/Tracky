@@ -228,6 +228,7 @@ library-management:
     options: "Optionen"
   types:
     movie: "Film"
+    movie-set: "Filmreihe"
     show: "Serie"
   add-items:
     page-title: "Filme oder Serien hinzufügen"

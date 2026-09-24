@@ -1,12 +1,14 @@
 <?php
 namespace tracky\controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\ImageFetcher;
 use tracky\model\MovieSet;
 use tracky\orm\MovieSetRepository;
@@ -99,7 +101,7 @@ class MovieSetController extends AbstractController
     }
 
     #[Route("/moviesets/{movieSet}", name: "moviesets_single_page", methods: ["GET"])]
-    public function getMoviePage(MovieSet $movieSet): Response
+    public function getMovieSetPage(MovieSet $movieSet): Response
     {
         $user = $this->getUser();
 
@@ -113,5 +115,28 @@ class MovieSetController extends AbstractController
             "movieSet" => $movieSet,
             "watchStats" => $watchStats
         ]);
+    }
+
+    #[Route("/moviesets/{movieSet}", name: "moviesets_remove_movieset_action", methods: ["DELETE"])]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function removeMovieSet(MovieSet $movieSet, ViewRepository $viewRepository, EntityManagerInterface $entityManager): Response
+    {
+        // Make sure no view exists for any movie in this movieset
+        foreach ($movieSet->getMovies() as $movie) {
+            if ($viewRepository->count(["item" => $movie->getId()], type: ViewType::MOVIE)) {
+                return $this->json([
+                    "error" => "view-exists"
+                ], 409);
+            }
+        }
+
+        foreach ($movieSet->getMovies() as $movie) {
+            $entityManager->remove($movie);
+        }
+
+        $entityManager->remove($movieSet);
+        $entityManager->flush();
+
+        return new Response("Movieset removed from database");
     }
 }

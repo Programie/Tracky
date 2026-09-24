@@ -240,6 +240,7 @@ library-management:
     options: "Options"
   types:
     movie: "Movie"
+    movie-set: "Movie set"
     show: "Show"
   add-items:
     page-title: "Add movies or shows"

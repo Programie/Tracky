@@ -14,6 +14,10 @@
                 {% set itemType = "movie" %}
                 {% set itemTypeTitle = "library-management.types.movie"|trans %}
                 {% set url = path("movies_single_page", {"movie": item.id}) %}
+            {% elseif item.className == "MovieSet" %}
+                {% set itemType = "movie-set" %}
+                {% set itemTypeTitle = "library-management.types.movie-set"|trans %}
+                {% set url = path("moviesets_single_page", {"movieSet": item.id}) %}
             {% elseif item.className == "Show" %}
                 {% set itemType = "show" %}
                 {% set itemTypeTitle = "library-management.types.show"|trans %}

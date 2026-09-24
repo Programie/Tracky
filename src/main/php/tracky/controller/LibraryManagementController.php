@@ -9,16 +9,19 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\dataprovider\Helper;
 use tracky\model\Movie;
+use tracky\model\MovieSet;
 use tracky\model\Show;
 use tracky\orm\MovieRepository;
+use tracky\orm\MovieSetRepository;
 use tracky\orm\ShowRepository;
 
 class LibraryManagementController extends AbstractController
 {
     public function __construct(
-        private readonly Helper          $dataProviderHelper,
-        private readonly MovieRepository $movieRepository,
-        private readonly ShowRepository  $showRepository
+        private readonly Helper             $dataProviderHelper,
+        private readonly MovieRepository    $movieRepository,
+        private readonly MovieSetRepository $movieSetRepository,
+        private readonly ShowRepository     $showRepository
     )
     {
     }
@@ -112,8 +115,9 @@ class LibraryManagementController extends AbstractController
 
         $items = array_merge($items, $this->showRepository->findAll());
         $items = array_merge($items, $this->movieRepository->findAll());
+        $items = array_merge($items, $this->movieSetRepository->findAll());
 
-        usort($items, function (Show|Movie $item1, Show|Movie $item2) {
+        usort($items, function (Show|Movie|MovieSet $item1, Show|Movie|MovieSet $item2) {
             return strcmp($item1->getTitle(), $item2->getTitle());
         });
 
