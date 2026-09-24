@@ -3,14 +3,15 @@
 ## [2.0.0] - pending
 
 - Use Doctrine to handle database migrations - importing database.sql and manually updating database no longer required
-- Improved and modernize frontend making it looking less like a basic Bootstrap page
-- Improved page load times (e.g. startpage with user logged in and TV show progress)
+- Improved and modernized frontend making it looking less like a basic Bootstrap page
+- Improved page load times (e.g. overview page with user logged in and TV show progress)
 - Show plot for shows and seasons if available
 - Show watch progress in show and season cards
 - Use TMDB as data provider for shows by default
-- Added buttons to mark a complete season as watched or unwatched
-- Per-user settings
-- Add movie sets
+- Added buttons to mark a complete season or the whole TV show as watched or unwatched
+- Added movie sets and automatically fetch new movies of existing movie sets
+- Implemented per-user settings (e.g. to change the number of episodes and movies to display on the overview page)
+- Implemented user collections to allow users to define their own sets of movies, movie sets, shows, seasons and episodes
 
 ## [1.6.0] - 2026-06-10
 
