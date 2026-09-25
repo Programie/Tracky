@@ -266,9 +266,18 @@ settings:
       label: "Shows"
     user-profile:
       label: "User profile"
+    change-password:
+      label: "Change password"
   flash:
-    saved: "Settings saved successfully."
-    error: "An error occurred while saving settings."
+    success:
+      save-settings: "Settings saved successfully."
+      update-password: "Password updated successfully."
+    error:
+      save-settings: "An error occurred while saving settings!"
+      invalid-current-password: "The current password is invalid!"
+      new-password-missing: "No new password given!"
+      new-passwords-do-not-match: "New passwords are not the same!"
+      new-password-too-short: "The entered new password is too short!"
   localization:
     language:
       label: "Language"
@@ -297,6 +306,15 @@ settings:
       label: "Items per page on history page"
     history-max-previous-next-pages:
       label: "Number of previous and next pages on history page"
+  change-password:
+    current:
+      label: "Current password"
+    new:
+      label: "New password"
+    new-confirm:
+      label: "Confirm new password"
+    update:
+      label: "Update password"
   items:
     label: "items"
   save:

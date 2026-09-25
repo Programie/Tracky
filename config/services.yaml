@@ -26,6 +26,9 @@ services:
       $showFetchInterval: "%show-fetch-interval%"
       $movieSetFetchInterval: "%movie-set-fetch-interval%"
       $downloadAllImages: "%image-fetcher.download-all-on-update%"
+  tracky\controller\SettingsController:
+    arguments:
+      $minPasswordLength: "%user.min-password-length%"
   tracky\controller\UserController:
     arguments:
       $enableRegister: "%user.enable-register%"

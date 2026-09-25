@@ -254,9 +254,18 @@ settings:
       label: "Serien"
     user-profile:
       label: "Benutzerprofil"
+    change-password:
+      label: "Passwort ändern"
   flash:
-    saved: "Einstellungen erfolgreich gespeichert."
-    error: "Beim Speichern der Einstellungen ist ein Fehler aufgetreten."
+    success:
+      save-settings: "Einstellungen erfolgreich gespeichert."
+      update-password: "Passwort erfolgreich geändert."
+    error:
+      save-settings: "Beim Speichern der Einstellungen ist ein Fehler aufgetreten!"
+      invalid-current-password: "Das aktuelle Passwort ist ungültig!"
+      new-password-missing: "Kein neues Passwort angegeben!"
+      new-passwords-do-not-match: "Die neuen Passwörter sind nicht die selben!"
+      new-password-too-short: "Das neue Passwort ist zu kurz!"
   localization:
     language:
       label: "Sprache"
@@ -285,6 +294,15 @@ settings:
       label: "Einräge pro Seite im Verlauf"
     history-max-previous-next-pages:
       label: "Anzahl der vorherigen und nächsten Seiten im Verlauf"
+  change-password:
+    current:
+      label: "Aktuelles passwort"
+    new:
+      label: "Neues Passwort"
+    new-confirm:
+      label: "Neues Passwort bestätigen"
+    update:
+      label: "Passwort ändern"
   items:
     label: "Einträge"
   save:
