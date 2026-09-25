@@ -22,7 +22,8 @@ use tracky\watchstats\WatchStatsProvider;
 class UserController extends AbstractController
 {
     public function __construct(
-        private readonly bool $enableRegister
+        private readonly bool $enableRegister,
+        private readonly int  $minPasswordLength
     )
     {
     }
@@ -88,6 +89,15 @@ class UserController extends AbstractController
                     "username" => $username,
                     "error" => [
                         "messageKey" => "register.error.passwords-do-not-match"
+                    ]
+                ]);
+            }
+
+            if (mb_strlen($password) < $this->minPasswordLength) {
+                return $this->render("user/register.twig", [
+                    "username" => $username,
+                    "error" => [
+                        "messageKey" => "register.error.password-too-short"
                     ]
                 ]);
             }

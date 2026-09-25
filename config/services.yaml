@@ -29,6 +29,7 @@ services:
   tracky\controller\UserController:
     arguments:
       $enableRegister: "%user.enable-register%"
+      $minPasswordLength: "%user.min-password-length%"
   tracky\dataprovider\Helper:
     arguments:
       $movieProvider: "%data-provider.movies%"

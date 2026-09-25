@@ -45,11 +45,12 @@ register:
   submit: "Register"
   already-have-account: "Already have an account?"
   error:
-    username-missing: "No username given"
-    username-taken: "The username is already taken"
-    password-missing: "No password given"
-    passwords-do-not-match: "Passwords are not the same"
-    not-enabled: "Registration is not enabled"
+    username-missing: "No username given!"
+    username-taken: "The username is already taken!"
+    password-missing: "No password given!"
+    passwords-do-not-match: "Passwords are not the same!"
+    password-too-short: "The entered password is too short!"
+    not-enabled: "Registration is not enabled!"
 
 login:
   title: "Login"

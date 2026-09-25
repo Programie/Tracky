@@ -45,11 +45,12 @@ register:
   submit: "Registrieren"
   already-have-account: "Du hast bereits einen Account?"
   error:
-    username-missing: "Kein Benutzername angegeben"
-    username-taken: "Der Benutzername wird bereits verwendet"
-    password-missing: "Kein Passwort angegeben"
-    passwords-do-not-match: "Die Passwörter sind nicht die selben"
-    not-enabled: "Registrierung ist nicht aktiviert"
+    username-missing: "Kein Benutzername angegeben!"
+    username-taken: "Der Benutzername wird bereits verwendet!"
+    password-missing: "Kein Passwort angegeben!"
+    passwords-do-not-match: "Die Passwörter sind nicht die selben!"
+    password-too-short: "Das Passwort ist zu kurz!"
+    not-enabled: "Registrierung ist nicht aktiviert!"
 
 login:
   title: "Anmelden"

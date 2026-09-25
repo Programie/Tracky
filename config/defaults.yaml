@@ -13,5 +13,6 @@ parameters:
   image-fetcher.storage-path: "%kernel.cache_dir%/images"
   image-fetcher.download-all-on-update: true
   user.enable-register: true
+  user.min-password-length: 8
   now-watching.storage-path: "%kernel.cache_dir%/now-watching"
   now-watching.max-age: 300
