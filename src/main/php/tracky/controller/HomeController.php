@@ -69,7 +69,7 @@ class HomeController extends AbstractController
         $episodes = [];
 
         foreach ($showRepository->findAllWithEpisodes() as $show) {
-            $latestWatchedEpisode = $show->getLatestWatchedEpisodes($watchStatsProvider, 1)[0] ?? null;
+            $latestWatchedEpisode = $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, 1, false)[0] ?? null;
 
             if ($latestWatchedEpisode === null) {
                 continue;
