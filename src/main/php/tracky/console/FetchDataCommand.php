@@ -2,6 +2,7 @@
 namespace tracky\console;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -60,18 +61,22 @@ class FetchDataCommand extends Command
 
                     $output->writeln(sprintf("Fetching data for show %d (%s) using provider %s", $show->getId(), $show->getTitle(), $dataProvider::class));
 
-                    if (!$dataProvider->fetchShow($show, true)) {
-                        $output->writeln(sprintf("ERROR: Fetching show %d (%s) failed!", $show->getId(), $show->getTitle()));
-                        continue;
-                    }
+                    try {
+                        if (!$dataProvider->fetchShow($show, true)) {
+                            $output->writeln(sprintf("ERROR: Fetching show %d (%s) failed!", $show->getId(), $show->getTitle()));
+                            continue;
+                        }
 
-                    $this->entityManager->persist($show);
-                    $this->entityManager->flush();
+                        $this->entityManager->persist($show);
+                        $this->entityManager->flush();
 
-                    if ($this->downloadAllImages) {
-                        $output->writeln(sprintf("Fetching images for show %d (%s)", $show->getId(), $show->getTitle()));
+                        if ($this->downloadAllImages) {
+                            $output->writeln(sprintf("Fetching images for show %d (%s)", $show->getId(), $show->getTitle()));
 
-                        $show->fetchPosterImages($this->imageFetcher, true, true);
+                            $show->fetchPosterImages($this->imageFetcher, true, true);
+                        }
+                    } catch (Exception $exception) {
+                        $output->writeln(sprintf("ERROR: Fetching show %d (%s) failed: %s", $show->getId(), $show->getTitle(), $exception->getMessage()));
                     }
                 }
                 break;
@@ -90,18 +95,22 @@ class FetchDataCommand extends Command
 
                     $output->writeln(sprintf("Fetching data for movie %d (%s) using provider %s", $movie->getId(), $movie->getTitle(), $dataProvider::class));
 
-                    if (!$dataProvider->fetchMovie($movie)) {
-                        $output->writeln(sprintf("ERROR: Fetching movie %d (%s) failed!", $movie->getId(), $movie->getTitle()));
-                        continue;
-                    }
+                    try {
+                        if (!$dataProvider->fetchMovie($movie)) {
+                            $output->writeln(sprintf("ERROR: Fetching movie %d (%s) failed!", $movie->getId(), $movie->getTitle()));
+                            continue;
+                        }
 
-                    $this->entityManager->persist($movie);
-                    $this->entityManager->flush();
+                        $this->entityManager->persist($movie);
+                        $this->entityManager->flush();
 
-                    if ($this->downloadAllImages) {
-                        $output->writeln(sprintf("Fetching images for movie %d (%s)", $movie->getId(), $movie->getTitle()));
+                        if ($this->downloadAllImages) {
+                            $output->writeln(sprintf("Fetching images for movie %d (%s)", $movie->getId(), $movie->getTitle()));
 
-                        $movie->fetchPosterImage($this->imageFetcher);
+                            $movie->fetchPosterImage($this->imageFetcher);
+                        }
+                    } catch (Exception $exception) {
+                        $output->writeln(sprintf("ERROR: Fetching movie %d (%s) failed: %s", $movie->getId(), $movie->getTitle(), $exception->getMessage()));
                     }
                 }
                 break;
@@ -120,18 +129,22 @@ class FetchDataCommand extends Command
 
                     $output->writeln(sprintf("Fetching data for movie set %d (%s) using provider %s", $movieSet->getId(), $movieSet->getTitle(), $dataProvider::class));
 
-                    if (!$dataProvider->fetchMovieSet($movieSet)) {
-                        $output->writeln(sprintf("ERROR: Fetching movie set %d (%s) failed!", $movieSet->getId(), $movieSet->getTitle()));
-                        continue;
-                    }
+                    try {
+                        if (!$dataProvider->fetchMovieSet($movieSet)) {
+                            $output->writeln(sprintf("ERROR: Fetching movie set %d (%s) failed!", $movieSet->getId(), $movieSet->getTitle()));
+                            continue;
+                        }
 
-                    $this->entityManager->persist($movieSet);
-                    $this->entityManager->flush();
+                        $this->entityManager->persist($movieSet);
+                        $this->entityManager->flush();
 
-                    if ($this->downloadAllImages) {
-                        $output->writeln(sprintf("Fetching images for movie set %d (%s)", $movieSet->getId(), $movieSet->getTitle()));
+                        if ($this->downloadAllImages) {
+                            $output->writeln(sprintf("Fetching images for movie set %d (%s)", $movieSet->getId(), $movieSet->getTitle()));
 
-                        $movieSet->fetchPosterImages($this->imageFetcher, true);
+                            $movieSet->fetchPosterImages($this->imageFetcher, true);
+                        }
+                    } catch (Exception $exception) {
+                        $output->writeln(sprintf("ERROR: Fetching movie set %d (%s) failed: %s", $movieSet->getId(), $movieSet->getTitle(), $exception->getMessage()));
                     }
                 }
                 break;

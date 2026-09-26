@@ -2,6 +2,7 @@
 namespace tracky\console;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,14 +49,18 @@ class UpdateDataCommand extends Command
 
             $output->writeln(sprintf("Fetching data for show: %s", $show->getTitle()));
 
-            $dataProvider = $this->dataProviderHelper->getProviderByEntry($show);
-            $dataProvider->fetchShow($show, true);
+            try {
+                $dataProvider = $this->dataProviderHelper->getProviderByEntry($show);
+                $dataProvider->fetchShow($show, true);
 
-            $this->entityManager->persist($show);
-            $this->entityManager->flush();
+                $this->entityManager->persist($show);
+                $this->entityManager->flush();
 
-            if ($this->downloadAllImages) {
-                $show->fetchPosterImages($this->imageFetcher, true, true);
+                if ($this->downloadAllImages) {
+                    $show->fetchPosterImages($this->imageFetcher, true, true);
+                }
+            } catch (Exception $exception) {
+                $output->writeln(sprintf("ERROR: Fetching show %d (%s) failed: %s", $show->getId(), $show->getTitle(), $exception->getMessage()));
             }
         }
 
@@ -69,14 +74,18 @@ class UpdateDataCommand extends Command
 
             $output->writeln(sprintf("Fetching data for movie set: %s", $movieSet->getTitle()));
 
-            $dataProvider = $this->dataProviderHelper->getProviderByEntry($movieSet);
-            $dataProvider->fetchMovieSet($movieSet);
+            try {
+                $dataProvider = $this->dataProviderHelper->getProviderByEntry($movieSet);
+                $dataProvider->fetchMovieSet($movieSet);
 
-            $this->entityManager->persist($movieSet);
-            $this->entityManager->flush();
+                $this->entityManager->persist($movieSet);
+                $this->entityManager->flush();
 
-            if ($this->downloadAllImages) {
-                $movieSet->fetchPosterImages($this->imageFetcher, true);
+                if ($this->downloadAllImages) {
+                    $movieSet->fetchPosterImages($this->imageFetcher, true);
+                }
+            } catch (Exception $exception) {
+                $output->writeln(sprintf("ERROR: Fetching movie set %d (%s) failed: %s", $movieSet->getId(), $movieSet->getTitle(), $exception->getMessage()));
             }
         }
 
