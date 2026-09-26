@@ -148,6 +148,7 @@ shows:
   latest-episodes: "Neuste Folgen"
   random-episodes: "Zufällige Folgen"
   latest-watched-episodes: "Zuletzt gesehene Folgen"
+  least-recently-watched-episodes: "Am längsten nicht gesehene Episoden"
   most-watched-episodes: "Meist gesehene Folgen"
   least-watched-episodes: "Am seltensten gesehene Folgen"
   unwatched-episodes: "Ungesehene Folgen ({count})"

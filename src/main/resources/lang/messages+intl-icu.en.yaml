@@ -156,6 +156,7 @@ shows:
   latest-episodes: "Latest episodes"
   random-episodes: "Random episodes"
   latest-watched-episodes: "Latest watched episodes"
+  least-recently-watched-episodes: "Least recently watched episodes"
   most-watched-episodes: "Most watched episodes"
   least-watched-episodes: "Least watched episodes"
   unwatched-episodes: "Unwatched episodes ({count})"

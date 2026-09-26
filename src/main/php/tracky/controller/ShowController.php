@@ -133,7 +133,21 @@ class ShowController extends AbstractController
         return $this->render("shows/episodes.twig", [
             "show" => $show,
             "title" => "shows.latest-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getLatestWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES))),
+            "episodes" => array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
+            "displaySeason" => true
+        ]);
+    }
+
+    #[Route("/shows/{show}/least-recently-watched", name: "shows_least_recently_watched_episodes_page")]
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function getLeastRecentlyWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
+    {
+        $show = $this->showRepository->findByIdWithEpisodes($show);
+
+        return $this->render("shows/episodes.twig", [
+            "show" => $show,
+            "title" => "shows.least-recently-watched-episodes",
+            "episodes" => array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
             "displaySeason" => true
         ]);
     }

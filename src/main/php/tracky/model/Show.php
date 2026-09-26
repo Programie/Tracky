@@ -203,9 +203,13 @@ class Show extends BaseEntity
     /**
      * @return list<array{Episode, ItemWatchStats}>
      */
-    public function getLatestWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $includeWatchStats = false): array
+    public function getLatestOrLeastRecentlyWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $leastRecentlyWatched = false): array
     {
         $episodes = $this->getWatchedEpisodesSortedByLastWatched($watchStatsProvider);
+
+        if ($leastRecentlyWatched) {
+            $episodes = array_reverse($episodes);
+        }
 
         return array_slice($episodes, 0, $count);
     }
