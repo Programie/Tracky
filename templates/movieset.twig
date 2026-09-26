@@ -28,13 +28,15 @@
                         {% set firstMovie = movieSet.movies.first %}
                         {% set lastMovie = movieSet.movies.last %}
 
-                        {% if firstMovie.year == lastMovie.year %}
-                            {% set year = firstMovie.year %}
-                        {% else %}
-                            {% set year = firstMovie.year ~ " - " ~ lastMovie.year %}
-                        {% endif %}
+                        {% if firstMovie and lastMovie %}
+                            {% if firstMovie.year == lastMovie.year %}
+                                {% set year = firstMovie.year %}
+                            {% else %}
+                                {% set year = firstMovie.year ~ " - " ~ lastMovie.year %}
+                            {% endif %}
 
-                        <small class="text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ year }}</small>
+                            <small class="text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ year }}</small>
+                        {% endif %}
 
                         {% if movieSet.runtime %}
                             <small class="text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movieSet.runtime}) }}</small>
@@ -56,7 +58,7 @@
     <div class="my-3">
         <h2 class="my-3">{{ "movie-sets.movies"|trans }}</h2>
 
-        {% if movieSet.movies %}
+        {% if movieSet.movies|length > 0 %}
             {% include "components/movie-list-small.twig" with {"movies": movieSet.movies, "watchStats": watchStats} only %}
         {% else %}
             <div class="alert alert-warning">{{ "movies.no-movies-available"|trans }}</div>

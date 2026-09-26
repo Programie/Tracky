@@ -8,17 +8,20 @@
             <a href="{{ linkUrl }}" class="text-reset text-decoration-none">{{ movieSet.title }}</a>
         </h5>
 
+        <small class="d-block text-body-secondary"><i class="fa-solid fa-film"></i> {{ "movies.count"|trans({"%count%": movieSet.movies|length}) }}</small>
+        <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movieSet.runtime}) }}</small>
+
         {% set firstMovie = movieSet.movies.first %}
         {% set lastMovie = movieSet.movies.last %}
 
-        {% if firstMovie.year == lastMovie.year %}
-            {% set year = firstMovie.year %}
-        {% else %}
-            {% set year = firstMovie.year ~ " - " ~ lastMovie.year %}
-        {% endif %}
+        {% if firstMovie and lastMovie %}
+            {% if firstMovie.year == lastMovie.year %}
+                {% set year = firstMovie.year %}
+            {% else %}
+                {% set year = firstMovie.year ~ " - " ~ lastMovie.year %}
+            {% endif %}
 
-        <small class="d-block text-body-secondary"><i class="fa-solid fa-film"></i> {{ "movies.count"|trans({"%count%": movieSet.movies|length}) }}</small>
-        <small class="d-block text-body-secondary"><i class="fa-solid fa-clock"></i> {{ "runtime"|trans({"%runtime%": movieSet.runtime}) }}</small>
-        <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ year }}</small>
+            <small class="d-block text-body-secondary"><i class="fa-solid fa-calendar"></i> {{ year }}</small>
+        {% endif %}
     </div>
 </div>
