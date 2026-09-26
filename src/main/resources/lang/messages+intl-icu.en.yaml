@@ -151,6 +151,7 @@ shows:
         other {# episodes}
       }
   all-shows: "All shows"
+  all-episodes: "All episodes"
   seasons: "Seasons"
   episodes: "Episodes"
   latest-episodes: "Latest episodes"
@@ -159,7 +160,7 @@ shows:
   least-recently-watched-episodes: "Least recently watched episodes"
   most-watched-episodes: "Most watched episodes"
   least-watched-episodes: "Least watched episodes"
-  unwatched-episodes: "Unwatched episodes ({count})"
+  unwatched-episodes: "Unwatched episodes"
   next-episodes: "Next episodes"
   no-shows-available: "No shows available."
   no-seasons-available: "No seasons available."

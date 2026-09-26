@@ -143,6 +143,7 @@ shows:
         other {# Folgen}
       }
   all-shows: "Alle Serien"
+  all-episodes: "Alle Folgen"
   seasons: "Staffeln"
   episodes: "Folgen"
   latest-episodes: "Neuste Folgen"
@@ -151,7 +152,7 @@ shows:
   least-recently-watched-episodes: "Am längsten nicht gesehene Episoden"
   most-watched-episodes: "Meist gesehene Folgen"
   least-watched-episodes: "Am seltensten gesehene Folgen"
-  unwatched-episodes: "Ungesehene Folgen ({count})"
+  unwatched-episodes: "Ungesehene Folgen"
   next-episodes: "Nächste Folgen"
   no-shows-available: "Keine Serien verfügbar."
   no-seasons-available: "Keine Staffeln verfügbar."

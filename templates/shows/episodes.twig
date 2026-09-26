@@ -1,7 +1,21 @@
 {% extends "shows/show.twig" %}
 
 {% block showContent %}
-    <h2 class="mb-3">{{ title|trans({count: episodes|length}) }}</h2>
+    <div class="row mb-3">
+        <h2 class="col">{{ "shows.all-episodes"|trans }}</h2>
 
-    {% include "components/episode-list-wide.twig" %}
+        <div class="col">
+            <div class="dropdown text-end">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">{{ ("shows." ~ activeFilter ~ "-episodes")|trans }}</button>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+                    {% for field in filters %}
+                        <li><a href="{{ path("shows_all_episodes_page", {"show": show.id, "filter": field}) }}" class="{{ html_classes("dropdown-item", "d-flex", "justify-content-between", "align-items-center", {"active": activeFilter == field}) }}">{{ ("shows." ~ field ~ "-episodes")|trans }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% include "components/episode-list-wide.twig" with {"episodes": episodes, "displaySeason": true} only %}
 {% endblock %}

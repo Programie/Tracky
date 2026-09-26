@@ -111,86 +111,64 @@ class ShowController extends AbstractController
         ]);
     }
 
-    #[Route("/shows/{show}/random-episodes", name: "shows_random_episodes_page")]
-    public function getRandomEpisodesPage(int $show): Response
+    #[Route("/shows/{show}/all-episodes", name: "shows_all_episodes_page")]
+    public function getAllEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider, Request $request): Response
     {
+        $user = $this->getUser();
         $show = $this->showRepository->findByIdWithEpisodes($show);
+
+        $filter = $request->query->getString("filter");
+
+        $episodes = null;
+        $filters = ["all", "random"];
+
+        if ($user !== null) {
+            $filters = array_merge($filters, [
+                "latest-watched",
+                "least-recently-watched",
+                "most-watched",
+                "least-watched",
+                "unwatched"
+            ]);
+        }
+
+        switch ($filter) {
+            case "random":
+                $episodes = $show->getRandomEpisodes($this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES));
+                break;
+            default:
+                if ($user !== null) {
+                    switch ($filter) {
+                        case "latest-watched":
+                            $episodes = array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false));
+                            break;
+                        case "least-recently-watched":
+                            $episodes = array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true));
+                            break;
+                        case "most-watched":
+                            $episodes = array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false));
+                            break;
+                        case "least-watched":
+                            $episodes = array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true));
+                            break;
+                        case "unwatched":
+                            $episodes = $show->getUnwatchedEpisodes($watchStatsProvider);
+                            break;
+                    }
+                }
+                break;
+        }
+
+        if ($episodes === null) {
+            $episodes = $show->getAllEpisodes();
+            $filter = "all";
+        }
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
-            "title" => "shows.random-episodes",
-            "episodes" => $show->getRandomEpisodes($this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES)),
-            "displaySeason" => true
-        ]);
-    }
-
-    #[Route("/shows/{show}/latest-watched", name: "shows_latest_watched_episodes_page")]
-    #[IsGranted("IS_AUTHENTICATED")]
-    public function getLatestWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
-    {
-        $show = $this->showRepository->findByIdWithEpisodes($show);
-
-        return $this->render("shows/episodes.twig", [
-            "show" => $show,
-            "title" => "shows.latest-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
-            "displaySeason" => true
-        ]);
-    }
-
-    #[Route("/shows/{show}/least-recently-watched", name: "shows_least_recently_watched_episodes_page")]
-    #[IsGranted("IS_AUTHENTICATED")]
-    public function getLeastRecentlyWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
-    {
-        $show = $this->showRepository->findByIdWithEpisodes($show);
-
-        return $this->render("shows/episodes.twig", [
-            "show" => $show,
-            "title" => "shows.least-recently-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
-            "displaySeason" => true
-        ]);
-    }
-
-    #[Route("/shows/{show}/most-watched", name: "shows_most_watched_episodes_page")]
-    #[IsGranted("IS_AUTHENTICATED")]
-    public function getMostWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
-    {
-        $show = $this->showRepository->findByIdWithEpisodes($show);
-
-        return $this->render("shows/episodes.twig", [
-            "show" => $show,
-            "title" => "shows.most-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
-            "displaySeason" => true
-        ]);
-    }
-
-    #[Route("/shows/{show}/least-watched", name: "shows_least_watched_episodes_page")]
-    #[IsGranted("IS_AUTHENTICATED")]
-    public function getLeastWatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
-    {
-        $show = $this->showRepository->findByIdWithEpisodes($show);
-
-        return $this->render("shows/episodes.twig", [
-            "show" => $show,
-            "title" => "shows.least-watched-episodes",
-            "episodes" => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
-            "displaySeason" => true
-        ]);
-    }
-
-    #[Route("/shows/{show}/unwatched", name: "shows_unwatched_episodes_page")]
-    #[IsGranted("IS_AUTHENTICATED")]
-    public function getUnwatchedEpisodesPage(int $show, WatchStatsProvider $watchStatsProvider): Response
-    {
-        $show = $this->showRepository->findByIdWithEpisodes($show);
-
-        return $this->render("shows/episodes.twig", [
-            "show" => $show,
-            "title" => "shows.unwatched-episodes",
-            "episodes" => $show->getUnwatchedEpisodes($watchStatsProvider),
-            "displaySeason" => true
+            "episodes" => $episodes,
+            "filters" => $filters,
+            "activeFilter" => $filter
         ]);
     }
 
