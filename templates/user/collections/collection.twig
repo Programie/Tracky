@@ -63,21 +63,31 @@
             {% for item in items %}
                 <div class="col">
                     <div class="position-relative">
-                        {% if item.type == UserCollectionItemType.SHOW %}
-                            {% set itemName = item.resolvedItem.title %}
-                            {% include "components/show-card-small.twig" with {"show": item.resolvedItem} %}
-                        {% elseif item.type == UserCollectionItemType.SEASON %}
-                            {% set itemName = item.resolvedItem.show.title ~ " - " ~ ("shows.season"|trans({"%number%": item.resolvedItem.number }))%}
-                            {% include "components/season-card-small.twig" with {"season": item.resolvedItem} %}
-                        {% elseif item.type == UserCollectionItemType.EPISODE %}
-                            {% set itemName = item.resolvedItem.season.show.title ~ " - " ~ ("shows.episode"|trans({"%number%": item.resolvedItem.season.number ~ "x" ~ item.resolvedItem.number }))%}
-                            {% include "components/episode-card-small.twig" with {"episode": item.resolvedItem} %}
-                        {% elseif item.type == UserCollectionItemType.MOVIE %}
-                            {% set itemName = item.resolvedItem.title %}
-                            {% include "components/movie-card-small.twig" with {"movie": item.resolvedItem} %}
-                        {% elseif item.type == UserCollectionItemType.MOVIE_SET %}
-                            {% set itemName = item.resolvedItem.title %}
-                            {% include "components/movieset-card-small.twig" with {"movieSet": item.resolvedItem} %}
+                        {% if item.resolvedItem %}
+                            {% if item.type == UserCollectionItemType.SHOW %}
+                                {% set itemName = item.resolvedItem.title %}
+                                {% include "components/show-card-small.twig" with {"show": item.resolvedItem} %}
+                            {% elseif item.type == UserCollectionItemType.SEASON %}
+                                {% set itemName = item.resolvedItem.show.title ~ " - " ~ ("shows.season"|trans({"%number%": item.resolvedItem.number }))%}
+                                {% include "components/season-card-small.twig" with {"season": item.resolvedItem} %}
+                            {% elseif item.type == UserCollectionItemType.EPISODE %}
+                                {% set itemName = item.resolvedItem.season.show.title ~ " - " ~ ("shows.episode"|trans({"%number%": item.resolvedItem.season.number ~ "x" ~ item.resolvedItem.number }))%}
+                                {% include "components/episode-card-small.twig" with {"episode": item.resolvedItem} %}
+                            {% elseif item.type == UserCollectionItemType.MOVIE %}
+                                {% set itemName = item.resolvedItem.title %}
+                                {% include "components/movie-card-small.twig" with {"movie": item.resolvedItem} %}
+                            {% elseif item.type == UserCollectionItemType.MOVIE_SET %}
+                                {% set itemName = item.resolvedItem.title %}
+                                {% include "components/movieset-card-small.twig" with {"movieSet": item.resolvedItem} %}
+                            {% endif %}
+                        {% else %}
+                            {% set itemName = "" %}
+                            <div class="card">
+                                <img class="card-img-top rounded-top image-poster" loading="lazy" src="{{ asset("missing-image-poster.svg") }}"/>
+                                <div class="card-body">
+                                    <h5 class="card-title text-truncate" title="{{ "user.collections.item-not-found"|trans }}"><span class="badge text-bg-danger">{{ "error"|trans }}</span> {{ "user.collections.item-not-found"|trans }}</h5>
+                                </div>
+                            </div>
                         {% endif %}
 
                         {% if app.user == collection.user %}

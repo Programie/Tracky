@@ -152,14 +152,14 @@ class UserCollectionController extends AbstractController
                 if ($resolvedItem instanceof Season) {
                     return $translator->trans("shows.season", ["%number%" => $resolvedItem->getNumber()]);
                 } else {
-                    return $resolvedItem->getTitle();
+                    return $resolvedItem?->getTitle() ?? "";
                 }
             case "type":
                 return $item->getType()->value;
             case "added":
                 return $item->getAddedAt()->getTimestamp();
             case "runtime":
-                return $resolvedItem->getRuntime();
+                return $resolvedItem?->getRuntime() ?? "";
             default:
                 return "";
         }

@@ -1,3 +1,4 @@
+error: "Fehler"
 unknown-title: "Unbekannt"
 runtime: "{runtime} min"
 sort-by: "Sortieren nach"
@@ -98,6 +99,7 @@ user:
         success: "Eintrag ''{name}'' von Sammlung entfernt."
     no-collections-available: "Keine Sammlungen verfügbar."
     no-items-available: "Keine Elemente verfügbar."
+    item-not-found: "Element nicht gefunden!"
     name: "Name"
     items: "Elemente"
     creation-date: "Erstelldatum"
