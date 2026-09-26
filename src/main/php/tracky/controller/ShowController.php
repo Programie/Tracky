@@ -119,55 +119,29 @@ class ShowController extends AbstractController
 
         $filter = $request->query->getString("filter");
 
-        $episodes = null;
-        $filters = ["all", "random"];
+        $filters = [
+            "all" => fn() => $show->getAllEpisodes(),
+            "random" => fn() => $show->getRandomEpisodes($this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES))
+        ];
 
         if ($user !== null) {
             $filters = array_merge($filters, [
-                "latest-watched",
-                "least-recently-watched",
-                "most-watched",
-                "least-watched",
-                "unwatched"
+                "latest-watched" => fn() => array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
+                "least-recently-watched" => fn() => array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
+                "most-watched" => fn() => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
+                "least-watched" => fn() => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
+                "unwatched" => fn() => $show->getUnwatchedEpisodes($watchStatsProvider)
             ]);
         }
 
-        switch ($filter) {
-            case "random":
-                $episodes = $show->getRandomEpisodes($this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES));
-                break;
-            default:
-                if ($user !== null) {
-                    switch ($filter) {
-                        case "latest-watched":
-                            $episodes = array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false));
-                            break;
-                        case "least-recently-watched":
-                            $episodes = array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true));
-                            break;
-                        case "most-watched":
-                            $episodes = array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false));
-                            break;
-                        case "least-watched":
-                            $episodes = array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true));
-                            break;
-                        case "unwatched":
-                            $episodes = $show->getUnwatchedEpisodes($watchStatsProvider);
-                            break;
-                    }
-                }
-                break;
-        }
-
-        if ($episodes === null) {
-            $episodes = $show->getAllEpisodes();
+        if (!isset($filters[$filter])) {
             $filter = "all";
         }
 
         return $this->render("shows/episodes.twig", [
             "show" => $show,
-            "episodes" => $episodes,
-            "filters" => $filters,
+            "episodes" => $filters[$filter](),
+            "filters" => array_keys($filters),
             "activeFilter" => $filter
         ]);
     }
