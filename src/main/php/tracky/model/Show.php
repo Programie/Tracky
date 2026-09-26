@@ -9,6 +9,7 @@ use tracky\model\traits\PosterImage;
 use tracky\model\traits\DataProvider;
 use tracky\model\traits\Plot;
 use tracky\orm\ShowRepository;
+use tracky\WatchedEpisode;
 use tracky\watchstats\WatchStatsProvider;
 
 #[ORM\Entity(repositoryClass: ShowRepository::class)]
@@ -201,11 +202,13 @@ class Show extends BaseEntity
     }
 
     /**
-     * @return list<array{Episode, ItemWatchStats}>
+     * @return WatchedEpisode[]
      */
     public function getLatestOrLeastRecentlyWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $leastRecentlyWatched = false): array
     {
-        $episodes = $this->getWatchedEpisodesSortedByLastWatched($watchStatsProvider);
+        $episodes = $this->getWatchedEpisodes($watchStatsProvider);
+
+        usort($episodes, fn(WatchedEpisode $item1, WatchedEpisode $item2) => $item2->itemWatchStats->getLastWatched() <=> $item1->itemWatchStats->getLastWatched());
 
         if ($leastRecentlyWatched) {
             $episodes = array_reverse($episodes);
@@ -215,18 +218,13 @@ class Show extends BaseEntity
     }
 
     /**
-     * @return list<array{Episode, ItemWatchStats}>
+     * @return WatchedEpisode[]
      */
     public function getMostOrLeastWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $leastWatched): array
     {
         $episodes = $this->getWatchedEpisodes($watchStatsProvider);
 
-        usort($episodes, function($item1, $item2) {
-            $item1WatchStats = $item1[1];
-            $item2WatchStats = $item2[1];
-
-            return $item2WatchStats->getCount() <=> $item1WatchStats->getCount();
-        });
+        usort($episodes, fn(WatchedEpisode $item1, WatchedEpisode $item2) => $item2->itemWatchStats->getCount() <=> $item1->itemWatchStats->getCount());
 
         if ($leastWatched) {
             $episodes = array_reverse($episodes);
@@ -236,24 +234,7 @@ class Show extends BaseEntity
     }
 
     /**
-     * @return list<array{Episode, ItemWatchStats}>
-     */
-    public function getWatchedEpisodesSortedByLastWatched(WatchStatsProvider $watchStatsProvider): array
-    {
-        $episodes = $this->getWatchedEpisodes($watchStatsProvider);
-
-        usort($episodes, function ($item1, $item2) {
-            $item1WatchStats = $item1[1];
-            $item2WatchStats = $item2[1];
-
-            return $item2WatchStats->getLastWatched() <=> $item1WatchStats->getLastWatched();
-        });
-
-        return $episodes;
-    }
-
-    /**
-     * @return list<array{Episode, ItemWatchStats}>
+     * @return WatchedEpisode[]
      */
     public function getWatchedEpisodes(WatchStatsProvider $watchStatsProvider): array
     {
@@ -266,7 +247,7 @@ class Show extends BaseEntity
                     continue;
                 }
 
-                $allEpisodes[] = [$episode, $itemWatchStats];
+                $allEpisodes[] = new WatchedEpisode($episode, $itemWatchStats);
             }
         }
 

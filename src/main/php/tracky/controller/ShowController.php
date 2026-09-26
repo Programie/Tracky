@@ -23,6 +23,7 @@ use tracky\orm\ViewRepository;
 use tracky\settings\SettingName;
 use tracky\settings\UserSettings;
 use tracky\ViewType;
+use tracky\WatchedEpisode;
 use tracky\watchstats\WatchStatsProvider;
 
 class ShowController extends AbstractController
@@ -126,10 +127,10 @@ class ShowController extends AbstractController
 
         if ($user !== null) {
             $filters = array_merge($filters, [
-                "latest-watched" => fn() => array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
-                "least-recently-watched" => fn() => array_map(fn($item) => $item[0], $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
-                "most-watched" => fn() => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
-                "least-watched" => fn() => array_map(fn($item) => $item[0], $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
+                "latest-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
+                "least-recently-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
+                "most-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
+                "least-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
                 "unwatched" => fn() => $show->getUnwatchedEpisodes($watchStatsProvider)
             ]);
         }

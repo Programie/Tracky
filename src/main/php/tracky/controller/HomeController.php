@@ -75,12 +75,12 @@ class HomeController extends AbstractController
                 continue;
             }
 
-            $nextEpisode = $latestWatchedEpisode[0]->getNextEpisode();
+            $nextEpisode = $latestWatchedEpisode->episode->getNextEpisode();
             if ($nextEpisode === null) {
                 continue;
             }
 
-            $episodes[] = [$nextEpisode, $latestWatchedEpisode[1]->getLastWatched()];
+            $episodes[] = [$nextEpisode, $latestWatchedEpisode->itemWatchStats->getLastWatched()];
         }
 
         usort($episodes, fn($item1, $item2) => $item2[1] <=> $item1[1]);
