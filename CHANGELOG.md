@@ -1,6 +1,9 @@
 # Changelog
 
-## [2.0.0] - pending
+## [2.0.0] - 2026-10-04
+
+> [!CAUTION]
+> Make sure to backup your existing database when upgrading to this new major version!
 
 - Use Doctrine to handle database migrations - importing database.sql and manually updating database no longer required
 - Improved and modernized frontend making it looking less like a basic Bootstrap page
