@@ -4,6 +4,7 @@ namespace tracky\model;
 use Doctrine\ORM\Mapping as ORM;
 use tracky\datetime\Date;
 use tracky\datetime\DateTime;
+use tracky\episoderange\EpisodeRanges;
 use tracky\ImageFetcher;
 use tracky\model\traits\PosterImage;
 use tracky\model\traits\DataProvider;
@@ -154,12 +155,16 @@ class Show extends BaseEntity
     /**
      * @return Episode[]
      */
-    public function getAllEpisodes(): array
+    public function getAllEpisodes(?EpisodeRanges $range = null): array
     {
         $allEpisodes = [];
 
         foreach ($this->getSeasons() as $season) {
             foreach ($season->getEpisodes() as $episode) {
+                if ($range !== null and !$range->isInRange($episode)) {
+                    continue;
+                }
+
                 $allEpisodes[] = $episode;
             }
         }
@@ -172,16 +177,10 @@ class Show extends BaseEntity
         return count($this->getAllEpisodes());
     }
 
-    public function getRandomEpisodes(int $count): array
+    public function getRandomEpisodes(int $count, ?EpisodeRanges $range = null): array
     {
-        $allEpisodes = [];
+        $allEpisodes = $this->getAllEpisodes($range);
         $randomEpisodes = [];
-
-        foreach ($this->getSeasons() as $season) {
-            foreach ($season->getEpisodes() as $episode) {
-                $allEpisodes[] = $episode;
-            }
-        }
 
         foreach (array_rand($allEpisodes, $count) as $index) {
             $randomEpisodes[] = $allEpisodes[$index];
@@ -204,9 +203,9 @@ class Show extends BaseEntity
     /**
      * @return WatchedEpisode[]
      */
-    public function getLatestOrLeastRecentlyWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $leastRecentlyWatched = false): array
+    public function getLatestOrLeastRecentlyWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $leastRecentlyWatched = false, ?EpisodeRanges $range = null): array
     {
-        $episodes = $this->getWatchedEpisodes($watchStatsProvider);
+        $episodes = $this->getWatchedEpisodes($watchStatsProvider, $range);
 
         usort($episodes, fn(WatchedEpisode $item1, WatchedEpisode $item2) => $item2->itemWatchStats->getLastWatched() <=> $item1->itemWatchStats->getLastWatched());
 
@@ -220,9 +219,9 @@ class Show extends BaseEntity
     /**
      * @return WatchedEpisode[]
      */
-    public function getMostOrLeastWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $leastWatched): array
+    public function getMostOrLeastWatchedEpisodes(WatchStatsProvider $watchStatsProvider, int $count, bool $leastWatched, ?EpisodeRanges $range = null): array
     {
-        $episodes = $this->getWatchedEpisodes($watchStatsProvider);
+        $episodes = $this->getWatchedEpisodes($watchStatsProvider, $range);
 
         usort($episodes, fn(WatchedEpisode $item1, WatchedEpisode $item2) => $item2->itemWatchStats->getCount() <=> $item1->itemWatchStats->getCount());
 
@@ -236,7 +235,7 @@ class Show extends BaseEntity
     /**
      * @return WatchedEpisode[]
      */
-    public function getWatchedEpisodes(WatchStatsProvider $watchStatsProvider): array
+    public function getWatchedEpisodes(WatchStatsProvider $watchStatsProvider, ?EpisodeRanges $range = null): array
     {
         $allEpisodes = [];
 
@@ -244,6 +243,10 @@ class Show extends BaseEntity
             foreach ($season->getEpisodes() as $episode) {
                 $itemWatchStats = $watchStatsProvider->getItemStats($episode);
                 if ($itemWatchStats === null or !$itemWatchStats->getCount()) {
+                    continue;
+                }
+
+                if ($range !== null and !$range->isInRange($episode)) {
                     continue;
                 }
 
@@ -257,12 +260,16 @@ class Show extends BaseEntity
     /**
      * @return Episode[]
      */
-    public function getUnwatchedEpisodes(WatchStatsProvider $watchStatsProvider): array
+    public function getUnwatchedEpisodes(WatchStatsProvider $watchStatsProvider, ?EpisodeRanges $range = null): array
     {
         $unwatchedEpisodes = [];
 
         foreach ($this->getSeasons() as $season) {
             foreach ($season->getEpisodes() as $episode) {
+                if ($range !== null and !$range->isInRange($episode)) {
+                    continue;
+                }
+
                 $itemWatchStats = $watchStatsProvider->getItemStats($episode);
                 if ($itemWatchStats !== null and $itemWatchStats->getCount()) {
                     continue;

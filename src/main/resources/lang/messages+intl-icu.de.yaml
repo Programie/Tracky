@@ -161,6 +161,8 @@ shows:
   no-episodes-available: "Keine Folgen verfügbar."
   some-shows-hidden: "Filter-Einstellungen sind aktiv. Einige Serien könnten ausgeblendet sein."
   add-new: "Serie hinzufügen"
+  filter: "Filter"
+  episode-range: "Episodenbereich"
   status:
     upcoming: "Geplant"
     continuing: "Wird fortgesetzt"

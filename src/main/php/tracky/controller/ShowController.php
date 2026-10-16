@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use tracky\datetime\DateTime;
+use tracky\episoderange\EpisodeRanges;
 use tracky\ImageFetcher;
 use tracky\model\Episode;
 use tracky\model\Season;
@@ -119,19 +120,20 @@ class ShowController extends AbstractController
         $show = $this->showRepository->findByIdWithEpisodes($show);
 
         $filter = $request->query->getString("filter");
+        $episodeRange = EpisodeRanges::fromString($request->query->getString("range"));
 
         $filters = [
-            "all" => fn() => $show->getAllEpisodes(),
-            "random" => fn() => $show->getRandomEpisodes($this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES))
+            "all" => fn() => $show->getAllEpisodes($episodeRange),
+            "random" => fn() => $show->getRandomEpisodes($this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), $episodeRange)
         ];
 
         if ($user !== null) {
             $filters = array_merge($filters, [
-                "latest-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
-                "least-recently-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
-                "most-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false)),
-                "least-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true)),
-                "unwatched" => fn() => $show->getUnwatchedEpisodes($watchStatsProvider)
+                "latest-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false, $episodeRange)),
+                "least-recently-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getLatestOrLeastRecentlyWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true, $episodeRange)),
+                "most-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), false, $episodeRange)),
+                "least-watched" => fn() => array_map(fn(WatchedEpisode $item) => $item->episode, $show->getMostOrLeastWatchedEpisodes($watchStatsProvider, $this->getSettings()->getOptionValue(SettingName::SHOWS_MAX_EPISODES), true, $episodeRange)),
+                "unwatched" => fn() => $show->getUnwatchedEpisodes($watchStatsProvider, $episodeRange)
             ]);
         }
 
@@ -143,7 +145,8 @@ class ShowController extends AbstractController
             "show" => $show,
             "episodes" => $filters[$filter](),
             "filters" => array_keys($filters),
-            "activeFilter" => $filter
+            "activeFilter" => $filter,
+            "range" => $episodeRange !== null ? $episodeRange->toString() : ""
         ]);
     }
 

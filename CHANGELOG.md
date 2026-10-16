@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.0] - 2026-10-16
+
+- Implemented episode range filter on "All episodes" page of a show (e.g. `S03E02-S06E05` to only list episodes in range of season 3 episode 2 to season 6 episode 5)
+
 ## [2.0.0] - 2026-10-04
 
 > [!CAUTION]

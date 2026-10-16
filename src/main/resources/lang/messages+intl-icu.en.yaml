@@ -169,6 +169,8 @@ shows:
   no-episodes-available: "No episodes available."
   some-shows-hidden: "Filter settings are active. Some shows might be hidden."
   add-new: "Add show"
+  filter: "Filter"
+  episode-range: "Episode range"
   status:
     upcoming: "Upcoming"
     continuing: "Continuing"
